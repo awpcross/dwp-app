@@ -1,0 +1,52 @@
+<ion-view view-title="Welcome">
+<ion-nav-buttons side="left">
+  <button class="button button-positive button-clear no-animation"
+		  ng-click="signIn()" ng-show="!slideIndex">
+	Passer
+  </button>
+  <button class="button button-positive button-clear no-animation"
+		  ng-click="previous()" ng-show="slideIndex > 0">
+	Précédent
+  </button>
+</ion-nav-buttons>
+<ion-nav-buttons side="right"> 
+  <button class="button button-positive button-clear no-animation"
+		  ng-click="next()" ng-show="slideIndex != 2">
+	Suivant
+  </button>
+  <button class="button button-positive button-clear no-animation"
+		  ng-click="signIn()" ng-show="slideIndex == 2">
+	Commencer
+  </button>
+</ion-nav-buttons>
+
+<ion-slide-box on-slide-changed="slideChanged(index)">
+  <ion-slide>			
+	<h3>{{labels[0].content}}</h3>
+	<p class="welcome-directives">{{labels[1].content}}</p>
+	<div id="logo">
+		<img src="http://code.ionicframework.com/assets/img/app_icon.png">
+	</div>
+	<p class="welcome-directives">{{labels[2].content}}</p>
+	<p class="welcome-hint">{{labels[3].content}}</p>
+  </ion-slide>
+  <ion-slide>
+	<h3>{{labels[4].content}}</h3>
+	<p class="welcome-directives">{{labels[5].content}}</p>
+	<div id="logo">
+		<img src="http://code.ionicframework.com/assets/img/app_icon.png">
+	</div>
+	<p class="welcome-directives">{{labels[6].content}}</p>
+	<p class="welcome-hint">{{labels[7].content}}</p>
+  </ion-slide>
+  <ion-slide>
+	<h3>{{labels[8].content}}</h3>
+	<p class="welcome-directives">{{labels[9].content}}</p>
+	<div id="logo">
+		<img src="http://code.ionicframework.com/assets/img/app_icon.png">
+	</div>
+	<p class="welcome-directives">{{labels[10].content}}</p>
+	<p class="welcome-hint">{{labels[11].content}}</p>
+  </ion-slide>
+</ion-slide-box>
+</ion-view>
