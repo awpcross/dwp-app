@@ -105,25 +105,43 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
       }
     })
 
+		
 	.state('tab.profile', {
       url: '/profile',
       views: {
         'tab-profile': {
-          templateUrl: 'templates/tab-profile.html',
-          controller: 'ProfileCtrl'
+          templateUrl: 'templates/user-profile.html',
+          controller: 'RegisterCtrl'
         }
       }
     })
 
-	
-	
+	.state('tab.profileregister', {
+      url: '/profileregister',
+      views: {
+        'tab-profile': {
+          templateUrl: 'templates/user-register-wizard.html',
+        }
+      }
+    })
+
+	.state('tab.profilelostpassword', {
+      url: '/profilelostpassword',
+      views: {
+        'tab-profile': {
+          templateUrl: 'templates/user-forgot-password.html',
+        }
+      }
+    })
+
+/*	
 	.state('register', {
     url: '/register',
     templateUrl: 'templates/modal-register.html',
     controller: 'RegisterCtrl'
   })
 	
-/*
+
 	.state('tab.catalog', {
       url: '/catalog',
       views: {
@@ -165,7 +183,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
   ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/welcome');
-  //$urlRouterProvider.otherwise('/');
+  //$urlRouterProvider.otherwise('/profile');
 
 });
 /*

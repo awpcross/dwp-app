@@ -1,6 +1,5 @@
 var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
-
 .controller('WelcomeCtrl', function(dpd,$scope, $state, $ionicSlideBoxDelegate) {
 
 	console.log('WelcomeCtrl | starting ... ');
@@ -90,10 +89,23 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   
 })
 
+.controller('RegisterCtrl', function($scope, $state) {
+	console.log('RegisterCtrl | starting ... ') ;
+		
+	console.log('RegisterCtrl | done. ') ;
+})
+
+.controller('ProfileRegisterCtrl', function($scope, $state) {
+	console.log('ProfileRegisterCtrl | starting ... ') ;
+		
+	console.log('ProfileRegisterCtrl | done. ') ;
+})
+
 .controller('CrossEcomCtrl', function($scope, $state) {
 	console.log('CrossEcomCtrl | starting ... ') ;
 	console.log('CrossEcomCtrl | done. ') ;
 })
+
 .controller('CrossNewsCtrl', function($scope, $state) {
 	console.log('CrossNewsCtrl | starting ... ') ;
 	console.log('CrossNewsCtrl | done. ') ;

@@ -1,7 +1,7 @@
 /* Empty. Add your own CSS if you like */
 
 
-/* Jeremy*/
+/* Jeremy
 
 h1,
 .h1 {
@@ -38,18 +38,21 @@ h1,
 .button.ng-hide {
   display: none;
 }
+
 @font-face {
   font-family: 'Playfair Display';
   font-style: normal;
   font-weight: 400;
   src: local('Playfair Display'), local('PlayfairDisplay-Regular'), url("http://fonts.gstatic.com/s/playfairdisplay/v10/2NBgzUtEeyB-Xtpr9bm1CV4QaRhHkZLZrsruvIjJ6Xo.woff") format('woff');
 }
+
 @font-face {
   font-family: 'Molengo';
   font-style: normal;
   font-weight: 400;
   src: local('Molengo'), local('Molengo-Regular'), url("http://fonts.gstatic.com/s/molengo/v7/2v3ScQ0eE96oPRRr3d-FjgLUuEpTyoUstqEm5AMlJo4.woff") format('woff');
 }
+
 @font-face {
   font-family: 'apex_newlight';
   src: url("../fonts/ApexNew/ApexNew-Light-webfont.eot");
@@ -57,43 +60,53 @@ h1,
   font-weight: normal;
   font-style: normal;
 }
+
 .nowrap {
   white-space: nowrap;
   font-family: inherit;
 }
+
 body {
   background-color: #ede9e5;
 }
+
 body * {
   font-family: 'apex_newlight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: bold;
   letter-spacing: 0.05em;
 }
+
 ion-header-bar {
   border: dashed #00f 2px;
   background-color: #ada8a2 !important;
   border: none;
 }
+
 ion-header-bar * {
   color: #fff !important;
   font-weight: bold !important;
 }
+
 ion-content {
   background-color: #ede9e5;
 }
+
 .tab-nav.tabs {
   background-color: #ada8a2;
   border: none;
   color: #fff;
 }
+
 .tab-nav.tabs .tab-title {
   font-size: 1.5em;
 }
+
 ion-view.trophies .list.card.bar-balanced {
   background-color: #00bfff;
   border-bottom: #ada8a2 solid 5px;
   box-shadow: none;
 }
+
 ion-view.trophies .list.card.bar-balanced:before {
   border-color: #ede9e5 transparent transparent transparent;
   border-style: solid;
@@ -105,6 +118,7 @@ ion-view.trophies .list.card.bar-balanced:before {
   top: -2px;
   width: 0;
 }
+
 ion-view.trophies .list.card.bar-balanced * {
   background-color: transparent;
   border: none;
@@ -162,7 +176,7 @@ ion-view.ecom .scroll .list.card .item.item-body {
 }
 
 
-/* // end Jeremy */
+ // end Jeremy */
 	h1, .h1 {
 		font-size: 24px;
 		padding-bottom: 15px;

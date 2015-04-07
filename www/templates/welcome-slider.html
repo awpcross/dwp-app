@@ -1,4 +1,4 @@
-<ion-view view-title="Welcome">
+<ion-view view-title="Bienvenue">
 <ion-nav-buttons side="left">
   <button class="button button-positive button-clear no-animation"
 		  ng-click="signIn()" ng-show="!slideIndex">
@@ -22,31 +22,43 @@
 
 <ion-slide-box on-slide-changed="slideChanged(index)">
   <ion-slide>			
-	<h3>{{labels[0].content}}</h3>
+	<h4>{{labels[0].content}}</h4>
 	<p class="welcome-directives">{{labels[1].content}}</p>
 	<div id="logo">
-		<img src="http://code.ionicframework.com/assets/img/app_icon.png">
+		<img src="/img/welcome/wizard-step-1.png">
 	</div>
 	<p class="welcome-directives">{{labels[2].content}}</p>
-	<p class="welcome-hint">{{labels[3].content}}</p>
+	<!-- footer -->
+	<div class="bar bar-footer bar-stable">
+	  <button class="button button-icon icon ion-information-circled"></button>
+	  <div class="title">{{labels[3].content}}</div>
+	</div>
   </ion-slide>
   <ion-slide>
-	<h3>{{labels[4].content}}</h3>
+	<h4>{{labels[4].content}}</h4>
 	<p class="welcome-directives">{{labels[5].content}}</p>
 	<div id="logo">
-		<img src="http://code.ionicframework.com/assets/img/app_icon.png">
+		<img src="/img/welcome/wizard-step-2.png">
 	</div>
 	<p class="welcome-directives">{{labels[6].content}}</p>
-	<p class="welcome-hint">{{labels[7].content}}</p>
+	<!-- footer -->
+	<div class="bar bar-footer bar-stable">
+	  <button class="button button-icon icon ion-information-circled"></button>
+	  <div class="title">{{labels[7].content}}</div>
+	</div>
   </ion-slide>
   <ion-slide>
-	<h3>{{labels[8].content}}</h3>
-	<p class="welcome-directives">{{labels[9].content}}</p>
 	<div id="logo">
-		<img src="http://code.ionicframework.com/assets/img/app_icon.png">
+		<img src="/img/welcome/wizard-step-3.png">
 	</div>
+	<h4>{{labels[8].content}}</h4>
+	<p class="welcome-directives">{{labels[9].content}}</p>
 	<p class="welcome-directives">{{labels[10].content}}</p>
-	<p class="welcome-hint">{{labels[11].content}}</p>
+	<!-- footer -->
+	<div class="bar bar-footer bar-stable">
+	  <button class="button button-icon icon ion-information-circled"></button>
+	  <div class="title">{{labels[11].content}}</div>
+	</div>
   </ion-slide>
 </ion-slide-box>
 </ion-view>
