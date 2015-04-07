@@ -43,6 +43,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   $scope.signIn = function() {
 	//$state.go('signin');
     $state.go('tab.profile');
+
   };
   $scope.next = function() {
     $ionicSlideBoxDelegate.next();
@@ -60,7 +61,19 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   
 })
 
-.controller('SignInCtrl', function($scope, $state, LoginService, $ionicPopup) {
+.controller('PrerequisitesCtrl', function($scope, $state) {
+
+  console.log('PrerequisitesCtrl | starting ... ') ;
+  // Called to navigate to the main app
+  $scope.goTrophies = function() {
+    //$state.go('tab.trophies');
+    $state.go('tab.cross-news');
+  };
+  console.log('PrerequisitesCtrl | done. ') ;
+  
+})
+
+.controller('SignInCtrl', function($scope, $state, LoginService, $ionicPopup, dpd) {
 
 	console.log('SignInCtrl | starting ... ') ;
 
@@ -70,7 +83,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	console.log('SignInCtrl.signIn() | start. ') ;
     console.log('SignInCtrl.signIn() | Signing in user : ', user);
 
-	LoginService.loginUser($scope.user.username, $scope.user.password).success(function(user) {
+	LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
 		//$state.go('tab.trophies');
 		$state.go('tab.profile');
 	}).error(function(user) {
@@ -112,6 +125,168 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	console.log('CrossNewsCtrl | done. ') ;
 })
 
+
+.controller('TrophiesCtrl', function($scope, $rootScope, $state, $ionicModal, $timeout, $http, Trophies, dpd) {
+  // BG Listner
+  window.plugin.notification.local.onclick = function (id, state, json) {
+    if(id==777) {
+      $state.go('tab.trophies');
+    }
+  };
+
+  // $scope.totalpoints = 1520;
+  $scope.totalpoints = "";
+  $scope.nextStep = "";
+
+  // Call launchMonitoring from Services
+  $scope.main =  function() {
+    console.log('IN MAIN');
+    
+    // Monitor all trohies
+    Trophies.getTrophies($scope, dpd).then(function(promise_trophies) {
+      $scope.trophies = promise_trophies;
+      // Get Granted trophies 
+      Trophies.getGrantedTrophies($scope, dpd).then(function(promise_grantedTrophies) {
+          //TODO : Not always check ListGrantedTrophies
+          if($rootScope.monitoringLaunched==false) {
+            $scope.listGrantedTrophies = promise_grantedTrophies;
+            console.log("GRANTED_LIST: " +JSON.stringify($scope.listGrantedTrophies));
+            $scope.listInfoGrantedTrophies = Trophies.getListGrantedTrophies($scope);
+            $scope.totalpoints = Trophies.getCurrentPoints();
+            // Launch Monitoring
+            Trophies.launchMonitoring($scope,$rootScope);
+          }
+      });
+    });
+    
+
+  }
+
+  $scope.getStatusSniffer = function() {
+    // Launch MODAL
+    console.log('PREMAIN getStatusSniffer | start!');
+    //$scope.openModal();
+    //$state.go('prerequisites');
+    //console.log('PREMAIN getStatusSniffered | end!');
+
+    var onAuthoResultSnif = function(status) {
+      // If authorization mode is activated
+      console.log("onAuthoResultSnif selector"); 
+      if (status == 3) {
+        console.log("onAuthoResultSnif : 3"); 
+        $rootScope.statusSniffer = true;
+        $scope.main();
+       // return true;
+      }
+      else {
+        console.log("onAuthoResultSnif : 0"); 
+        $rootScope.statusSniffer = false;
+        $state.go('prerequisites');
+        // return false;
+      }
+    }
+    estimote.beacons.authorizationStatus(onAuthoResultSnif);
+  }
+
+  $scope.gotoPrerequisites =  function() {
+    console.log('IN MAIN');
+    // $rootScope.monitoringLaunched = true;
+    $state.go('prerequisites');
+  }
+
+  // Callback from Services
+  $scope.dispatchThrophyEvent = function() {
+    if ($scope.regionState.state=='inside') {
+      //  Get the associate TROPHY
+      var currentTS = new Date().getTime();
+      var trophy = Trophies.getFromRegion($scope,$scope.regionState);
+      // TODO : Add logic : multicheck
+      console.log("TIMESTAMP : " + currentTS + " " + JSON.stringify(trophy));
+      if ( currentTS > trophy.startDate  &&  currentTS < trophy.endDate) {
+
+        // IF app in Background
+       if ($rootScope.appInBackground) {
+          console.log('DispatchEvent in BackGround ' + $rootScope.appInBackground);
+          $scope.displayNotification($scope.regionState);
+        }
+        console.log("***** iT IS A MATCH **** ");
+        //TODO : CALL BACKEND TO adapt the DB
+        $scope.$apply( function() {
+          console.log('Add newItem');
+          // Update NextStep in the view 
+          $scope.nextStep = trophy.nextStep;
+          // Update Score in the view
+          $scope.totalpoints += trophy.points;
+          $scope.listInfoGrantedTrophies.push(trophy);
+        });
+      }
+    }
+  }
+
+  $scope.displayNotification = function(regionState) {
+      var notification_msg = regionState.state+" "+regionState.identifier;
+      if (regionState.state=='inside') {
+        //Send a Notification
+        window.plugin.notification.local.add({ id:777, message: notification_msg,badge:0});
+        console.log('Bravo vous avez débloqué un nouveau trophée');
+      }
+  }
+    // Gestion modal des prerequis  - faire une version allegée pour le bluetooth [BEGIN]
+    $ionicModal.fromTemplateUrl('templates/modal-prerequisites.html', {
+          scope: $scope,
+          animation: 'slide-in-up'
+      }).then(function(modal) {
+        $scope.modal = modal;
+      })
+      $scope.openModal = function() {
+        $scope.modal.show()
+      }
+      $scope.closeModal = function() {
+        $scope.modal.hide();
+      };
+      //Cleanup the modal when we're done with it!
+      $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+      });
+      // Execute action on hide modal
+      $scope.$on('modal.hidden', function() {
+        // Execute action
+      });
+      // Execute action on remove modal
+      $scope.$on('modal.removed', function() {
+        // Execute action
+      });
+      // Gestion modal des prerequis END]
+
+  $scope.toWelcome = function(){
+    console.log('TrophiesCtrl:toWelcome() | start');
+    //TODO : mettre en place le tab.profile
+    $state.go('welcome');
+    console.log('TrophiesCtrl:toWelcome() | end');
+  }
+
+  // Execute after view Render
+  $scope.$on('$ionicView.afterEnter', function() {
+    console.log('$ionicView.loaded event captured | start');
+    // STOP MONITORING and launch PREREQUIS
+    if($rootScope.bluetoothAct==false) {
+        console.log('Monitoring STOPPED');
+        // Launch MODAL ( faire une modal special bluetooth)
+        $scope.openModal();
+        // Stop monitoring
+        estimote.beacons.stopMonitoringForRegion({});
+        $rootScope.monitoringLaunched  = false;
+    }
+    // Execute MAIN VIEW
+    else {
+      console.log('Monitoring WILL BE LAUNCHED');
+      $scope.main();
+    }
+    console.log('$ionicView.loaded event captured | end');
+  });
+})
+
+/*
 .controller('TrophiesCtrl', function(TrophyService, $scope, $state, $http, $ionicModal, $timeout) {
 	console.log('TrophiesCtrl | start');
 
@@ -119,6 +294,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	$scope.trophiesMatched = [];
 
 	console.log('TrophiesCtrl | GET /trophies ...');
+  */
 	// Get all trophies
 	
 	/*
@@ -133,7 +309,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		// err.status will contain the status code
 	})
 	*/
-
+  /*
 	TrophyService.getTrophies().then(function(promise1) {
 		$scope.trophies = promise1;
 	});
@@ -149,20 +325,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	
 	console.log('TrophiesCtrl | GET /trophies-matched done.');
 	
-	/*
-	$scope.contact = {
-		firstname: 'John',
-		lastname: 'Appleseed',
-		email: 'john@apple.com'
-	}
-	
-	
-	$scope.toWelcome = function(){
-		console.log('TrophiesCtrl:toWelcome() | start');
-		$state.go('welcome');
-		console.log('TrophiesCtrl:toWelcome() | end');
-	}
-	*/
 	
 	$ionicModal.fromTemplateUrl('templates/modal-prerequisites.html', {
 		scope: $scope,
@@ -193,14 +355,13 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		console.log('$ionicView.loaded event captured | end');
 	});
 
-	
-
-  
 })
+*/
 
 
-.controller('LeaderboardCtrl', function(ScoreService, $scope, $http) {
+.controller('LeaderboardCtrl', function(dpd, ScoreService, $scope, $http) {
 	console.log('LeaderboardCtrl | starting ... ');
+  //dpd.users.exec('me');
 
 	$scope.players = [];
 	
@@ -233,8 +394,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		{nickname: "Bart Simpson", avatar:"img/avatar-player4.png", score:1500}
 	];
 	*/
-	
-	
 	
 	
 	$scope.doRefresh = function() {
@@ -315,5 +474,3 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
 })
 */
-
-

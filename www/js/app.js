@@ -12,19 +12,48 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
 
 .run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
-
-  // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-
-    }
-	
+    if (window.cordova && window.cordova.plugins.Keyboard) {cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);}
+    // org.apache.cordova.statusbar required
+    if (window.StatusBar) { StatusBar.styleDefault(); }
+    // Ask to authorize BG monitoring
+    //console.log('Device Ready | Request authorization ') ;
+    estimote.beacons.requestAlwaysAuthorization();
+    // Ask to authorize Notification 
+    window.plugin.notification.local.promptForPermission();
+    // Bluetooth : Listenet : To comment for compilation in evothings
+    chrome.bluetooth.onAdapterStateChanged.addListener(
+    function(adapter) {
+      if (adapter.powered != $rootScope.bluetoothActt) {
+        $rootScope.bluetoothAct = adapter.powered;
+        if ($rootScope.bluetoothAct) {
+          console.log('bluetooth is on ') ;
+        } else {
+          console.log('bluetooth is off') ;
+        }
+      }
+    });
+    
   });
+
+
+  /*App State*/
+  $rootScope.appInBackground = false;
+  $rootScope.bluetoothAct = true;
+  $rootScope.monitoringLaunched = false;
+  $rootScope.statusSniffer = false;
+
+  /* Listener */
+  $ionicPlatform.on('resume', function(){
+    console.log('********** Event RESUME appInForground ') ;
+    $rootScope.appInBackground = false;
+  });
+  $ionicPlatform.on('pause', function(){
+    console.log('********* Event PAUSE appInBackground ') ;
+     $rootScope.appInBackground = true;
+  });
+
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -40,9 +69,16 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
 		url: '/welcome',
 		templateUrl: 'templates/welcome-slider.html',
 		controller: 'WelcomeCtrl'
-	  })	
-  
-    // App Sign-in, register, user management 
+	  })
+    // Prerequis
+  .state('prerequisites', {
+    url: '/prerequisites',
+    templateUrl: 'templates/prerequisites.html',
+    controller: 'PrerequisitesCtrl'
+    })
+
+  // App Sign-in, register, user management 
+
 
 	.state('signin', {
 		url: '/sign-in',
@@ -111,7 +147,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
       views: {
         'tab-profile': {
           templateUrl: 'templates/user-profile.html',
-          controller: 'RegisterCtrl'
+          controller: 'SignInCtrl'
         }
       }
     })
@@ -134,45 +170,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
       }
     })
 
-/*	
-	.state('register', {
-    url: '/register',
-    templateUrl: 'templates/modal-register.html',
-    controller: 'RegisterCtrl'
-  })
-	
-
-	.state('tab.catalog', {
-      url: '/catalog',
-      views: {
-        'tab-catalog': {
-          templateUrl: 'templates/tab-catalog.html',
-          controller: 'CatalogCtrl'
-        }
-      }
-    })
-	
-  .state('tab.scan', {
-      url: '/scan',
-      views: {
-        'tab-scan': {
-          templateUrl: 'templates/tab-scan.html',
-          controller: 'ScanCtrl'
-        }
-      }
-    })
-
-	//dealer locator feature
-	.state('tab.dealers', {
-	  url: '/dealers',
-	  views: {
-		'tab-dealers': {
-		  templateUrl: 'templates/tab-dealers.html',
-		  controller: 'DealersCtrl'
-		}
-	  }
-	})
-	*/
 	
 	.state('scan-modal', {
     url: '/scan/modal',
@@ -184,17 +181,16 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/welcome');
   //$urlRouterProvider.otherwise('/profile');
-
 });
+
 /*
 app.value('dpdConfig',['categories']);
 */
 
 app.value('dpdConfig', { 
-    collections: ['users', 'welcomecontents'], 
-    serverRoot: 'http://localhost:2403/', // optional, defaults to same server
+    collections: ['users', 'welcomecontents', 'trophies', 'trophiesmatched'], 
+    serverRoot: 'https://digitalwatchproject.cross-systems.ch/', // optional, defaults to same server
     socketOptions: { reconnectionDelayMax: 3000 }, // optional socket io additional configuration
     useSocketIo: false, // optional, defaults to false
     noCache: true // optional, defaults to false (false means that caching is enabled, true means it disabled)
 });
-
