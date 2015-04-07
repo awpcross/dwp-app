@@ -1,64 +1,24 @@
 <ion-view view-title="Trophées" >
-	<ion-content class="padding">
-		<!--button class="button button-full button-energized" ng-controller='TrophiesCtrl' ng-click="openModal()">Register now</button-->
-		<!--button class="button" ng-click="toWelcome()">Welcome</button-->    
-		<div class="list card bar-balanced">
-			<div class="item item-divider ">Votre score : 4500 points</div>
-			<div class="item item-body">
-				<div>
-				Bravo! Vous êtes dans la course déjà 4500 points!!! <br/>
-				Votre prochain objectif gagner des points avec notre solution de POS!<br/>
-				Cette étape en vaut la peine entre 1500 et 5000 points à gagner. Encore un effort, vous pouvez faire la différence! </b>
-				</div>
-			</div>
-		</div>
+  
 
-		<div class="list card bar-calm">
-		<ion-item ng-repeat="trophyMatched in trophiesMatched | orderBy:'-orderNo':!reverse">
-			<div class="item item-divider">{{ trophyMatched.points}} points</div>
-			<div class="item item-body">
-				<div>
-				TrophyId : {{ trophyMatched.trophyid}}</br>
-				Matched @ : {{ trophyMatched.timestamp}}</br>
-				</div>
-			</div>
-		</ion-item>
-		</div>
-
-		<div class="list card bar-calm">
-		<ion-item ng-repeat="trophy in trophies | orderBy:'-timestamp':!reverse">
-			<div class="item item-divider">{{ trophy.points}} points</div>
-			<div class="item item-body">
-				<div>
-				{{ trophy.description}}</b>
-				</div>
-			</div>
-		</ion-item>
-		</div>
-		
-		<!--div class="list card bar-calm">
-			<div class="item item-divider">1000 points</div>
-			<div class="item item-body">
-				<div>
-				App téléchargée!</b>
-				</div>
-			</div>
-		</div>
-		<div class="list card">
-      <div class="item item-divider">2500 points</div>
+  <ion-content class="padding">
+    <div class="list card">
+      <div class="item item-divider ">Votre score : {{totalpoints}} points</div>
       <div class="item item-body">
         <div>
-          Suivi de la conférence "Big Data"
+        Bravo! Vous êtes dans la course déjà {{totalpoints}} points!!! <br/>
+        {{nextStep}}</b>
         </div>
       </div>
     </div>
-    <div class="list card">
-      <div class="item item-divider">1000 points</div>
+
+    <div ng-repeat="item in listInfoGrantedTrophies" item="item" item-type="item" class="list card">
+      <div class="item item-divider">{{ item.points }} points</div>
       <div class="item item-body">
-        <div>
-		Visite de notre stand (B12)
-        </div>
+        <div>{{ item.description }}</div>
       </div>
-    </div-->
+    </div>
+
   </ion-content>
+
 </ion-view>
