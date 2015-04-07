@@ -1,5 +1,27 @@
-/* Empty. Add your own CSS if you like */
+/* Empty. Add your own CSS if you like 
 
+blue : #37b0dc
+*/
+
+.bar-subheader {
+  top: 44px;
+  display: block;
+  color:#fff;
+  background-color:#37b0dc;
+  height: 150px; }
+
+.welcome-title {
+  color:#37b0dc;
+  }
+  
+.welcome-visual {
+  color:#fff;
+  background-color:#37b0dc;
+  }
+
+.big-icon {
+  font-size:5em;
+}
 
 /* Jeremy
 

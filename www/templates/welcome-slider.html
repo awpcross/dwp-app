@@ -21,12 +21,31 @@
 </ion-nav-buttons>
 
 <ion-slide-box on-slide-changed="slideChanged(index)">
-  <ion-slide>			
-	<h4>{{labels[0].content}}</h4>
+<ion-slide>
+<div class="row">
+  <div class="col"><h4 class="welcome-title">{{labels[0].content}}</h4></div>
+</div>
+<div class="row row-center welcome-visual">
+  <span class="icon-dwpsand-timer big-icon"></span> 
+</div>
+<div class="row row-bottom welcome-content">
+  <div class="col">
 	<p class="welcome-directives">{{labels[1].content}}</p>
-	<div id="logo">
+	<p class="welcome-directives">{{labels[2].content}}</p>  
+  </div>
+</div>
+<div class="bar bar-footer bar-stable">
+  <button class="button button-icon icon ion-information-circled"></button>
+  <div class="title">{{labels[3].content}}</div>
+</div>
+</ion-slide>
+
+  <ion-slide>
+	<h4 class="welcome-header">{{labels[0].content}}</h4>  
+	<div class="bar bar-subheader bar-welcome">
 		<img src="/img/welcome/wizard-step-1.png">
 	</div>
+	<p class="welcome-directives">{{labels[1].content}}</p>
 	<p class="welcome-directives">{{labels[2].content}}</p>
 	<!-- footer -->
 	<div class="bar bar-footer bar-stable">
@@ -35,11 +54,11 @@
 	</div>
   </ion-slide>
   <ion-slide>
-	<h4>{{labels[4].content}}</h4>
-	<p class="welcome-directives">{{labels[5].content}}</p>
-	<div id="logo">
+	<div class="bar bar-subheader bar-welcome">
+		<h4>{{labels[4].content}}</h4>
 		<img src="/img/welcome/wizard-step-2.png">
 	</div>
+	<p class="welcome-directives">{{labels[5].content}}</p>
 	<p class="welcome-directives">{{labels[6].content}}</p>
 	<!-- footer -->
 	<div class="bar bar-footer bar-stable">
