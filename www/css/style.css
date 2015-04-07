@@ -3,18 +3,61 @@
 blue : #37b0dc
 */
 
+
+#welcome-visual-step1 {
+	width: 100px;
+	height: 100px;
+	background: url(/img/welcome/wizard-step-1.png) 0 0 no-repeat;
+}
+#welcome-visual-step2 {
+	width: 100px;
+	height: 100px;
+	background: url(/img/welcome/wizard-step-2.png) 0 0 no-repeat;
+}
+#welcome-visual-step3 {
+	width: 100px;
+	height: 100px;
+	background: url(/img/welcome/wizard-step-3.png) 0 0 no-repeat;
+}
+
+@media
+screen and (-webkit-min-device-pixel-ratio: 1.5),
+screen and (-moz-min-device-pixel-ratio: 1.5),
+screen and (min-device-pixel-ratio: 1.5) {
+	#welcome-visual-step1 {
+		background-image: url(/img/welcome/wizard-step-1@2x.png);
+	}
+	#welcome-visual-step2 {
+		background-image: url(/img/welcome/wizard-step-2@2x.png);
+	}
+	#welcome-visual-step3 {
+		background-image: url(/img/welcome/wizard-step-3@2x.png);
+	}
+}
+
+
+.bar .title.indice {
+	padding-left: 5px;
+	font-size:12px;
+}
+
 .bar-subheader {
   top: 44px;
   display: block;
   color:#fff;
   background-color:#37b0dc;
-  height: 150px; }
+  height: 120px; 
+  padding:0px;
+  margin:0px
+  }
 
 .welcome-title {
   color:#37b0dc;
   }
   
 .welcome-visual {
+  padding:0px;
+  margin:0px
   color:#fff;
   background-color:#37b0dc;
   }

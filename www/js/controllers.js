@@ -19,7 +19,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		});
 				
 	// todo fallback if network error
-	console.log( $scope.labels );
+	//console.log( $scope.labels );
 	
 	
 	
