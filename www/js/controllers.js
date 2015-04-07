@@ -41,8 +41,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   // Called to navigate to the main app
   $scope.signIn = function() {
-    //$state.go('tab.trophies');
-	$state.go('signin');
+	//$state.go('signin');
+    $state.go('tab.profile');
   };
   $scope.next = function() {
     $ionicSlideBoxDelegate.next();
@@ -71,7 +71,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
     console.log('SignInCtrl.signIn() | Signing in user : ', user);
 
 	LoginService.loginUser($scope.user.username, $scope.user.password).success(function(user) {
-		$state.go('tab.trophies');
+		//$state.go('tab.trophies');
+		$state.go('tab.profile');
 	}).error(function(user) {
 		var alertPopup = $ionicPopup.alert({
 			title: 'Login failed!',
