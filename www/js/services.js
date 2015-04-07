@@ -4,14 +4,23 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 	
 	console.log('LoginService | starting... ');
     return {
-        loginUser: function(name, pw) {
+        loginUser: function(name, pw, dpd) {
             var deferred = $q.defer();
             var promise = deferred.promise;
 
 			console.log('LoginService | using appconfig.ENV : "' + env +'"');
 			if ( env == 'dev-nobackend') {
-				console.log('LoginService | skipping auth');
-				deferred.resolve('Welcome ' + name + '!');
+				console.log('LoginService | skipping auth (bart@gmail.com');
+				// deferred.resolve('Welcome ' + name + '!');
+        dpd.users.exec('login', { username: 'bart@gmail.com', password: 'bart' }).success(function(session) {
+          console.log('success ! loging Bart');
+          deferred.resolve('Welcome ' + name + '!'); 
+          console.log(session);
+      }).error(function(error) {
+          console.log('error : ' + error.message, error);
+          deferred.reject('Wrong credentials.');
+      });
+
 			} else {	
 			console.log('LoginService | calling deployd service (dpd.users.login)... ');
 			dpd.users.exec('login', { username: name, password: pw }).success(function(session) {
@@ -21,7 +30,8 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 				  console.log('error : ' + error.message, error);
 				  deferred.reject('Wrong credentials.');
 			});
-			
+
+
 			/*
 			dpd.users.login({username: name, password: pw}, function(session, error) {
 				if (error) {

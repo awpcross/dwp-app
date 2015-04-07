@@ -73,7 +73,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   
 })
 
-.controller('SignInCtrl', function($scope, $state, LoginService, $ionicPopup) {
+.controller('SignInCtrl', function($scope, $state, LoginService, $ionicPopup, dpd) {
 
 	console.log('SignInCtrl | starting ... ') ;
 
@@ -83,7 +83,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	console.log('SignInCtrl.signIn() | start. ') ;
     console.log('SignInCtrl.signIn() | Signing in user : ', user);
 
-	LoginService.loginUser($scope.user.username, $scope.user.password).success(function(user) {
+	LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
 		//$state.go('tab.trophies');
 		$state.go('tab.profile');
 	}).error(function(user) {
@@ -359,8 +359,9 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 */
 
 
-.controller('LeaderboardCtrl', function(ScoreService, $scope, $http) {
+.controller('LeaderboardCtrl', function(dpd, ScoreService, $scope, $http) {
 	console.log('LeaderboardCtrl | starting ... ');
+  //dpd.users.exec('me');
 
 	$scope.players = [];
 	
