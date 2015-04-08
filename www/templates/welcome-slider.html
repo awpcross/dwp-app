@@ -22,7 +22,7 @@
 <ion-slide-box on-slide-changed="slideChanged(index)">
 <ion-slide>
 <div class="row">
-	<div class="col"><img id="welcome-visual-step1" src="/img/welcome/wizard-step-1@2x.png"></div>
+	<div class="col"><img id="welcome-visual-step1" src="../img/welcome/wizard-step-1@2x.png"></div>
 </div>
 <div class="row">
   <div class="col"><h4 class="welcome-title">{{labels[0].content}}</h4></div>
@@ -40,15 +40,14 @@
 </ion-slide>
 <ion-slide>
 <div class="row">
-	<div class="col"><img id="welcome-visual-step2" src="/img/welcome/wizard-step-2@2x.png"></div>
+	<div class="col"><img id="welcome-visual-step2" src="../img/welcome/wizard-step-2@2x.png"></div>
 </div>
 <div class="row welcome-content">
 	<div class="col"><h4 class="welcome-title">{{labels[4].content}}</h4></div>
 </div>
 <div class="row welcome-content">
 	<div class="col">
-	<p class="welcome-directives" ng-if="labels[5].content != 'empty'">{{labels[5].content}}</p>
-	<p class="welcome-list" ng-if="labels[6].content != 'empty'">{{labels[6].content}}</p>
+	<p class="welcome-directives">{{labels[5].content}}</p>
 	<ul class="welcome-list">
 	<li>1. Enregistrez-vous (500 points)</li>
 	<li>2. Gagnez des points en participant à nos conférences (4000 points / conférence)</li>
@@ -65,7 +64,7 @@
 </ion-slide>
 <ion-slide>
 <div class="row">
-	<div class="col"><img id="welcome-visual-step3" src="/img/welcome/wizard-step-3@2x.png"></div>
+	<div class="col"><img id="welcome-visual-step3" src="../img/welcome/wizard-step-3@2x.png"></div>
 </div>
 <div class="row welcome-content">
 	<div class="col"><h4 class="welcome-title">{{labels[8].content}}</h4></div>
@@ -73,7 +72,6 @@
 
 <p class="welcome-directives">{{labels[9].content}}</p>
 <p class="welcome-directives">{{labels[10].content}}</p>
-<!-- footer -->
 <div class="bar bar-footer bar-stable">
   <button class="button button-icon icon ion-information-circled"></button>
   <div class="title indice">{{labels[11].content}}</div>

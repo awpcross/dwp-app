@@ -3,15 +3,17 @@
 		<h1 class="title">Pull to Refresh!</h1>
 	</ion-header-bar>
 	<ion-content ng-controller="LeaderboardCtrl">
+		<!---
 		<ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()">
 		</ion-refresher>
+		!-->
 		<ion-list>
-			<ion-item ng-repeat="player in players | orderBy:'-score'"><a class="item item-thumbnail-left" href="#">
-				<!--img src="{{player.avatar}}"-->
-				<img src="img/avatar-player2.png">
-				<h2>{{player.score}}</h2>
-				<p>{{player.nickname}}</p>
-			</a></ion-item>
+			<ion-item ng-repeat="player in players | orderBy:'-score'">
+				<div class="score-list">
+				<div class="score-list-nickname">{{player.nickname}}</div>
+				<div class="score-list-score">{{player.score}}</div>
+				</div>
+			</ion-item>
 		</ion-list>     
 	</ion-content>
 </ion-view>

@@ -39,6 +39,7 @@ div.list.list-inset{
 }
 
 .welcome-list {
+	font-size: 12px;
 	text-align: left;
 	padding-left: 15px;
 }
@@ -54,11 +55,22 @@ div.list.list-inset{
 #welcome-visual-step3 {
 	width: 100px;
 	height: 100px;
+}
 
+/* LeaderBoard Screen */
+.score-list-score {
+  float:right;
+}
+
+.score-list-nickname {
+  float:left;
 }
 
 
+
 .bar .title.indice {
+	text-align: left;
+	margin-left: 50px;
 	padding-left: 5px;
 	font-size:12px;
 }
@@ -73,8 +85,14 @@ div.list.list-inset{
   margin:0px
   }
 
+.welcome-directives {
+	padding: 5px;
+}  
+
 .welcome-title {
   color:#37b0dc;
+  font-size: 24px;
+  font-weight: 200;
   }
   
 .welcome-visual {
