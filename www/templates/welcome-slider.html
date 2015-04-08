@@ -45,8 +45,15 @@
 <div class="row row-bottom">
 	<div class="col"><img id="welcome-visual-step2" src="/img/welcome/wizard-step-2.png"></div>
 </div>
-	<p class="welcome-directives">{{labels[5].content}}</p>
-	<p class="welcome-directives">{{labels[6].content}}</p>
+	<p class="welcome-directives" ng-if="labels[5].content != 'empty'">{{labels[5].content}}</p>
+	<p class="welcome-list" ng-if="labels[6].content != 'empty'">{{labels[6].content}}</p>
+	<ul class="welcome-list">
+	<li>1. Enregistrez-vous (500 points)</li>
+	<li>2. Gagnez des points en participant à nos conférences (4000 points / conférence)</li>
+	<li>3. Rendez-nous visite sur le stand B12 au SITB, eCOM et gagnez encore plus de points (1000 points)</li>
+	<li>4. Participez à notre jeu et pulvérisez votre score</li>
+	<li>5. Passez à la caisse pour comptabiliser vos points totaux et participer au tirage au sort.</li>
+	</ul>
 	<!-- footer -->
 	<div class="bar bar-footer bar-stable">
 	  <button class="button button-icon icon ion-information-circled"></button>
@@ -63,7 +70,7 @@
 	<!-- footer -->
 	<div class="bar bar-footer bar-stable">
 	  <button class="button button-icon icon ion-information-circled"></button>
-	  <div class="title">{{labels[11].content}}</div>
+	  <div class="title indice">{{labels[11].content}}</div>
 	</div>
   </ion-slide>
 </ion-slide-box>

@@ -3,6 +3,10 @@
 blue : #37b0dc
 */
 
+.welcome-list {
+	text-align: left;
+	padding-left: 15px;
+}
 
 #welcome-visual-step1 {
 	width: 100px;
