@@ -192,7 +192,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   // $scope.totalpoints = 1520;
   $scope.totalpoints = "";
-  $scope.nextStep = "";
+  $scope.nextStep = "Identifiez vous pour continuer.";
 
   // Call launchMonitoring from Services
   $scope.main =  function() {
@@ -209,11 +209,17 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
             //console.log("GRANTED_LIST: " +JSON.stringify($scope.listGrantedTrophies));
             $scope.listInfoGrantedTrophies = Trophies.getListGrantedTrophies($scope);
             
-            //console.log("AFTER listInfoGrantedTrophies: " +JSON.stringify($scope.listInfoGrantedTrophies));
-
+            //total point
             $scope.totalpoints = Trophies.getCurrentPoints($scope);
             // Launch Monitoring
-            Trophies.launchMonitoring($scope,$rootScope);
+            if (localStorage.getItem("user_auth_id")) {
+              console.log("********* someone is identified" + localStorage.getItem("user_auth_id") );
+              Trophies.launchMonitoring($scope,$rootScope);
+            }
+            else {
+              console.log("********* Nobody is identified"+ localStorage.getItem("user_auth_id") );
+            }
+          
           }
       });
     });
