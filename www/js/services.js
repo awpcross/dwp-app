@@ -221,7 +221,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 			  dpd.users.get('me').success(function(session) {
 				  console.log('me :: success ! A user is logged in');
 				  console.log('session', session);
-				  console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+				  console.log('me :: Sucess Sucess user is already logged in : ' + session.nickname + ' (' + session.id + ')!'); 
 				  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!'); 
 				  return(session);
 
