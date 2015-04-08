@@ -1,5 +1,30 @@
 angular.module('starter.services', ['dpd', 'appconfig'])
 
+    .factory('AuthService', function ($rootScope) {
+        return {
+            checkLogin: function() {
+                // Check if logged in and fire events
+                if(this.isLoggedIn()) {
+                    $rootScope.$broadcast('app.loggedIn');
+                } else {
+                    $rootScope.$broadcast('app.loggedOut');
+                }
+            },
+            isLoggedIn: function() {
+                // Check auth token here from localStorage
+                if (localStorage.getItem("coride_auth_token") === null || localStorage.getItem("coride_auth_token") === "undefined") {
+                    return false
+                } else {
+                    return true
+                };
+            },
+            logout: function(email, pass) {
+                // Same thing, log out user
+                $rootScope.$broadcast('app.loggedOut');
+            }
+        }
+    })
+
 .service('LoginService', ['dpd', '$q', 'ENV', function(dpd, $q, env) {
 	
 	console.log('LoginService | starting... ');
@@ -24,10 +49,13 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 			
 			dpd.users.exec('login', { username: username, password: password }).success(function(session) {
 				  console.log('success ! Bart logged in');
-				  console.log('Sucess logged in : ' + username + ' (' + session.uid + ')!'); 
+				  console.log('Sucess logged in : ' + username + ' (' + session.uid + ')!'); 	
 
-			  console.log('checking current user start');
-			  
+				console.log('checking current user start');
+				console.log('persisting auth state');
+				localStorage.setItem("user_auth_id") = session.id;
+				console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
+
 			  dpd.users.get('me').success(function(session) {
 				  console.log('me :: success ! Bart logged in');
 				  console.log('session', session);
@@ -56,7 +84,12 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 			console.log('LoginService | calling deployd service (' + name + ' / ' + pw + ')... ');
 			dpd.users.exec('login', { username: name, password: pw }).success(function(session) {
 				  console.log('success !');
-				  deferred.resolve('Welcome ' + name + ' !');			
+
+				console.log('persisting auth state');
+				localStorage.setItem("user_auth_id", session.uid);
+				console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
+
+				deferred.resolve('Welcome ' + name + ' !');			
 			}).error(function(error) {
 				  console.log('error : ' + error.message, error);
 				  deferred.reject('Wrong credentials.');

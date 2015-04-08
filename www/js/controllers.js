@@ -491,8 +491,12 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
 		dpd.users.get('logout').success(function(session) {
 			  console.log('Sucessfuly logged out !');
-			  //deferred.resolve('Logged out ' + name + ' !');
-			$state.go('tab.profilelogin');
+				//deferred.resolve('Logged out ' + name + ' !');
+				console.log('persisting auth state');
+				localStorage.setItem("user_auth_id", '');
+				console.log('set user_auth_id : "', localStorage.getItem("user_auth_id") +'"' );
+
+				$state.go('tab.profilelogin');
 			  
 		}).error(function(error) {
 			  //console.log('error : ' + error.message, error);
