@@ -42,7 +42,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   // Called to navigate to the main app
   $scope.signIn = function() {
 	//$state.go('signin');
-    $state.go('tab.profile');
+    $state.go('tab.profilelogin');
 
   };
   $scope.next = function() {
@@ -73,25 +73,53 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   
 })
 
-.controller('SignInCtrl', function($scope, $state, LoginService, $ionicPopup, dpd) {
+.controller('SignInCtrl', function($scope, $state, LoginService, $ionicPopup, dpd, ProfileService) {
 
 	console.log('SignInCtrl | starting ... ') ;
 
-	$scope.user = {};
+	ProfileService.getUserProfile(dpd).success(function(response) {
 	
-	$scope.authUser = function(user) {
-	console.log('SignInCtrl.signIn() | start. ') ;
-    console.log('SignInCtrl.signIn() | Signing in user : ', user);
-
-	LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
-		//$state.go('tab.trophies');
-		$state.go('tab.profile');
-	}).error(function(user) {
+		if (response != null && response != '' ) {
+			console.log('user signed in');
+			$scope.user = response;		
+			console.log('response : "' + response + '"', response);
+		} else {
+			console.log('no user signed in');
+		}
+	}).error(function(error) {
+		console.log('error ProfileService.getUserProfile() in SignInCtrl', error);
+	/*	
 		var alertPopup = $ionicPopup.alert({
 			title: 'Login failed!',
 			template: 'Please check your credentials!'
 		});
+	*/
 	});
+	
+	
+	$scope.user = {};
+	
+	$scope.authUser = function(user) {
+	
+	console.log('SignInCtrl.signIn() | start. ') ;
+    if (user != null) {
+	console.log('SignInCtrl.signIn() | Signing in user : ', user);
+
+		LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
+			//$state.go('tab.trophies');
+			$scope.user = {};
+			$state.go('tab.profile');
+		}).error(function(user) {
+			var alertPopup = $ionicPopup.alert({
+				title: 'Login failed!',
+				template: 'Please check your credentials!'
+			});
+		});
+	
+	} else {
+	console.log('SignInCtrl.signIn() | Signing in user : !!warning user is empty!!');	
+	}
+
 	
     //$state.go('tab.trophies');
 
@@ -103,9 +131,37 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   
 })
 
-.controller('RegisterCtrl', function($scope, $state) {
+.controller('RegisterCtrl', function($scope, $state, RegisterUserService, dpd) {
 	console.log('RegisterCtrl | starting ... ') ;
-		
+
+	var newuser = $scope.newuser;
+	
+	$scope.registerUser = function(newuser) {
+	console.log('RegisterCtrl.registerUser() | start. ') ;
+
+    if (newuser == null) {
+	console.log('RegisterCtrl.registerUser() | registering user : !!warning user is empty!!');	
+	} else {
+	console.log('RegisterCtrl.registerUser() | registering user : ', newuser);
+
+	RegisterUserService.registerUser(newuser.username, newuser.password, newuser.nickname, dpd).success(function(user) {
+		//$state.go('tab.trophies');
+		$state.go('tab.news');
+	}).error(function(user) {
+		var alertPopup = $ionicPopup.alert({
+			title: 'This user already exists!',
+			template: 'Please select another username or contact support!'
+		});
+	});
+	
+    //$state.go('tab.trophies');
+	}
+
+	console.log('SignInCtrl.registerUser() | end. ') ;
+	
+  };
+
+	
 	console.log('RegisterCtrl | done. ') ;
 })
 
@@ -404,73 +460,61 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	console.log('LeaderboardCtrl | done. ') ;
 })
 
-.controller('ProfileCtrl', function($scope, $state) {
-	console.log('CrossNewsCtrl | starting ... ') ;
-	console.log('CrossNewsCtrl | done. ') ;
+.controller('ProfileCtrl', function($scope, $state, ProfileService, dpd) {
+	console.log('ProfileCtrl | starting ... ') ;
+
+
+	
+	ProfileService.getUserProfile(dpd).success(function(response) {
+		$scope.user = response;
+		console.log('response', response);
+	});
+
+
+	$scope.signOutUser = function(user) {
+	
+	console.log('ProfileCtrl.signOutUser() | start. ') ;
+    if (user != null) {
+	console.log('ProfileCtrl.signOutUser() | Signing in user : ', user);
+	} else {
+	console.log('ProfileCtrl.signOutUser() | Signing in user : !!warning user is empty!!');	
+	}
+
+	
+	
+	console.log('ProfileCtrl | logging out ');
+
+	dpd.users.get('me').success(function(session) {
+	console.log('me :: success ! A user is logged in');
+	console.log('session', session);
+	console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+
+		dpd.users.get('logout').success(function(session) {
+			  console.log('Sucessfuly logged out !');
+			  //deferred.resolve('Logged out ' + name + ' !');
+			$state.go('tab.profilelogin');
+			  
+		}).error(function(error) {
+			  //console.log('error : ' + error.message, error);
+			  console.log('error', error);
+		});
+
+		//deferred.resolve('Logged out ' + session.nickname + ' (' + session.id + ')!'); 
+
+	}).error(function(error) {
+		console.log('me::ERROR : ' + error.message, error);
+		console.log('me::ERROR : please check user is logged in.');
+		//deferred.reject('No user logged in.');
+	});
+
+	
+	
+	
+    //$state.go('tab.trophies');
+
+	console.log('ProfileCtrl.signOutUser() | end. ') ;
+	
+  };	
+	console.log('ProfileCtrl | done. ') ;
 });
 
-/*
-.controller('DealersCtrl', function($scope,$ionicLoading, $compile) {
-
-  console.log('DealersCtrl');
-
-    $scope.init = function() {
-
-  console.log('DealersCtrl >> initialize()');
-
-  var myLatlng = new google.maps.LatLng(43.07493,-89.381388);
-        
-        var mapOptions = {
-          center: myLatlng,
-          zoom: 16,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        
-		var map = new google.maps.Map(document.getElementById("map"),
-            mapOptions);
-        
-        //Marker + infowindow + angularjs compiled ng-click
-        var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
-        var compiled = $compile(contentString)($scope);
-
-        var infowindow = new google.maps.InfoWindow({
-          content: compiled[0]
-        });
-
-        var marker = new google.maps.Marker({
-          position: myLatlng,
-          map: map,
-          title: 'Uluru (Ayers Rock)'
-        });
-
-        google.maps.event.addListener(marker, 'click', function() {
-          infowindow.open(map,marker);
-        });
-
-        $scope.map = map;
-      }
-      
-      $scope.centerOnMe = function() {
-        if(!$scope.map) {
-          return;
-        }
-
-        $scope.loading = $ionicLoading.show({
-          content: 'Getting current location...',
-          showBackdrop: false
-        });
-
-        navigator.geolocation.getCurrentPosition(function(pos) {
-          $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-          $scope.loading.hide();
-        }, function(error) {
-          alert('Unable to get location: ' + error.message);
-        });
-      };
-      
-      $scope.clickTest = function() {
-        alert('Example of infowindow with ng-click')
-      };
-
-})
-*/

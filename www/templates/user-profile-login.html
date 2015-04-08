@@ -1,4 +1,4 @@
-<ion-view view-title="Profil">
+<ion-view view-title="Connexion">
 <ion-content>
 <!--<div class="row">
 
@@ -13,6 +13,7 @@ Vous devez vous connecter pour accéder à votre profil.
     <a nav-transition="none" href="/#/tab/profilelostpassword">Mot de passe oublié ?</a>
   </div>
   <div class="col" align="right">
+    <a nav-transition="none" href="/#/tab/profileregister">Créer un compte</a>
   </div>
 </div>
 <div class="list list-inset">
@@ -20,12 +21,12 @@ Vous devez vous connecter pour accéder à votre profil.
     <input type="text" ng-model="user.username" placeholder="Email">
   </label>
   <label class="item item-input">
-    <input type="text" ng-model="user.nickname" placeholder="Nom d'utilisateur">
+    <input type="text" ng-model="user.password" placeholder="Mot de passe">
   </label>
 </div>
 <div class="row">
   <div class="col">
-    <button class="button button-block button-positive" ng-click="signOutUser(user)">Déconnexion</button>
+    <button class="button button-block button-positive" ng-click="authUser(user)">Connexion</button>
   </div>
 </div>
 </ion-content>

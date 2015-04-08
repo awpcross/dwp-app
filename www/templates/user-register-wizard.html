@@ -5,23 +5,23 @@
     <a nav-transition="none" href="/#/tab/profilelostpassword">Mot de passe oublié ?</a>
   </div>
   <div class="col" align="right">
-    <a nav-transition="none" href="/#/tab/profile">Connexion</a>
+    <a nav-transition="none" href="/#/tab/profilelogin">Connexion</a>
   </div>
 </div>
 <div class="list list-inset">
   <label class="item item-input">
-    <input type="text" placeholder="Email">
+    <input type="text" ng-model="newuser.username" placeholder="Email">
   </label>
   <label class="item item-input">
-    <input type="text" placeholder="Mot de passe">
+    <input type="text" ng-model="newuser.password" placeholder="Mot de passe">
   </label>
   <label class="item item-input">
-    <input type="text" placeholder="Nom d'utilisateur">
+    <input type="text" ng-model="newuser.nickname" placeholder="Nom d'utilisateur">
   </label>
 </div>
 <div class="row">
   <div class="col">
-    <button class="button button-block button-positive">Connexion</button>
+    <button class="button button-block button-positive" ng-click="registerUser(newuser)" >S'inscrire</button>
   </div>
 </div>
 </ion-content>

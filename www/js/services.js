@@ -8,24 +8,55 @@ angular.module('starter.services', ['dpd', 'appconfig'])
             var deferred = $q.defer();
             var promise = deferred.promise;
 
+			
+			username = 'bart@gmail.com';
+			password = 'bart';
+			
 			console.log('LoginService | using appconfig.ENV : "' + env +'"');
 			if ( env == 'dev-nobackend') {
-				console.log('LoginService | skipping auth (bart@gmail.com');
-				// deferred.resolve('Welcome ' + name + '!');
-        dpd.users.exec('login', { username: 'bart@gmail.com', password: 'bart' }).success(function(session) {
-          console.log('success ! loging Bart');
-          deferred.resolve('Welcome ' + name + '!'); 
-          console.log(session);
-      }).error(function(error) {
-          console.log('error : ' + error.message, error);
-          deferred.reject('Wrong credentials.');
-      });
+				console.log('LoginService | skipping auth (no uid available...)');
+				deferred.resolve('Welcome ' + username + '!');
 
-			} else {	
-			console.log('LoginService | calling deployd service (dpd.users.login)... ');
+			} else if ( env == 'dev-local-backend' ) {
+			
+			
+			console.log('LoginService | auth with bart@gmail.com');
+			
+			dpd.users.exec('login', { username: username, password: password }).success(function(session) {
+				  console.log('success ! Bart logged in');
+				  console.log('Sucess logged in : ' + username + ' (' + session.uid + ')!'); 
+
+			  console.log('checking current user start');
+			  
+			  dpd.users.get('me').success(function(session) {
+				  console.log('me :: success ! Bart logged in');
+				  console.log('session', session);
+				  console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+				  deferred.resolve('Welcome ' + name + ' (' + session.uid + ')!'); 
+			  }).error(function(error) {
+				  console.log('me::ERROR : ' + error.message, error);
+				  console.log('me::ERROR : please check user : ' + username + ' exists in DB.');
+				  deferred.reject('Wrong credentials.');
+			  });
+
+			  console.log('checking current user done.');
+
+			  deferred.resolve('Welcome ' + name + ' (' + session.uid + ')!'); 
+
+				  }).error(function(error) {
+				  console.log('ERROR : ' + error.message, error);
+				  console.log('ERROR : please check user : ' + username + ' exists in DB.');
+				  deferred.reject('Wrong credentials.');
+			  });
+			  
+			  
+
+			} else {
+			
+			console.log('LoginService | calling deployd service (' + name + ' / ' + pw + ')... ');
 			dpd.users.exec('login', { username: name, password: pw }).success(function(session) {
 				  console.log('success !');
-				  deferred.resolve('Welcome ' + name + '!');			
+				  deferred.resolve('Welcome ' + name + ' !');			
 			}).error(function(error) {
 				  console.log('error : ' + error.message, error);
 				  deferred.reject('Wrong credentials.');
@@ -64,6 +95,149 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 	console.log('LoginService | done. ') ;
 	
 }])
+
+.service('RegisterUserService', ['dpd', '$q', 'ENV', function(dpd, $q, env) {
+	
+	console.log('RegisterUserService | starting... ');
+    return {
+        registerUser: function(newusername, newpassword, newnickname, dpd) {
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+
+			username = 'bart@gmail.com';
+			password = 'bart';
+			nickname = 'Bart Simpson'; 
+			score = 1500;
+			
+			console.log('RegisterUserService | using appconfig.ENV : "' + env +'"');
+			if ( env == 'dev-nobackend') {
+				console.log('RegisterUserService | skipping register (no user created...)');
+				deferred.resolve('Created ' + name + '!');
+
+			} else if ( env == 'dev-local-backend' ) {
+			
+			
+			console.log('RegisterUserService | registering bart@gmail.com (' + username + ' / ' + password + ' / ' + nickname + ')');
+			
+			dpd.users.post({ username: username, password: password, nickname: nickname, score: score, picture:false }).success(function(session) {
+				  console.log('success ! user created');
+				  console.log('Sucess created user : ' + username + ' (' + session.uid + ')!'); 
+				  deferred.resolve('Created ' + name + ' (' + session.uid + ')!'); 
+			  }).error(function(error) {
+				  console.log('ERROR : ' + error.message, error);
+				  console.log('ERROR : please check could not create : ' + username + ' in DB.');
+				  deferred.reject('Wrong credentials.');
+			  });
+
+			} else {	
+			console.log('RegisterUserService | calling deployd service (dpd.users.login)... ');
+			
+			dpd.users.post({ username: newusername, password: newpassword, nickname: newnickname, score: score, picture:false }).success(function(session) {
+				  console.log('success ! user created');
+				  console.log('Sucess created user : ' + session.username + ' (' + session.id + ')!'); 
+				  deferred.resolve('Created ' + session.username + ' (' + session.id + ')!'); 
+			  }).error(function(error) {
+				  console.log('ERROR : ' + error.message, error);
+				  console.log('ERROR : please check could not create : ' + new	username + ' in DB.');
+				  deferred.reject('Wrong credentials.');
+			  });
+
+			console.log('RegisterUserService | done deployd ... ');
+			}
+
+            promise.success = function(fn) {
+                promise.then(fn);
+                return promise;
+            }
+
+            promise.error = function(fn) {
+                promise.then(null, fn);
+                return promise;
+            }
+            return promise;
+        }
+    }
+	console.log('RegisterUserService | done. ') ;
+	
+}])
+
+.service('ProfileService', ['dpd', '$q', 'ENV', function(dpd, $q, env) {
+	
+	console.log('ProfileService | starting... ');
+    return {
+	
+        getUserProfile: function(dpd) {
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+
+			username = 'bart@gmail.com';
+			password = 'bart';
+			nickname = 'Bart Simpson'; 
+			score = 1500;
+			
+			console.log('ProfileService | using appconfig.ENV : "' + env +'"');
+			if ( env == 'dev-nobackend') {
+				console.log('ProfileService | skipping register (no user created...)');
+				deferred.resolve('Created ' + name + '!');
+
+			} else if ( env == 'dev-local-backend' ) {
+			
+			
+			console.log('ProfileService | registering bart@gmail.com (' + username + ' / ' + password + ' / ' + nickname + ')');
+			
+			  dpd.users.get('me').success(function(session) {
+				  console.log('me :: success ! A user is logged in');
+				  console.log('session', session);
+				  console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+				  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!'); 
+				  return(session);
+
+			  }).error(function(error) {
+				  console.log('me::ERROR : ' + error.message, error);
+				  console.log('me::ERROR : please check user : ' + username + ' exists in DB.');
+				  deferred.reject('Wrong credentials.');
+			  });
+
+			} else {	
+			console.log('ProfileService | calling deployd service (dpd.users.get(me))... ');
+			
+			  dpd.users.get('me').success(function(session) {
+				  console.log('me :: success ! A user is logged in');
+				  console.log('session', session);
+				  console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+				  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!');
+				  deferred.resolve(session);
+				  return(session);
+				  
+			  }).error(function(error) {
+				  console.log('me::ERROR : ' + error.message, error);
+				  console.log('me::ERROR : no user logged in.');
+				  deferred.reject('No user logged in.');
+			  });
+
+			
+			console.log('ProfileService | done deployd ... ');
+			}
+
+            promise.success = function(fn) {
+                promise.then(fn);
+                return promise;
+            }
+
+            promise.error = function(fn) {
+                promise.then(null, fn);
+                return promise;
+            }
+            return promise;
+        }
+	
+    };
+	
+	
+	console.log('ProfileService | done. ') ;
+	
+}])
+
 
 .factory('ScoreService', function($http) {
   var promise;
