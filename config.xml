@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.crossagency.beaconandnotification" version="1.0.0">
-  <name>awp-app</name>
+  <name>dwp-app</name>
   <description>Find Beacons and Notify.</description>
   <author href="http://phonegap.com" email="support@phonegap.com">CrossAgencyTeam</author>
   <content src="index.html"/>

@@ -17,6 +17,7 @@
 	font-variant: normal;
 	text-transform: none;
 	line-height: 1;
+	font-size: 12px;
 
 	/* Better Font Rendering =========== */
 	-webkit-font-smoothing: antialiased;
@@ -71,7 +72,17 @@
 	content: "\e631";
 }
 
+.icon-dwpwinners-podium-on:before {
+	content: "\e631";
+	stroke-width:4; 
+}
+
 .icon-dwpuser:before {
 	content: "\e600";
+}
+
+.icon-dwpuser-on:before {
+	content: "\e600";
+	stroke-width:4; 
 }
 

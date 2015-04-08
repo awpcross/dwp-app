@@ -3,6 +3,41 @@
 blue : #37b0dc
 */
 
+
+h1, .h1 {
+  font-size: 14px;
+  padding-bottom: 0px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.item {
+  font-size: 14px;
+}
+
+.item-body h1{
+  font-size: 14px;
+  padding-bottom: 0px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+[class$='-positive']{
+  background : #37b0dc;
+  border-color : #37b0dc;
+}
+
+body > ion-nav-view > ion-tabs > div{
+  background : #37b0dc;
+}
+
+div.list.list-inset{
+ margin-top : 0;
+}
+
+.tab-item .icon {
+	font-size: 28px;
+}
+
 .welcome-list {
 	text-align: left;
 	padding-left: 15px;
@@ -11,32 +46,15 @@ blue : #37b0dc
 #welcome-visual-step1 {
 	width: 100px;
 	height: 100px;
-	background: url(/img/welcome/wizard-step-1.png) 0 0 no-repeat;
 }
 #welcome-visual-step2 {
 	width: 100px;
 	height: 100px;
-	background: url(/img/welcome/wizard-step-2.png) 0 0 no-repeat;
 }
 #welcome-visual-step3 {
 	width: 100px;
 	height: 100px;
-	background: url(/img/welcome/wizard-step-3.png) 0 0 no-repeat;
-}
 
-@media
-screen and (-webkit-min-device-pixel-ratio: 1.5),
-screen and (-moz-min-device-pixel-ratio: 1.5),
-screen and (min-device-pixel-ratio: 1.5) {
-	#welcome-visual-step1 {
-		background-image: url(/img/welcome/wizard-step-1@2x.png);
-	}
-	#welcome-visual-step2 {
-		background-image: url(/img/welcome/wizard-step-2@2x.png);
-	}
-	#welcome-visual-step3 {
-		background-image: url(/img/welcome/wizard-step-3@2x.png);
-	}
 }
 
 
@@ -70,6 +88,33 @@ screen and (min-device-pixel-ratio: 1.5) {
   font-size:5em;
 }
 
+@font-face {
+  font-family: 'open_sansregular';
+  src: url("../fonts/open_sans/OpenSans-Regular-webfont.eot");
+  src: url("../fonts/open_sans/OpenSans-Regular-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/open_sans/OpenSans-Regular-webfont.woff2") format('woff2'), url("../fonts/open_sans/OpenSans-Regular-webfont.woff") format('woff'), url("../fonts/open_sans/OpenSans-Regular-webfont.ttf") format('truetype'), url("../fonts/open_sans/OpenSans-Regular-webfont.svg#open_sansregular") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sanslight';
+    src: url('./fonts/open_sans/OpenSans-Light-webfont.eot');
+    src: url('./fonts/open_sans/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/open_sans/OpenSans-Light-webfont.woff2') format('woff2'),
+         url('./fonts/open_sans/OpenSans-Light-webfont.woff') format('woff'),
+         url('./fonts/open_sans/OpenSans-Light-webfont.ttf') format('truetype'),
+         url('./fonts/open_sans/OpenSans-Light-webfont.svg#open_sanslight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+body * {
+  font-family: 'Helvetica Neue', 'open_sanslight', Helvetica, Arial, sans-serif;
+  /*font-weight: bold;*/
+  /*letter-spacing: 0.05em;*/
+ }
+ 
 /* Jeremy
 
 h1,
@@ -246,10 +291,7 @@ ion-view.ecom .scroll .list.card .item.item-body {
 
 
  // end Jeremy */
-	h1, .h1 {
-		font-size: 24px;
-		padding-bottom: 15px;
-	}
+
 .slider {
   height: 100%;
 }

@@ -198,7 +198,7 @@ app.value('dpdConfig',['categories']);
 */
 
 app.value('dpdConfig', { 
-    collections: ['users', 'welcomecontents', 'trophies', 'trophiesmatched'], 
+    collections: ['users', 'welcomecontents', 'trophies', 'trophiesmatched', 'newsecom', 'newscross'], 
     //serverRoot: 'https://digitalwatchproject.cross-systems.ch/', // optional, defaults to same server
     serverRoot: 'http://localhost:2403/', // optional, defaults to same server
     socketOptions: { reconnectionDelayMax: 3000 }, // optional socket io additional configuration

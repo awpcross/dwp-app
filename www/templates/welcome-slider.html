@@ -22,12 +22,12 @@
 <ion-slide-box on-slide-changed="slideChanged(index)">
 <ion-slide>
 <div class="row">
+	<div class="col"><img id="welcome-visual-step1" src="/img/welcome/wizard-step-1@2x.png"></div>
+</div>
+<div class="row">
   <div class="col"><h4 class="welcome-title">{{labels[0].content}}</h4></div>
 </div>
-<div class="row row-bottom">
-	<div class="col"><img id="welcome-visual-step1" src="/img/welcome/wizard-step-1.png"></div>
-</div>
-<div class="row row-bottom welcome-content">
+<div class="row welcome-content">
   <div class="col">
 	<p class="welcome-directives">{{labels[1].content}}</p>
 	<p class="welcome-directives">{{labels[2].content}}</p>  
@@ -40,11 +40,13 @@
 </ion-slide>
 <ion-slide>
 <div class="row">
+	<div class="col"><img id="welcome-visual-step2" src="/img/welcome/wizard-step-2@2x.png"></div>
+</div>
+<div class="row welcome-content">
 	<div class="col"><h4 class="welcome-title">{{labels[4].content}}</h4></div>
 </div>
-<div class="row row-bottom">
-	<div class="col"><img id="welcome-visual-step2" src="/img/welcome/wizard-step-2.png"></div>
-</div>
+<div class="row welcome-content">
+	<div class="col">
 	<p class="welcome-directives" ng-if="labels[5].content != 'empty'">{{labels[5].content}}</p>
 	<p class="welcome-list" ng-if="labels[6].content != 'empty'">{{labels[6].content}}</p>
 	<ul class="welcome-list">
@@ -54,24 +56,28 @@
 	<li>4. Participez à notre jeu et pulvérisez votre score</li>
 	<li>5. Passez à la caisse pour comptabiliser vos points totaux et participer au tirage au sort.</li>
 	</ul>
-	<!-- footer -->
-	<div class="bar bar-footer bar-stable">
-	  <button class="button button-icon icon ion-information-circled"></button>
-	  <div class="title indice">{{labels[7].content}}</div>
 	</div>
-  </ion-slide>
-  <ion-slide>
-	<div id="logo">
-		<img src="/img/welcome/wizard-step-3.png">
-	</div>
-	<h4>{{labels[8].content}}</h4>
-	<p class="welcome-directives">{{labels[9].content}}</p>
-	<p class="welcome-directives">{{labels[10].content}}</p>
-	<!-- footer -->
-	<div class="bar bar-footer bar-stable">
-	  <button class="button button-icon icon ion-information-circled"></button>
-	  <div class="title indice">{{labels[11].content}}</div>
-	</div>
-  </ion-slide>
+</div>
+<div class="bar bar-footer bar-stable">
+  <button class="button button-icon icon ion-information-circled"></button>
+  <div class="title indice">{{labels[7].content}}</div>
+</div>
+</ion-slide>
+<ion-slide>
+<div class="row">
+	<div class="col"><img id="welcome-visual-step3" src="/img/welcome/wizard-step-3@2x.png"></div>
+</div>
+<div class="row welcome-content">
+	<div class="col"><h4 class="welcome-title">{{labels[8].content}}</h4></div>
+</div>
+
+<p class="welcome-directives">{{labels[9].content}}</p>
+<p class="welcome-directives">{{labels[10].content}}</p>
+<!-- footer -->
+<div class="bar bar-footer bar-stable">
+  <button class="button button-icon icon ion-information-circled"></button>
+  <div class="title indice">{{labels[11].content}}</div>
+</div>
+</ion-slide>
 </ion-slide-box>
 </ion-view>

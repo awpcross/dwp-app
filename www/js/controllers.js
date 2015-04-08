@@ -3,12 +3,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 .controller('WelcomeCtrl', function(dpd,$scope, $state, $ionicSlideBoxDelegate) {
 
 	console.log('WelcomeCtrl | starting ... ');
-	// GET filter: viewid: {$in: "10"}, viewid: {$in: "1"}
-	//category: {$in: ["food", "business", "technology"]}
-	//dpd.categories.get($sort: {name: 1}, $limit: 10, rightsLevel: {$gt:0}};
-	//$sort: {likes: -1}
-	
-	//$scope.txt = dpd.appcontents.get( {viewid: 10, subviewid: 1, $sort: {orderno: 1}} );
 
 	dpd.welcomecontents.get( { $sort: {orderno: 1}} ).success(function(response) {
 			  console.log('success !');
@@ -18,26 +12,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 			  console.log('error : ' + error.message, error);
 		});
 				
-	// todo fallback if network error
-	//console.log( $scope.labels );
-	
-	
-	
-	
-
-/*
-	// sample dpd usage
-	dpd.users.get();	
-
-	dpd.users.exec('login', { username: 'jaimie@gmail.com', password: 'jaimie' }).success(function(session) {
-					  console.log('success !');
-				}).error(function(error) {
-					  console.log('error : ' + error.message, error);
-				});
-
-	dpd.users.post({"username":"pascal@escarment.com","password":"123"});
-*/
-
 
   // Called to navigate to the main app
   $scope.signIn = function() {
@@ -171,13 +145,30 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	console.log('ProfileRegisterCtrl | done. ') ;
 })
 
-.controller('CrossEcomCtrl', function($scope, $state) {
+.controller('CrossEcomCtrl', function($scope, $state, dpd) {
 	console.log('CrossEcomCtrl | starting ... ') ;
+
+	dpd.newsecom.get( { $sort: {timestamp: 1}} ).success(function(response) {
+			  console.log('success !');
+			  console.log('data : ', response);
+			  $scope.ecomnews = response;
+		}).error(function(error) {
+			  console.log('error : ' + error.message, error);
+		});
+	
 	console.log('CrossEcomCtrl | done. ') ;
 })
 
-.controller('CrossNewsCtrl', function($scope, $state) {
+.controller('CrossNewsCtrl', function($scope, $state,dpd) {
 	console.log('CrossNewsCtrl | starting ... ') ;
+	dpd.newscross.get( { $sort: {timestamp: 1}} ).success(function(response) {
+			  console.log('success !');
+			  console.log('data : ', response);
+			  $scope.crossnews = response;
+		}).error(function(error) {
+			  console.log('error : ' + error.message, error);
+		});
+	
 	console.log('CrossNewsCtrl | done. ') ;
 })
 
