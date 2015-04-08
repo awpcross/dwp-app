@@ -21,7 +21,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
     //console.log('Device Ready | Request authorization ') ;
     estimote.beacons.requestAlwaysAuthorization();
     // Ask to authorize Notification 
-    window.plugin.notification.local.promptForPermission();
+     window.plugin.notification.local.promptForPermission();
     // Bluetooth : Listenet : To comment for compilation in evothings
     chrome.bluetooth.onAdapterStateChanged.addListener(
     function(adapter) {
@@ -199,8 +199,8 @@ app.value('dpdConfig',['categories']);
 
 app.value('dpdConfig', { 
     collections: ['users', 'welcomecontents', 'trophies', 'trophiesmatched'], 
-    //serverRoot: 'https://digitalwatchproject.cross-systems.ch/', // optional, defaults to same server
-    serverRoot: 'http://localhost:2403/', // optional, defaults to same server
+    serverRoot: 'https://digitalwatchproject.cross-systems.ch/', // optional, defaults to same server
+    //serverRoot: 'http://localhost:2403/', // optional, defaults to same server
     socketOptions: { reconnectionDelayMax: 3000 }, // optional socket io additional configuration
     useSocketIo: false, // optional, defaults to false
     noCache: true // optional, defaults to false (false means that caching is enabled, true means it disabled)

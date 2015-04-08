@@ -206,9 +206,12 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
           //TODO : Not always check ListGrantedTrophies
           if($rootScope.monitoringLaunched==false) {
             $scope.listGrantedTrophies = promise_grantedTrophies;
-            console.log("GRANTED_LIST: " +JSON.stringify($scope.listGrantedTrophies));
+            //console.log("GRANTED_LIST: " +JSON.stringify($scope.listGrantedTrophies));
             $scope.listInfoGrantedTrophies = Trophies.getListGrantedTrophies($scope);
-            $scope.totalpoints = Trophies.getCurrentPoints();
+            
+            //console.log("AFTER listInfoGrantedTrophies: " +JSON.stringify($scope.listInfoGrantedTrophies));
+
+            $scope.totalpoints = Trophies.getCurrentPoints($scope);
             // Launch Monitoring
             Trophies.launchMonitoring($scope,$rootScope);
           }
@@ -256,9 +259,12 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
       //  Get the associate TROPHY
       var currentTS = new Date().getTime();
       var trophy = Trophies.getFromRegion($scope,$scope.regionState);
+     console.log("DISPATCH EVENT begin");
+      $scope.nbMatch = Trophies.getNbMatch($scope,trophy.id);
+
       // TODO : Add logic : multicheck
       console.log("TIMESTAMP : " + currentTS + " " + JSON.stringify(trophy));
-      if ( currentTS > trophy.startDate  &&  currentTS < trophy.endDate) {
+      if (currentTS > trophy.startDate  &&  currentTS < trophy.endDate && $scope.nbMatch < trophy.maxCount) {
 
         // IF app in Background
        if ($rootScope.appInBackground) {
@@ -274,6 +280,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
           // Update Score in the view
           $scope.totalpoints += trophy.points;
           $scope.listInfoGrantedTrophies.push(trophy);
+          // Update Score in the DB
+          Trophies.setPoints($scope, trophy, dpd);
         });
       }
     }

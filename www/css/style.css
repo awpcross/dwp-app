@@ -24,6 +24,16 @@ blue : #37b0dc
 	background: url(/img/welcome/wizard-step-3.png) 0 0 no-repeat;
 }
 
+/* LeaderBoard Screen */
+.score-list-score {
+  float:right;
+}
+
+.score-list-nickname {
+  float:left;
+}
+
+
 @media
 screen and (-webkit-min-device-pixel-ratio: 1.5),
 screen and (-moz-min-device-pixel-ratio: 1.5),

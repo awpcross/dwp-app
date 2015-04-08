@@ -95,21 +95,6 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 				  deferred.reject('Wrong credentials.');
 			});
 
-
-			/*
-			dpd.users.login({username: name, password: pw}, function(session, error) {
-				if (error) {
-				  console.log('error : ' + error.message, error);
-				  deferred.reject('Wrong credentials.');
-				  
-				} else {
-				  console.log('success !');
-				  deferred.resolve('Welcome ' + name + '!');
-				//location.href = "/welcome.html";
-
-				}
-			});
-			*/
 			console.log('LoginService | done deployd ... ');
 			}
 
@@ -272,7 +257,9 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 }])
 
 
-.factory('ScoreService', function($http) {
+.factory('ScoreService', function($http,dpd) {
+
+
   var promise;
   var ScoreService = {
     getScores: function() {
@@ -280,7 +267,8 @@ angular.module('starter.services', ['dpd', 'appconfig'])
         // $http returns a promise, which has a then function, which also returns a promise
         promise = $http.get('https://digitalwatchproject.cross-systems.ch/users').then(function (response) {
           // The then function here is an opportunity to modify the response
-          console.log("************** RESPONSE : "+response);
+          // TODO Penser a la mise a jour du score
+          console.log("************** RESPONSE : "+response.data);
           // The return value gets picked up by the then in the controller.
           return response.data;
         });
@@ -292,49 +280,11 @@ angular.module('starter.services', ['dpd', 'appconfig'])
   return ScoreService;
 })
 
-/*
-.factory('TrophyService', function($http) {
-  var promise1;
-  var promise2;
-  var TrophyService = {
-  
-    getTrophies: function() {
-      if ( !promise1 ) {
-        // $http returns a promise, which has a then function, which also returns a promise
-        promise1 = $http.get('http://localhost:2403/trophies').then(function (response) {
-          // The then function here is an opportunity to modify the response
-          console.log(response);
-          // The return value gets picked up by the then in the controller.
-          return response.data;
-        });
-      }
-      // Return the promise to the controller
-      return promise1;
-    },
-
-    getMatchedTrophies: function() {
-      if ( !promise2 ) {
-        // $http returns a promise, which has a then function, which also returns a promise
-        promise2 = $http.get('http://localhost:2403/trophies-matched').then(function (response) {
-          // The then function here is an opportunity to modify the response
-          console.log(response);
-          // The return value gets picked up by the then in the controller.
-          return response.data;
-        });
-      }
-      // Return the promise to the controller
-      return promise2;
-    }
-	
-
-	};
-  return TrophyService;
-})
-*/
 
 /* Beacons/Trophies Factory */
 .factory('Trophies', function($http) {
   // TODO : get all region from a resource that returns a JSON array
+   /*
    var beaconRegions = [{
         id : 'eac708b7e5f508e1',
         identifier: 'BienvenueAuSalon',
@@ -443,7 +393,9 @@ angular.module('starter.services', ['dpd', 'appconfig'])
           timestamp :1427984922000,
         }
     ];
-
+    */
+     var beaconRegions = [];
+    var listGrantedTrophies = [];
     var listInfoGrantedTrophies = [];
 
     var  promise = [];
@@ -451,52 +403,24 @@ angular.module('starter.services', ['dpd', 'appconfig'])
   // Get a specific trophy from regionState
   getFromRegion  = function($scope,regionState) {
     console.log('getFromRegion | start!');
+    var  trophy = {};
+    // Number of flagged of the trophy
+    //var  nbFlagged = 0;
     for (var i = 0; i < beaconRegions.length; i++) {
         if (beaconRegions[i].identifier === regionState.identifier) {
           console.log('getFromRegion | FOUND');
-          return beaconRegions[i];
+          trophy = beaconRegions[i];
+          // nbFlagged += 1;
         }
       }
-      return null;
+      // trophy.nbFlagged = nbFlagged;
+      //alert(trophy.nbFlagged);
+      return trophy;
   }
-  /*
-      getTrophies = function($scope) {
-        console.log('******************* | START  getTrophies!');
-        promise = $http.get('https://digitalwatchproject.cross-systems.ch/users');
-        console.log('******************* | END  getTrophies!');
-      return null;
-    }
-  */
+
   // Get Trophies Json
   getTrophies = function($scope,dpd) {
-      console.log('******************* | START  getTrophies!');
-      // return null;
-    /* WORK 
-    dpd.trophies.get().success(function(response) {
-        console.log('data : ', response);
-        console.log("IN DPD" + JSON.stringify(response));
-
-        return response;
-    }).error(function(error) {
-        console.log('error : ' + error.message, error);
-    });
-    */ 
-
-    /*
-     var promise1;
-          console.log('******************* | IN getTrophies');
-          // $http returns a promise, which has a then function, which also returns a promise
-          promise1 = $http.get('https://digitalwatchproject.cross-systems.ch/trophies').then(function (response) {
-          // The then function here is an opportunity to modify the response
-         console.log('___****************** | IN RESPONSE');
-         console.log(JSON.stringify(response.data));
-          // The return value gets picked up by the then in the controller.
-          return response.data;
-        });
-      console.log('******************* | END getTrophies!');
-      // Return the promise to the controller
-      return promise1;
-      */
+    console.log('******************* | START  getTrophies!');
     var promise1;
     promise1 = dpd.trophies.get().then( function (response) {
       console.log(JSON.stringify(response.data));
@@ -513,8 +437,9 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 
     console.log('******************* | START  getTrophies Granted');
     var promise2;
-    promise2 = dpd.trophiesmatched.get().then( function (response) {
-      console.log(JSON.stringify(response.data));
+    // Get Granted Trophies for the authentified user
+    promise2 = dpd.trophiesmatched.get({userid:localStorage.getItem("user_auth_id")}).then( function (response) {
+      console.log("INIT : Granted TROPHIES: "+JSON.stringify(response.data));
        return response.data;
     });
     // Return the promise to the controller
@@ -533,17 +458,30 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     for (var i = 0; i < listGrantedTrophies.length; i++) {
         var bRegionId = listGrantedTrophies[i].trophyid;
         // Loop on regions - should be optimized
+        console.log("BOUCLE : "+ i + " bregionId : " + bRegionId);
         for (var j = 0; j < beaconRegions.length; j++) {
+          console.log("j : "+ j)
          if (beaconRegions[j].id === bRegionId) {
-           listInfoGrantedTrophies.push(beaconRegions[j]);
+            //beaconRegions[j].description = j + "_j_" + beaconRegions[j].description;
+            //beaconRegions[j].id= j+beaconRegions[j].id;
+           // beaconRegions[j].description="DESC_";
+            listInfoGrantedTrophies.push(beaconRegions[j]);
+            console.log("ADD : "+ j + JSON.stringify(beaconRegions[j]));
         }
       }
     }
+        console.log('getListGrantedTrophies | PASENDUR' + JSON.stringify(listInfoGrantedTrophies));
+    // listInfoGrantedTrophies = JSON.stringify(listInfoGrantedTrophies);
+    // listInfoGrantedTrophies = [{"name":"Zone Apero","description":"Apéritifs réseautage","points":500,"maxCount":1,"beaconColor":"yellow","endDate":1430438399000,"startDate":1427984918000,"nextStep":"Allez rencontrez nos intervenants","orderNo":3,"isActive":false,"uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":11,"minor":1,"identifier":"ZoneApero","delay":3600,"id":"8c1cc8ed6a6b7bbe"},{"name":"Rencontre Avec Nos Intervenants","description":" Rencontre avec nos intervenants","points":400,"maxCount":1,"endDate":1430438399000,"startDate":1427984918000,"nextStep":"Allez vite à l apero reseautage","orderNo":2,"isActive":false,"beaconColor":"yellow","delay":3600,"identifier":"RencontreAvecNosIntervenants","uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":12,"minor":1,"id":"22334cdaa20578a3"},{"name":"Bienvenue Au Salon","points":300,"description":"App téléchargée !","maxCount":1,"beaconColor":"red","endDate":1430438399000,"startDate":1427984918000,"nextStep":"Créez vous un compte!","orderNo":1,"isActive":false,"uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":10,"minor":1,"identifier":"BienvenueAuSalon","delay":3600,"id":"eac708b7e5f508e1"},{"name":"Zone Stand","description":"Vous avez débloqué le trophée : Visite de notre stand (B12)","points":2000,"maxCount":2,"endDate":1430438399000,"startDate":1427984918000,"nextStep":"C etait le dernier trophée. Revenez-nous voir au stand","orderNo":5,"isActive":true,"beaconColor":"black","delay":3600,"identifier":"ZoneStand","uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":700,"minor":1,"id":"ebae93ac8b78cbce"},{"name":"Zone Conf","description":"Vous avez débloqué le trophée : Suivi de conférence BIG DATA","points":1000,"maxCount":1,"endDate":1430438399000,"startDate":1427984918000,"nextStep":"Allez vite au stand","orderNo":4,"isActive":true,"beaconColor":"blue","delay":3600,"identifier":"ZoneConf","uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":500,"minor":1,"id":"aebda58efdbf3946"},{"name":"Zone Conf","description":"Vous avez débloqué le trophée : Suivi de conférence BIG DATA","points":1000,"maxCount":1,"endDate":1430438399000,"startDate":1427984918000,"nextStep":"Allez vite au stand","orderNo":4,"isActive":true,"beaconColor":"blue","delay":3600,"identifier":"ZoneConf","uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":500,"minor":1,"id":"aebda58efdbf3946"}];
+    // console.log('getListGrantedTrophies | ENDUR' + JSON.stringify(listInfoGrantedTrophies));
+
     return listInfoGrantedTrophies;
   }
 
     //Get Currents points
   getCurrentPoints = function($scope) {
+    listGrantedTrophies = $scope.listGrantedTrophies;
+    beaconRegions = $scope.trophies;
     console.log('getCurrentPoints | start!');
     var points = 0;
     for (var i = 0; i < listGrantedTrophies.length; i++) {
@@ -556,6 +494,49 @@ angular.module('starter.services', ['dpd', 'appconfig'])
       }
     }
     return points;
+  }
+
+      //Get Currents points
+  getNbMatch = function($scope,trophyid) {
+    console.log('getNbMatch | start!'+ trophyid);
+    listGrantedTrophies = $scope.listGrantedTrophies;
+    var nbMatch = 0;
+    for (var i = 0; i < listGrantedTrophies.length; i++) {
+         if (listGrantedTrophies[i].trophyid === trophyid) {
+           nbMatch += 1;
+      }
+    }
+    console.log('getNbMatch | nbMatch' + nbMatch);
+    console.log('getNbMatch | end!');
+    return nbMatch;
+  }
+
+
+  // SetPoints
+  setPoints = function ($scope,$trophy,dpd) {
+
+
+    console.log("SETPOINTS : BEGIN" + JSON.stringify($trophy));
+    var currentTS = new Date().getTime();
+    // Set points
+    dpd.trophiesmatched.post({ "timestamp" : currentTS, "trophyid":$trophy.id,"userid":localStorage.getItem("user_auth_id"),"points":$trophy.points}).success(function (result) {
+            console.log("SETPOINTS : SUCESS" + JSON.stringify(result));
+        }).error(function (err) {
+           console.log("SETPOINTS : ERROR > " + JSON.stringify(err));
+        }).finally(function () {
+            console.log("SETPOINTS : FINALLY ");
+        });
+    // UPDATE GLOBAL SCORE
+    dpd.users.put(localStorage.getItem("user_auth_id"),{"score":$scope.totalpoints}).success(function (result) {
+            console.log("UPDATE GLOBALPOINT : SUCESS" + JSON.stringify(result));
+        }).error(function (err) {
+           console.log("UPDATE GLOBALPOINT : ERROR > " + JSON.stringify(err));
+        }).finally(function () {
+            console.log("UPDATE GLOBALPOINT : FINALLY ");
+        });
+
+   console.log("SETPOINTS : END");
+
   }
 
 
@@ -622,10 +603,14 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     getTrophies : getTrophies,
     // Get Trophies Granted
     getGrantedTrophies : getGrantedTrophies,
+    // Get nMatch
+    getNbMatch : getNbMatch,
     // Get Kist
     getListGrantedTrophies : getListGrantedTrophies,
     // Get current points
-    getCurrentPoints : getCurrentPoints
+    getCurrentPoints : getCurrentPoints,
+    // Set addition points
+    setPoints : setPoints
   };
 })
 
