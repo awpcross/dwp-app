@@ -178,7 +178,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 							console.log('LostPasswordCtrl::sendPasswordReset() | found user : ' + response[0].username +'(' + response[0].id + ')');
 							var user = response[0];
 
-							var link = 'http://digitalprojectwatch.cross-systems.ch/reset-password';
+							var link = 'http://digitalprojectwatch.cross-systems.ch/user-reset-password/' + response[0].id;
 							// 2. send email & set flag passwordreset: true
 							
 							var mailJSON ={
@@ -227,12 +227,9 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 															},
 															{
 																"name": "link",
-																"content": user.nickname
-															},
-															{
-																"name": "password",
-																"content": user.nickname
+																"content": link
 															}
+															
 														]
 													}
 												]										

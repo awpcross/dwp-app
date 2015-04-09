@@ -12,6 +12,10 @@ h1, .h1 {
   margin-bottom: 5px;
 }
 
+.input-label {
+	color: #666;
+}
+
 .item {
   font-size: 13px;
 }
