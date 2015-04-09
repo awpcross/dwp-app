@@ -51,6 +51,13 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
 	console.log('SignInCtrl | starting ... ') ;
 
+	
+	if ( localStorage.getItem('user_auth_id') != null && localStorage.getItem('user_auth_id') != '' ) {
+		console.log('SignInCtrl | already logged in, redirecting to profile... ') ;
+		$state.go('tab.profile');
+
+	}
+	
 	ProfileService.getUserProfile(dpd).success(function(response) {
 	
 		if (response != null && response != '' ) {
@@ -702,6 +709,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 .controller('ProfileCtrl', function($scope, $state, ProfileService, dpd) {
 	console.log('ProfileCtrl | starting ... ') ;
 
+	console.log('ProfileCtrl | user_auth_id ... ' + localStorage.getItem('user_auth_id') ) ;
 
 	
 	ProfileService.getUserProfile(dpd).success(function(response) {

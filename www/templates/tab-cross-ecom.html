@@ -1,11 +1,11 @@
 <ion-view view-title="News eCOM SITB 2015">
   <ion-content class="padding">    
 	<div class="list card" ng-repeat="news in ecomnews">
-      <div class="item item-divider" ng-bind-html="news.headerText"></div>
+      <div class="item item-divider news-header" ng-bind-html="news.headerText"></div>
       <div class="item item-body">
         <div>
-          <h1 ng-bind-html="news.titleText"></h1>
-		  <p ng-bind-html="news.articleText"></p> 
+          <h1 class="news-title" ng-bind-html="news.titleText"></h1>
+		  <p class="news-article" ng-bind-html="news.articleText"></p> 
         </div>
       </div>
     </div>

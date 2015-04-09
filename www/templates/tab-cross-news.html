@@ -2,11 +2,11 @@
 <ion-view view-title="Cross News">
   <ion-content class="padding">    
 	<div class="list card" ng-repeat="news in crossnews">
-      <div class="item item-divider" ng-bind-html="news.headerText"></div>
+      <div class="item item-divider news-header" ng-bind-html="news.headerText"></div>
       <div class="item item-body">
         <div>
-          <h3 ng-bind-html="news.titleText"></h3>
-		  <p ng-bind-html="news.articleText"></p>
+          <h3 class="news-title" ng-bind-html="news.titleText"></h3>
+		  <p class="news-article" ng-bind-html="news.articleText"></p>
         </div>
       </div>
     </div>

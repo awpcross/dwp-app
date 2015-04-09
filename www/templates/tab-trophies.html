@@ -3,7 +3,7 @@
 
   <ion-content class="padding">
     <div class="list card">
-      <div class="item item-divider ">Votre score : {{totalpoints}} point(s)</div>
+      <div class="item item-divider news-header">Votre score : {{totalpoints}} point(s)</div>
       <div class="item item-body">
         <div>
         Vous avez {{totalpoints}} point(s)! <br/>
@@ -13,7 +13,7 @@
     </div>
 
     <div ng-repeat="item in listInfoGrantedTrophies" class="list card">
-      <div class="item item-divider">{{ item.points }} points</div>
+      <div class="item item-divider news-header">{{ item.points }} points</div>
       <div class="item item-body">
         <div>{{ item.description }}</div>
       </div>
