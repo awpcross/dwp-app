@@ -181,7 +181,17 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
       }
     })
 
-	.state('reset-password', {
+  .state('tab.changepassword', {
+    url: '/userchangepassword',
+      views: {
+        'tab-profile': {
+          templateUrl: 'templates/user-change-password.html',
+		  controller: 'ChangePasswordCtrl'
+        }
+      }
+  })
+	
+  .state('resetpassword', {
     url: '/user-reset-password/:uid',
     templateUrl: 'templates/user-reset-password.html',
     controller: 'ResetPasswordCtrl'

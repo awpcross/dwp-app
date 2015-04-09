@@ -185,7 +185,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     console.log('ProfileService | starting... ');
     return {
     
-        getUserProfile: function(dpd) {
+        getUserProfile: function(uid, dpd) {
             var deferred = $q.defer();
             var promise = deferred.promise;
 
@@ -220,7 +220,9 @@ angular.module('starter.services', ['dpd', 'appconfig'])
             } else {    
             console.log('ProfileService | calling deployd service (dpd.users.get(me))... ');
             
-              dpd.users.get('me').success(function(session) {
+              dpd.users.get(uid).success(function(session) {
+			  
+			  
                   console.log('me :: success ! A user is logged in');
                   console.log('session', session);
                   console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 

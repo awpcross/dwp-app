@@ -21,9 +21,11 @@
 </ion-nav-buttons>
 <ion-slide-box on-slide-changed="slideChanged(index)">
 <ion-slide>
-<div class="row">
-	<div class="col"><img id="welcome-visual-step1" src="img/welcome/wizard-step-1@2x.png"></div>
+<div class="row welcome-banner">
+<div class="welcome-banner-icon"><img id="welcome-visual-step2" src="img/welcome/wizard-step-2@2x.png"></div>
+<div class="welcome-banner-title">{{labels[0].content}}</div>
 </div>
+
 <div class="row">
   <div class="col"><h4 class="welcome-title">{{labels[0].content}}</h4></div>
 </div>

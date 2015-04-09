@@ -16,6 +16,9 @@ h1, .h1 {
 	color: #666;
 }
 
+.button.button-positive.button-clear {
+  color: #37b0dc;
+}
 .item {
   font-size: 13px;
 }
@@ -51,6 +54,8 @@ h1, .h1 {
 
 
 .news-header {
+	padding: none;
+	margin: none;
 	color: #fff;
 	background-color:#37b0dc;
 	font-weight:300;
@@ -84,6 +89,48 @@ div.list.list-inset{
 .tab-item .icon {
 	font-size: 28px;
 }
+
+
+.welcome-banner {
+	width: 100%;
+	background : #37b0dc;
+}
+
+.welcome-banner-title {
+  padding:0px;
+  margin:0px;
+	border: white;
+	color: #fff;
+	height:100px;
+	font-size: 24px;
+	font-weight: 200;
+    line-height: 1.2;
+	background : #37b0dc;
+}
+
+.welcome-banner-icon {
+	background : #37b0dc;
+}
+
+.welcome-visual {
+  padding:0px;
+  margin:0px;
+  color:#fff;
+  width: 100px;
+  height: 100px;
+  background-color:#37b0dc;
+}
+.welcome-directives {
+	padding: 5px;
+}  
+
+.welcome-title {
+  color:#37b0dc;
+  font-size: 24px;
+  font-weight: 200;
+  }
+  
+
 
 .welcome-list {
 	font-size: 12px;
@@ -132,26 +179,6 @@ div.list.list-inset{
   margin:0px
   }
 
-.welcome-directives {
-	padding: 5px;
-}  
-
-.welcome-title {
-  color:#37b0dc;
-  font-size: 24px;
-  font-weight: 200;
-  }
-  
-.welcome-visual {
-  padding:0px;
-  margin:0px
-  color:#fff;
-  background-color:#37b0dc;
-  }
-
-.big-icon {
-  font-size:5em;
-}
 
 @font-face {
   font-family: 'open_sansregular';
