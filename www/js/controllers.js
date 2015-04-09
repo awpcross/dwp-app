@@ -126,8 +126,24 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	console.log('RegisterCtrl.registerUser() | registering user : ', newuser);
 
 	RegisterUserService.registerUser(newuser.username, newuser.password, newuser.nickname, dpd).success(function(user) {
-		//$state.go('tab.trophies');
-		$state.go('tab.news');
+	
+	// TODO PES / LAL auto signin the user
+	dpd.users.exec('login', { username: newuser.username, password: newuser.password }).success(function(session) {
+		  console.log('success ! user logged in');
+		  console.log('Sucess logged in : ' + session.username + ' (' + session.id + ')!'); 	
+
+		console.log('checking current user start');
+		console.log('persisting auth state');
+		localStorage.setItem("user_auth_id", session.id);
+		console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
+		//state.go('tab.profil');
+		
+	  }).error(function(error) {
+		  console.log('ERROR : ' + error.message, error);
+		  console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
+	  });	
+			  
+	$state.go('tab.cross-ecom');
 	}).error(function(user) {
 		var alertPopup = $ionicPopup.alert({
 			title: 'This user already exists!',
@@ -178,7 +194,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 							console.log('LostPasswordCtrl::sendPasswordReset() | found user : ' + response[0].username +'(' + response[0].id + ')');
 							var user = response[0];
 
-							var link = 'http://digitalprojectwatch.cross-systems.ch:443/user-reset-password/' + response[0].id;
+							var link = 'http://digitalprojectwatch.cross-systems.ch/user-reset-password/' + response[0].id;
 							// 2. send email & set flag passwordreset: true
 							
 							var mailJSON ={
