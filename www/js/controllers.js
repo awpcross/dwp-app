@@ -425,30 +425,44 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   // Call launchMonitoring from Services
   $scope.main =  function() {
-    console.log('IN MAIN');
-    
+    $scope.$apply();
+    console.log('IN MAIN : > ' + localStorage.getItem("user_auth_id"));
+
     // Monitor all trohies
     Trophies.getTrophies($scope, dpd).then(function(promise_trophies) {
       $scope.trophies = promise_trophies;
       // Get Granted trophies 
       Trophies.getGrantedTrophies($scope, dpd).then(function(promise_grantedTrophies) {
           //TODO : Not always check ListGrantedTrophies
+           console.log('rootScope.monitoringLaunched > ' + $rootScope.monitoringLaunched);
           if($rootScope.monitoringLaunched==false) {
             $scope.listGrantedTrophies = promise_grantedTrophies;
             //console.log("GRANTED_LIST: " +JSON.stringify($scope.listGrantedTrophies));
+            $scope.listInfoGrantedTrophies = [];
             $scope.listInfoGrantedTrophies = Trophies.getListGrantedTrophies($scope);
-            
             //total point
             $scope.totalpoints = Trophies.getCurrentPoints($scope);
+            
+             console.log('IN MAIN before if');
             // Launch Monitoring
             if (localStorage.getItem("user_auth_id")) {
               console.log("********* someone is identified" + localStorage.getItem("user_auth_id") );
+              $scope.nextStep = "";
               Trophies.launchMonitoring($scope,$rootScope);
             }
             else {
               console.log("********* Nobody is identified"+ localStorage.getItem("user_auth_id") );
+              $scope.nextStep = "Identifiez vous pour continuer.";
             }
-          
+          }
+          // Fix for underterminedBug
+          else if (localStorage.getItem("user_auth_id")=='') {
+            console.log('IN PARTICULAR BUG [BEGIN]');
+            $scope.nextStep = "Vous n'êtes plus connecté. Identifiez-vous pour continuer.";
+            $scope.listInfoGrantedTrophies = [];
+            estimote.beacons.stopMonitoringForRegion({});
+            $rootScope.monitoringLaunched  = false;
+            console.log('IN PARTICULAR BUG [END]');
           }
       });
     });
@@ -456,34 +470,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   }
 
-  $scope.getStatusSniffer = function() {
-    // Launch MODAL
-    console.log('PREMAIN getStatusSniffer | start!');
-    //$scope.openModal();
-    //$state.go('prerequisites');
-    //console.log('PREMAIN getStatusSniffered | end!');
-
-    var onAuthoResultSnif = function(status) {
-      // If authorization mode is activated
-      console.log("onAuthoResultSnif selector"); 
-      if (status == 3) {
-        console.log("onAuthoResultSnif : 3"); 
-        $rootScope.statusSniffer = true;
-        $scope.main();
-       // return true;
-      }
-      else {
-        console.log("onAuthoResultSnif : 0"); 
-        $rootScope.statusSniffer = false;
-        $state.go('prerequisites');
-        // return false;
-      }
-    }
-    estimote.beacons.authorizationStatus(onAuthoResultSnif);
-  }
-
   $scope.gotoPrerequisites =  function() {
-    console.log('IN MAIN');
+    console.log('gotoPrerequisites');
     // $rootScope.monitoringLaunched = true;
     $state.go('prerequisites');
   }
@@ -495,10 +483,18 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
       var currentTS = new Date().getTime();
       var trophy = Trophies.getFromRegion($scope,$scope.regionState);
      console.log("DISPATCH EVENT begin");
-      $scope.nbMatch = Trophies.getNbMatch($scope,trophy.id);
+      // $scope.nbMatch = Trophies.getNbMatch($scope,trophy.id);
+      // Workaround
+      //$scope.nbMatch = Trophies.checkIfDoublon($scope,trophy.id,dpd);
 
+      Trophies.checkIfDoublon($scope, trophy.id,dpd).then(function(promise_nbmatch) {
+        $scope.nbMatch = promise_nbmatch;
+
+        
       // TODO : Add logic : multicheck
-      console.log("TIMESTAMP : " + currentTS + " " + JSON.stringify(trophy));
+      console.log("MATCHING THIS TROPHY :" + $scope.nbMatch + " - " +  currentTS + " " + JSON.stringify(trophy));
+      // Get nbMatch
+      
       if (currentTS > trophy.startDate  &&  currentTS < trophy.endDate && $scope.nbMatch < trophy.maxCount) {
 
         // IF app in Background
@@ -508,7 +504,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
         }
         console.log("***** iT IS A MATCH **** ");
         //TODO : CALL BACKEND TO adapt the DB
-        $scope.$apply( function() {
+      //  $scope.$apply( function() {
           console.log('Add newItem');
           // Update NextStep in the view 
           $scope.nextStep = trophy.nextStep;
@@ -517,13 +513,17 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
           $scope.listInfoGrantedTrophies.push(trophy);
           // Update Score in the DB
           Trophies.setPoints($scope, trophy, dpd);
-        });
-      }
+        //}); // END sccope.apply
+      } // End IF
+      }); // END Trophies.checkIfDoublon
+
     }
   }
 
+
   $scope.displayNotification = function(regionState) {
       var notification_msg = regionState.state+" "+regionState.identifier;
+      var notification_msg ="Vous avez débloqué un nouveau trophée."
       if (regionState.state=='inside') {
         //Send a Notification
         window.plugin.notification.local.add({ id:777, message: notification_msg,badge:0});
@@ -585,83 +585,11 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   });
 })
 
-/*
-.controller('TrophiesCtrl', function(TrophyService, $scope, $state, $http, $ionicModal, $timeout) {
-	console.log('TrophiesCtrl | start');
-
-	$scope.trophies = [];
-	$scope.trophiesMatched = [];
-
-	console.log('TrophiesCtrl | GET /trophies ...');
-  */
-	// Get all trophies
-	
-	/*
-	$http.get('http://localhost:2403/trophies').then(function(resp) {
-		console.log('Success', resp);
-		// For JSON responses, resp.data contains the result
-		$scope.loaded = true;
-		$scope.trophies = resp.data;
-		console.log( $scope.trophies[0].name);
-	}, function(err) {
-		console.error('ERR', err);
-		// err.status will contain the status code
-	})
-	*/
-  /*
-	TrophyService.getTrophies().then(function(promise1) {
-		$scope.trophies = promise1;
-	});
-	
-	console.log('TrophiesCtrl | GET /trophies done.');
-
-	console.log('TrophiesCtrl | GET /trophies-matched ...');
-
-	TrophyService.getMatchedTrophies().then(function(promise2) {
-		$scope.trophiesMatched = promise2;
-	});
-	console.log('TrophiesCtrl | GET /trophies-matched | $scope.trophiesMatched : ' + $scope.trophiesMatched);
-	
-	console.log('TrophiesCtrl | GET /trophies-matched done.');
-	
-	
-	$ionicModal.fromTemplateUrl('templates/modal-prerequisites.html', {
-		scope: $scope,
-		animation: 'slide-in-up'
-	}).then(function(modal) {
-		$scope.modal = modal;
-		//TODO uncomment
-		//$scope.modal.show();
-	})  
-
-  $scope.openModal = function() {
-    $scope.modal.show()
-  }
-
-  $scope.closeModal = function() {
-    $scope.modal.hide();
-  };
-
-  $scope.$on('$destroy', function() {
-    $scope.modal.remove();
-  });
-	// Execute action on hide modal
-	$scope.$on('$ionicView.afterEnter', function() {
-		console.log('$ionicView.loaded event captured | start');
-		// TODO : check if first render of the modal, event should not show the modal (done through the promise (.then()))
-		//TODO uncomment
-		//$scope.modal.show();
-		console.log('$ionicView.loaded event captured | end');
-	});
-
-})
-*/
-
 
 .controller('LeaderboardCtrl', function(dpd, ScoreService, $scope, $http) {
 	console.log('LeaderboardCtrl | starting ... ');
   //dpd.users.exec('me');
-
+  $scope.$apply();
 	$scope.players = [];
 	
 	console.log('LeaderboardCtrl | calling ScoreService.getScores() ... ') ;
@@ -715,7 +643,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	});
 
 
-	$scope.signOutUser = function(user) {
+	$scope.signOutUser = function(user, $rootScope) {
 	
 	console.log('ProfileCtrl.signOutUser() | start. ') ;
     if (user != null) {
@@ -728,7 +656,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	
 	console.log('ProfileCtrl | logging out ');
 
-	dpd.users.get('me').success(function(session) {
+	dpd.users.get('me').success(function(session, $rootScope) {
 	console.log('me :: success ! A user is logged in');
 	console.log('session', session);
 	console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
@@ -737,10 +665,19 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 			  console.log('Sucessfuly logged out !');
 				//deferred.resolve('Logged out ' + name + ' !');
 				console.log('persisting auth state');
+        // NULL
 				localStorage.setItem("user_auth_id", '');
 				console.log('set user_auth_id : "', localStorage.getItem("user_auth_id") +'"' );
-
+        // Stop monitoring
+        
+        if ($rootScope.monitoringLaunched  ==true ) {
+          console.log("STOP MONITORING in Profil if");
+          estimote.beacons.stopMonitoringForRegion({});
+          $rootScope.monitoringLaunched  = false;
+        }
+        console.log("STOP MONITORING in Profil");
 				$state.go('tab.profilelogin');
+
 			  
 		}).error(function(error) {
 			  //console.log('error : ' + error.message, error);

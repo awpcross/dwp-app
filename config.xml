@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.crossagency.beaconandnotification" version="1.0.0">
-  <name>dwp-app</name>
-  <description>Find Beacons and Notify.</description>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="ch.cross-agency.digital-watch-project" version="1.0.0">
+  <name>D Watch</name>
+  <description>Cross au salon SITB et eCOM 2015. Jouez et gagnez un magnifique prix.</description>
   <author href="http://phonegap.com" email="support@phonegap.com">CrossAgencyTeam</author>
   <content src="index.html"/>
   <preference name="permissions" value="none"/>
@@ -27,20 +27,20 @@
   <gap:plugin name="de.appplant.cordova.plugin.local-notification" version="0.8.1" />
  <!-- Allow conf Privacy Iphone -->
   <gap:config-file platform="ios" parent="NSLocationAlwaysUsageDescription" overwrite="false">
-      <string>Cross Beacon Finder.</string>
+      <string>Project Digital Watch</string>
   </gap:config-file>
-  <icon src="icon.png"/>
-  <icon src="icon-29@2x.png" gap:platform="ios" width="58" height="58"/>
-  <icon src="icon-29@3x.png" gap:platform="ios" width="87" height="87"/>
-  <icon src="icon-40@2x.png" gap:platform="ios" width="80" height="80"/>
-  <icon src="icon-40@3x.png" gap:platform="ios" width="120" height="120"/>
-  <icon src="icon-60@2x.png" gap:platform="ios" width="120" height="120"/>
-  <icon src="icon-60@3x.png" gap:platform="ios" width="180" height="180"/>
-  <gap:splash src="www/res/screen/ios/screen-iphone-portrait.png" gap:platform="ios" width="320" height="480"/>
-  <gap:splash src="www/res/screen/ios/screen-iphone-portrait-2x.png" gap:platform="ios" width="640" height="960"/>
-  <gap:splash src="www/res/screen/ios/screen-iphone-portrait-568h-2x.png" gap:platform="ios" width="640" height="1136"/>
-  <gap:splash src="www/res/screen/ios/screen-ipad-portrait.png" gap:platform="ios" width="768" height="1024"/>
-  <gap:splash src="www/res/screen/ios/screen-ipad-landscape.png" gap:platform="ios" width="1024" height="768"/>
+  <!--  <icon src="icon.png"/>  -->
+  <icon src="res/icon/ios/icon.png" gap:platform="ios" width="57" height="57"/>
+  <icon src="res/icon/ios/icon-29@2x.png" gap:platform="ios" width="58" height="58"/>
+  <icon src="res/icon/ios/icon-29@3x.png" gap:platform="ios" width="87" height="87"/>
+  <icon src="res/icon/ios/icon-40@2x.png" gap:platform="ios" width="80" height="80"/>
+  <icon src="res/icon/ios/icon-40@3x.png" gap:platform="ios" width="120" height="120"/>
+  <icon src="res/icon/ios/icon-60@2x.png" gap:platform="ios" width="120" height="120"/>
+  <icon src="res/icon/ios/icon-60@3x.png" gap:platform="ios" width="180" height="180"/>
+  <gap:splash src="res/splash/ios/Default@2x.png" gap:platform="ios" width="640" height="960" />
+  <gap:splash src="res/splash/ios/Default-568h@2x.png" gap:platform="ios" width="640" height="1136" />
+  <gap:splash src="res/splash/ios/Default-667h@2x.png" gap:platform="ios" width="750" height="1334" />
+  <gap:splash src="res/splash/ios/Default-736h@3x.png" gap:platform="ios" width="1242" height="2208" />
   <access origin="*"/>
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>

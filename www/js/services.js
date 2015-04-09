@@ -1,6 +1,6 @@
 angular.module('starter.services', ['dpd', 'appconfig'])
 
-    .factory('AuthService', function ($rootScope) {
+ .factory('AuthService', function ($rootScope) {
         return {
             checkLogin: function() {
                 // Check if logged in and fire events
@@ -26,77 +26,77 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     })
 
 .service('LoginService', ['dpd', '$q', 'ENV', function(dpd, $q, env) {
-	
-	console.log('LoginService | starting... ');
+    
+    console.log('LoginService | starting... ');
     return {
         loginUser: function(name, pw, dpd) {
             var deferred = $q.defer();
             var promise = deferred.promise;
 
-			
-			username = 'bart@gmail.com';
-			password = 'bart';
-			
-			console.log('LoginService | using appconfig.ENV : "' + env +'"');
-			if ( env == 'dev-nobackend') {
-				console.log('LoginService | skipping auth (no uid available...)');
-				deferred.resolve('Welcome ' + username + '!');
+            
+            username = 'bart@gmail.com';
+            password = 'bart';
+            
+            console.log('LoginService | using appconfig.ENV : "' + env +'"');
+            if ( env == 'dev-nobackend') {
+                console.log('LoginService | skipping auth (no uid available...)');
+                deferred.resolve('Welcome ' + username + '!');
 
-			} else if ( env == 'dev-local-backend' ) {
-			
-			
-			console.log('LoginService | auth with bart@gmail.com');
-			
-			dpd.users.exec('login', { username: username, password: password }).success(function(session) {
-				  console.log('success ! Bart logged in');
-				  console.log('Sucess logged in : ' + username + ' (' + session.uid + ')!'); 	
+            } else if ( env == 'dev-local-backend' ) {
+            
+            
+            console.log('LoginService | auth with bart@gmail.com');
+            
+            dpd.users.exec('login', { username: username, password: password }).success(function(session) {
+                  console.log('success ! Bart logged in');
+                  console.log('Sucess logged in : ' + username + ' (' + session.uid + ')!');    
 
-				console.log('checking current user start');
-				console.log('persisting auth state');
-				localStorage.setItem("user_auth_id") = session.id;
-				console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
+                console.log('checking current user start');
+                console.log('persisting auth state');
+                localStorage.setItem("user_auth_id") = session.id;
+                console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
 
-			  dpd.users.get('me').success(function(session) {
-				  console.log('me :: success ! Bart logged in');
-				  console.log('session', session);
-				  console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
-				  deferred.resolve('Welcome ' + name + ' (' + session.uid + ')!'); 
-			  }).error(function(error) {
-				  console.log('me::ERROR : ' + error.message, error);
-				  console.log('me::ERROR : please check user : ' + username + ' exists in DB.');
-				  deferred.reject('Wrong credentials.');
-			  });
+              dpd.users.get('me').success(function(session) {
+                  console.log('me :: success ! Bart logged in');
+                  console.log('session', session);
+                  console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+                  deferred.resolve('Welcome ' + name + ' (' + session.uid + ')!'); 
+              }).error(function(error) {
+                  console.log('me::ERROR : ' + error.message, error);
+                  console.log('me::ERROR : please check user : ' + username + ' exists in DB.');
+                  deferred.reject('Wrong credentials.');
+              });
 
-			  console.log('checking current user done.');
+              console.log('checking current user done.');
 
-			  deferred.resolve('Welcome ' + name + ' (' + session.uid + ')!'); 
+              deferred.resolve('Welcome ' + name + ' (' + session.uid + ')!'); 
 
-				  }).error(function(error) {
-				  console.log('ERROR : ' + error.message, error);
-				  console.log('ERROR : please check user : ' + username + ' exists in DB.');
-				  deferred.reject('Wrong credentials.');
-			  });
-			  
-			  
+                  }).error(function(error) {
+                  console.log('ERROR : ' + error.message, error);
+                  console.log('ERROR : please check user : ' + username + ' exists in DB.');
+                  deferred.reject('Wrong credentials.');
+              });
+              
+              
 
-			} else {
-			
-			console.log('LoginService | calling deployd service (' + name + ' / ' + pw + ')... ');
-			dpd.users.exec('login', { username: name, password: pw }).success(function(session) {
-				  console.log('success !');
+            } else {
+            
+            console.log('LoginService | calling deployd service (' + name + ' / ' + pw + ')... ');
+            dpd.users.exec('login', { username: name, password: pw }).success(function(session) {
+                  console.log('success !');
 
-				console.log('persisting auth state');
-				localStorage.setItem("user_auth_id", session.uid);
-				console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
+                console.log('persisting auth state');
+                localStorage.setItem("user_auth_id", session.uid);
+                console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
 
-				deferred.resolve('Welcome ' + name + ' !');			
-			}).error(function(error) {
-				  console.log('error : ' + error.message, error);
-				  deferred.reject('Wrong credentials.');
-			});
+                deferred.resolve('Welcome ' + name + ' !');         
+            }).error(function(error) {
+                  console.log('error : ' + error.message, error);
+                  deferred.reject('Wrong credentials.');
+            });
 
-			console.log('LoginService | done deployd ... ');
-			}
+            console.log('LoginService | done deployd ... ');
+            }
 
             promise.success = function(fn) {
                 promise.then(fn);
@@ -110,58 +110,59 @@ angular.module('starter.services', ['dpd', 'appconfig'])
             return promise;
         }
     }
-	console.log('LoginService | done. ') ;
-	
+    console.log('LoginService | done. ') ;
+    
 }])
 
+// TODO : Ajouter deux trophees ( app telechargee et compte cree) dans la table trophiesmatched au moment de la creation de l user et mettre le bon totalscore dans la table users
 .service('RegisterUserService', ['dpd', '$q', 'ENV', function(dpd, $q, env) {
-	
-	console.log('RegisterUserService | starting... ');
+    
+    console.log('RegisterUserService | starting... ');
     return {
         registerUser: function(newusername, newpassword, newnickname, dpd) {
             var deferred = $q.defer();
             var promise = deferred.promise;
 
-			username = 'bart@gmail.com';
-			password = 'bart';
-			nickname = 'Bart Simpson'; 
-			score = 1500;
-			
-			console.log('RegisterUserService | using appconfig.ENV : "' + env +'"');
-			if ( env == 'dev-nobackend') {
-				console.log('RegisterUserService | skipping register (no user created...)');
-				deferred.resolve('Created ' + name + '!');
+            username = 'bart@gmail.com';
+            password = 'bart';
+            nickname = 'Bart Simpson'; 
+            score = 1500;
+            
+            console.log('RegisterUserService | using appconfig.ENV : "' + env +'"');
+            if ( env == 'dev-nobackend') {
+                console.log('RegisterUserService | skipping register (no user created...)');
+                deferred.resolve('Created ' + name + '!');
 
-			} else if ( env == 'dev-local-backend' ) {
-			
-			
-			console.log('RegisterUserService | registering bart@gmail.com (' + username + ' / ' + password + ' / ' + nickname + ')');
-			
-			dpd.users.post({ username: username, password: password, nickname: nickname, score: score, picture:false, acivated:false }).success(function(session) {
-				  console.log('success ! user created');
-				  console.log('Sucess created user : ' + username + ' (' + session.uid + ')!'); 
-				  deferred.resolve('Created ' + name + ' (' + session.uid + ')!'); 
-			  }).error(function(error) {
-				  console.log('ERROR : ' + error.message, error);
-				  console.log('ERROR : please check could not create : ' + username + ' in DB.');
-				  deferred.reject('Wrong credentials.');
-			  });
+            } else if ( env == 'dev-local-backend' ) {
+            
+            
+            console.log('RegisterUserService | registering bart@gmail.com (' + username + ' / ' + password + ' / ' + nickname + ')');
+            
+            dpd.users.post({ username: username, password: password, nickname: nickname, score: score, picture:false, acivated:false }).success(function(session) {
+                  console.log('success ! user created');
+                  console.log('Sucess created user : ' + username + ' (' + session.uid + ')!'); 
+                  deferred.resolve('Created ' + name + ' (' + session.uid + ')!'); 
+              }).error(function(error) {
+                  console.log('ERROR : ' + error.message, error);
+                  console.log('ERROR : please check could not create : ' + username + ' in DB.');
+                  deferred.reject('Wrong credentials.');
+              });
 
-			} else {	
-			console.log('RegisterUserService | calling deployd service (dpd.users.login)... ');
-			
-			dpd.users.post({ username: newusername, password: newpassword, nickname: newnickname, score: score, picture:false }).success(function(session) {
-				  console.log('success ! user created');
-				  console.log('Sucess created user : ' + session.username + ' (' + session.id + ')!'); 
-				  deferred.resolve('Created ' + session.username + ' (' + session.id + ')!'); 
-			  }).error(function(error) {
-				  console.log('ERROR : ' + error.message, error);
-				  console.log('ERROR : please check could not create : ' + new	username + ' in DB.');
-				  deferred.reject('Wrong credentials.');
-			  });
+            } else {    
+            console.log('RegisterUserService | calling deployd service (dpd.users.login)... ');
+            
+            dpd.users.post({ username: newusername, password: newpassword, nickname: newnickname, score: score, picture:false }).success(function(session) {
+                  console.log('success ! user created');
+                  console.log('Sucess created user : ' + session.username + ' (' + session.id + ')!'); 
+                  deferred.resolve('Created ' + session.username + ' (' + session.id + ')!'); 
+              }).error(function(error) {
+                  console.log('ERROR : ' + error.message, error);
+                  console.log('ERROR : please check could not create : ' + new  username + ' in DB.');
+                  deferred.reject('Wrong credentials.');
+              });
 
-			console.log('RegisterUserService | done deployd ... ');
-			}
+            console.log('RegisterUserService | done deployd ... ');
+            }
 
             promise.success = function(fn) {
                 promise.then(fn);
@@ -175,67 +176,67 @@ angular.module('starter.services', ['dpd', 'appconfig'])
             return promise;
         }
     }
-	console.log('RegisterUserService | done. ') ;
-	
+    console.log('RegisterUserService | done. ') ;
+    
 }])
 
 .service('ProfileService', ['dpd', '$q', 'ENV', function(dpd, $q, env) {
-	
-	console.log('ProfileService | starting... ');
+    
+    console.log('ProfileService | starting... ');
     return {
-	
+    
         getUserProfile: function(dpd) {
             var deferred = $q.defer();
             var promise = deferred.promise;
 
-			username = 'bart@gmail.com';
-			password = 'bart';
-			nickname = 'Bart Simpson'; 
-			score = 1500;
-			
-			console.log('ProfileService | using appconfig.ENV : "' + env +'"');
-			if ( env == 'dev-nobackend') {
-				console.log('ProfileService | skipping register (no user created...)');
-				deferred.resolve('Created ' + name + '!');
+            username = 'bart@gmail.com';
+            password = 'bart';
+            nickname = 'Bart Simpson'; 
+            score = 1500;
+            
+            console.log('ProfileService | using appconfig.ENV : "' + env +'"');
+            if ( env == 'dev-nobackend') {
+                console.log('ProfileService | skipping register (no user created...)');
+                deferred.resolve('Created ' + name + '!');
 
-			} else if ( env == 'dev-local-backend' ) {
-			
-			
-			console.log('ProfileService | registering bart@gmail.com (' + username + ' / ' + password + ' / ' + nickname + ')');
-			
-			  dpd.users.get('me').success(function(session) {
-				  console.log('me :: success ! A user is logged in');
-				  console.log('session', session);
-				  console.log('me :: Sucess Sucess user is already logged in : ' + session.nickname + ' (' + session.id + ')!'); 
-				  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!'); 
-				  return(session);
+            } else if ( env == 'dev-local-backend' ) {
+            
+            
+            console.log('ProfileService | registering bart@gmail.com (' + username + ' / ' + password + ' / ' + nickname + ')');
+            
+              dpd.users.get('me').success(function(session) {
+                  console.log('me :: success ! A user is logged in');
+                  console.log('session', session);
+                  console.log('me :: Sucess Sucess user is already logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+                  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!'); 
+                  return(session);
 
-			  }).error(function(error) {
-				  console.log('me::ERROR : ' + error.message, error);
-				  console.log('me::ERROR : please check user : ' + username + ' exists in DB.');
-				  deferred.reject('Wrong credentials.');
-			  });
+              }).error(function(error) {
+                  console.log('me::ERROR : ' + error.message, error);
+                  console.log('me::ERROR : please check user : ' + username + ' exists in DB.');
+                  deferred.reject('Wrong credentials.');
+              });
 
-			} else {	
-			console.log('ProfileService | calling deployd service (dpd.users.get(me))... ');
-			
-			  dpd.users.get('me').success(function(session) {
-				  console.log('me :: success ! A user is logged in');
-				  console.log('session', session);
-				  console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
-				  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!');
-				  deferred.resolve(session);
-				  return(session);
-				  
-			  }).error(function(error) {
-				  console.log('me::ERROR : ' + error.message, error);
-				  console.log('me::ERROR : no user logged in.');
-				  deferred.reject('No user logged in.');
-			  });
+            } else {    
+            console.log('ProfileService | calling deployd service (dpd.users.get(me))... ');
+            
+              dpd.users.get('me').success(function(session) {
+                  console.log('me :: success ! A user is logged in');
+                  console.log('session', session);
+                  console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+                  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!');
+                  deferred.resolve(session);
+                  return(session);
+                  
+              }).error(function(error) {
+                  console.log('me::ERROR : ' + error.message, error);
+                  console.log('me::ERROR : no user logged in.');
+                  deferred.reject('No user logged in.');
+              });
 
-			
-			console.log('ProfileService | done deployd ... ');
-			}
+            
+            console.log('ProfileService | done deployd ... ');
+            }
 
             promise.success = function(fn) {
                 promise.then(fn);
@@ -248,12 +249,12 @@ angular.module('starter.services', ['dpd', 'appconfig'])
             }
             return promise;
         }
-	
+    
     };
-	
-	
-	console.log('ProfileService | done. ') ;
-	
+    
+    
+    console.log('ProfileService | done. ') ;
+    
 }])
 
 
@@ -453,30 +454,34 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     listGrantedTrophies = $scope.listGrantedTrophies;
     // TODO : voir pourquoi necessaire de redefinir le scope
     beaconRegions = $scope.trophies;
-
     console.log('getListGrantedTrophies | start!');
     for (var i = 0; i < listGrantedTrophies.length; i++) {
         var bRegionId = listGrantedTrophies[i].trophyid;
         // Loop on regions - should be optimized
-        console.log("BOUCLE : "+ i + " bregionId : " + bRegionId);
+        //console.log("BOUCLE : "+ i + " bregionId : " + bRegionId);
         for (var j = 0; j < beaconRegions.length; j++) {
-          console.log("j : "+ j)
+          //console.log("j : "+ j)
          if (beaconRegions[j].id === bRegionId) {
-            //beaconRegions[j].description = j + "_j_" + beaconRegions[j].description;
-            //beaconRegions[j].id= j+beaconRegions[j].id;
-           // beaconRegions[j].description="DESC_";
             listInfoGrantedTrophies.push(beaconRegions[j]);
-            console.log("ADD : "+ j + JSON.stringify(beaconRegions[j]));
+           // console.log("ADD : "+ j + JSON.stringify(beaconRegions[j]));
         }
       }
     }
         console.log('getListGrantedTrophies | PASENDUR' + JSON.stringify(listInfoGrantedTrophies));
     // listInfoGrantedTrophies = JSON.stringify(listInfoGrantedTrophies);
     // listInfoGrantedTrophies = [{"name":"Zone Apero","description":"Apéritifs réseautage","points":500,"maxCount":1,"beaconColor":"yellow","endDate":1430438399000,"startDate":1427984918000,"nextStep":"Allez rencontrez nos intervenants","orderNo":3,"isActive":false,"uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":11,"minor":1,"identifier":"ZoneApero","delay":3600,"id":"8c1cc8ed6a6b7bbe"},{"name":"Rencontre Avec Nos Intervenants","description":" Rencontre avec nos intervenants","points":400,"maxCount":1,"endDate":1430438399000,"startDate":1427984918000,"nextStep":"Allez vite à l apero reseautage","orderNo":2,"isActive":false,"beaconColor":"yellow","delay":3600,"identifier":"RencontreAvecNosIntervenants","uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":12,"minor":1,"id":"22334cdaa20578a3"},{"name":"Bienvenue Au Salon","points":300,"description":"App téléchargée !","maxCount":1,"beaconColor":"red","endDate":1430438399000,"startDate":1427984918000,"nextStep":"Créez vous un compte!","orderNo":1,"isActive":false,"uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":10,"minor":1,"identifier":"BienvenueAuSalon","delay":3600,"id":"eac708b7e5f508e1"},{"name":"Zone Stand","description":"Vous avez débloqué le trophée : Visite de notre stand (B12)","points":2000,"maxCount":2,"endDate":1430438399000,"startDate":1427984918000,"nextStep":"C etait le dernier trophée. Revenez-nous voir au stand","orderNo":5,"isActive":true,"beaconColor":"black","delay":3600,"identifier":"ZoneStand","uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":700,"minor":1,"id":"ebae93ac8b78cbce"},{"name":"Zone Conf","description":"Vous avez débloqué le trophée : Suivi de conférence BIG DATA","points":1000,"maxCount":1,"endDate":1430438399000,"startDate":1427984918000,"nextStep":"Allez vite au stand","orderNo":4,"isActive":true,"beaconColor":"blue","delay":3600,"identifier":"ZoneConf","uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":500,"minor":1,"id":"aebda58efdbf3946"},{"name":"Zone Conf","description":"Vous avez débloqué le trophée : Suivi de conférence BIG DATA","points":1000,"maxCount":1,"endDate":1430438399000,"startDate":1427984918000,"nextStep":"Allez vite au stand","orderNo":4,"isActive":true,"beaconColor":"blue","delay":3600,"identifier":"ZoneConf","uuid":"085AED38-4155-4A99-9C4B-372CE7AD6BDF","major":500,"minor":1,"id":"aebda58efdbf3946"}];
-    // console.log('getListGrantedTrophies | ENDUR' + JSON.stringify(listInfoGrantedTrophies));
-
+    console.log('******BEFORE ORDERING ******');
+    listInfoGrantedTrophies = sortByKey(listInfoGrantedTrophies, 'orderNo');
+    console.log('******AFTER ORDERING ******');
     return listInfoGrantedTrophies;
   }
+    /*helper to sort Json*/
+    sortByKey= function (array, key) {
+        return array.sort(function(a, b) {
+            var x = a[key]; var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    }
 
     //Get Currents points
   getCurrentPoints = function($scope) {
@@ -511,6 +516,18 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     return nbMatch;
   }
 
+  // Get Matched Trophies Json
+  checkIfDoublon = function($scope,trophyid,dpd) {
+    console.log('******************* | START  checkIfDoublon' + localStorage.getItem("user_auth_id") +'- trophyid -' + trophyid);
+    var promise3;
+    // Get Granted Trophies for the authentified user
+    promise3 = dpd.trophiesmatched.get({userid:localStorage.getItem("user_auth_id"),trophyid:trophyid}).then( function (response) {
+      console.log("INIT : checkIfDoublon TROPHIES: "+JSON.stringify(response.data));
+       return response.data.length;
+    });
+    // Return the promise to the controller
+    return promise3;
+  }
 
   // SetPoints
   setPoints = function ($scope,$trophy,dpd) {
@@ -554,7 +571,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
       // *** Action for controllers *** /
       // Set region
       $scope.regionState = regionState;
-      // Call dispatcher
+      // Call dispatcherlog
       $scope.dispatchThrophyEvent();
     };
     // error fallback
@@ -605,6 +622,8 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     getGrantedTrophies : getGrantedTrophies,
     // Get nMatch
     getNbMatch : getNbMatch,
+    // checkIfDoublon in DB
+    checkIfDoublon : checkIfDoublon,
     // Get Kist
     getListGrantedTrophies : getListGrantedTrophies,
     // Get current points
