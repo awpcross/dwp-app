@@ -4,6 +4,7 @@ blue : #37b0dc
 */
 
 
+
 h1, .h1 {
   font-size: 14px;
   padding-bottom: 0px;
@@ -21,10 +22,30 @@ h1, .h1 {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-[class$='-positive']{
-  background : #37b0dc;
-  border-color : #37b0dc;
+
+.button.button-positive {
+  border-color: #37b0dc;
+  background-color: #37b0dc;
 }
+
+.tabs-positive > .tabs, .tabs.tabs-positive {
+	border-color: #37b0dc;
+	background-color: #37b0dc;	
+}
+.bar .title {
+  font-weight: 300;	
+}
+.bar.bar-light .title {
+  color:#37b0dc;
+}
+
+a, a:active, a:hover, a:focus, button:focus {
+  color:#37b0dc;
+  font-weight:350;
+  outline: 0;
+  text-decoration: none;
+}
+
 
 body > ion-nav-view > ion-tabs > div{
   background : #37b0dc;

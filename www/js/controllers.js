@@ -85,8 +85,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 			$state.go('tab.profile');
 		}).error(function(user) {
 			var alertPopup = $ionicPopup.alert({
-				title: 'Login failed!',
-				template: 'Please check your credentials!'
+				title: 'Erreur!',
+				template: 'Veuillez vérifier votre email et mot de passe!'
 			});
 		});
 	
@@ -143,6 +143,240 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	console.log('ProfileRegisterCtrl | starting ... ') ;
 		
 	console.log('ProfileRegisterCtrl | done. ') ;
+})
+
+.controller('LostPasswordCtrl', function($scope, $state, $http, $ionicPopup, dpd) {
+	console.log('LostPasswordCtrl | starting ... ') ;
+
+	$scope.sendPasswordReset = function( useremail ) {
+		
+		if ( useremail == null) {
+			var alertPopup = $ionicPopup.alert({
+				title: 'Erreur',
+				template: 'Veuillez saisir un email valide!'
+			});		
+		} else {
+			console.log('LostPasswordCtrl::sendPasswordReset() | looking for user : ' + useremail) ;
+
+			// 1. check if user exists (ok : 2., ko :alert)
+			dpd.users.get( {"username":useremail} ).success(function(response) {
+						
+						if ( response == null || response == ''){ 
+							console.log('LostPasswordCtrl::sendPasswordReset() | no such user : ' + useremail) ;
+							var alertPopup = $ionicPopup.alert({
+								title: 'Erreur',
+								template: 'Une erreur est survenue, veuillez vérifier l\'adresse email saisie.'
+							});		
+						} else {
+							console.log('LostPasswordCtrl::sendPasswordReset() | found user : ' + response[0].username +'(' + response[0].id + ')');
+							var user = response[0];
+
+							var link = 'http://digitalprojectwatch.cross-systems.ch/reset-password';
+							// 2. send email & set flag passwordreset: true
+							
+							var mailJSON ={
+									"key": "b5jBPWAtZOqLnILTUURplQ",
+									"template_name": "dwp-app-password-reset",
+										"template_content": [
+											{
+												"nickname": user.nickname,
+												"link": 'http://digitalwatchproject.cross-systems.ch/user-reset-password/' + user.id,
+												"password" : '1234'
+												}
+										],
+										"message": {
+										"html": "<p>Example HTML content</p>",
+										"text": "Example text content",
+										"from_email": "projectdigitalwatch@cross-systems.ch",
+										"from_name": "Project Digital Watch by Cross",
+										"to": [
+											{
+												"email": user.username,
+												"name": user.nickname,
+												"type": "to"
+											}
+										],
+										"important": false,
+										"track_opens": null,
+										"track_clicks": null,
+										"auto_text": null,
+										"auto_html": null,
+										"inline_css": null,
+										"url_strip_qs": null,
+										"preserve_recipients": null,
+										"view_content_link": null,
+										"tracking_domain": null,
+										"signing_domain": null,
+										"return_path_domain": null,
+										"merge": true,
+										"merge_language": "handlebars",
+										"merge_vars": [
+													{
+														"rcpt": user.username,
+														"vars": [
+															{
+																"name": "nickname",
+																"content": user.nickname
+															},
+															{
+																"name": "link",
+																"content": user.nickname
+															},
+															{
+																"name": "password",
+																"content": user.nickname
+															}
+														]
+													}
+												]										
+									},
+									"async": false,
+									"ip_pool": "Main Pool"
+								};
+								//reference to the Mandrill REST api
+								var apiURL = "https://mandrillapp.com/api/1.0/messages/send-template.json";
+								//used to send the email via POST of JSON to Manrdill REST API end-point
+
+							console.log('LostPasswordCtrl::sendPasswordReset() | sending email ...') ;
+								$http.post(apiURL, mailJSON).
+									success(function(data, status, headers, config) {
+										console.log('successful email send.');
+										var alertPopup = $ionicPopup.alert({
+											title: 'Confirmation',
+											template: 'Un email de réinitialisation à été envoyé. Veuillez consulter votre boîte mail et suivre les instructions.'
+										});		
+										console.log('status: ' + status);
+									}).error(function(data, status, headers, config) {
+										console.log('error sending email.');
+										var alertPopup = $ionicPopup.alert({
+											title: 'Erreur',
+											template: 'Une erreur est survenue dans l\'envoi de l\'email, veuillez rééssayer. Veuillez consulter votre boîte mail et suivre les instructions.'
+										});		
+										console.log('status: ' + status);
+									});
+							console.log('LostPasswordCtrl::sendPasswordReset() | sending done.') ;
+														
+							
+							
+						}
+				}).error(function(error) {
+					console.log('error : ' + error.message, error);
+					var alertPopup = $ionicPopup.alert({
+						title: 'Erreur!',
+						template: 'Veuillez vérifier votre email et mot de passe!'
+					});
+					  
+				});
+		}
+		
+
+	}	
+	
+	
+	
+	// 3. go to set password view
+	
+	console.log('LostPasswordCtrl | done. ') ;
+})
+
+
+
+
+.controller('ResetPasswordCtrl', function($scope, $state, $stateParams, $ionicPopup, dpd) {
+	console.log('ResetPasswordCtrl | starting ... ') ;
+
+	console.log('ResetPasswordCtrl');
+	
+	/*$scope.resetPassword = function( $stateParams ) {*/
+
+		var uid = $stateParams.uid;
+		$scope.user = null;
+		console.log()
+		if ( uid == null) {
+			console.log('ResetPasswordCtrl::resetPassword() | wrong id : ' + uid );
+			var alertPopup = $ionicPopup.alert({
+				title: 'Erreur',
+				template: 'Erreur lors de la réinitialisation du mot de passe.'
+			});		
+		} else {
+			console.log('LostPasswordCtrl::sendPasswordReset() | looking for user : ' + uid) ;
+
+			// 1. check if user exists (ok : 2., ko :alert)
+			dpd.users.get( {"id":uid} ).success(function(response) {
+						
+						if ( response == null || response == ''){ 
+							console.log('LostPasswordCtrl::sendPasswordReset() | no such user : ' + uid) ;
+							var alertPopup = $ionicPopup.alert({
+								title: 'Erreur',
+								template: 'Erreur lors de la réinitialisation du mot de passe.'
+							});
+							// state.go( out' );
+						} else {
+							console.log(response);
+							console.log('LostPasswordCtrl::sendPasswordReset() | found user : ' + response.username +'(' + response.id + ')');
+							user = response;
+							$scope.user = response;
+							
+							console.log('LostPasswordCtrl::sendPasswordReset() | redirecting to set new password.') ;
+							// state.go('set-new-password');
+														
+							
+							
+						}
+				}).error(function(error) {
+					console.log('error : ' + error.message, error);
+					var alertPopup = $ionicPopup.alert({
+						title: 'Erreur',
+						template: 'Erreur lors de la réinitialisation du mot de passe.'
+					});
+					  
+				});
+		}
+		
+
+	/*}*/	
+
+	$scope.updateUserPassword = function(form, $scope) {
+		pwd1 = form.pwd1;
+		pwd2 = form.pwd2;
+
+		
+		console.log('updating password for user : ' + user.username);
+		
+		if (pwd1 == pwd2 ){
+			console.log('setting password : \'' + pwd1 + '\' for user : ' +  user.username  );
+			dpd.users.put( $stateParams.uid, { password: pwd1, nickname: user.nickname}).success(function(session) {
+				  console.log('success ! user updated');
+				  console.log('Sucess updated user : ' + $stateParams.uid + '!');
+				  
+			console.log('authenticating user '+  user.username +' with password ' + pwd1);
+
+			dpd.users.exec('login', { username: user.username, password: pwd1 }).success(function(session) {
+				  console.log('success ! user logged in');
+				  console.log('Sucess logged in : ' + user.username + ' (' + session.uid + ')!'); 	
+
+				console.log('checking current user start');
+				console.log('persisting auth state');
+				localStorage.setItem("user_auth_id", session.id);
+				console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
+				//state.go('tab.profil');
+				
+			  }).error(function(error) {
+				  console.log('ERROR : ' + error.message, error);
+				  console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
+			  });			  
+
+				  
+			  }).error(function(error) {
+				  console.log('ERROR : ' + error.message, error);
+				  console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
+			  });
+
+
+		
+		}
+	}
+	console.log('ResetPasswordCtrl | done. ') ;
 })
 
 .controller('CrossEcomCtrl', function($scope, $state, dpd) {

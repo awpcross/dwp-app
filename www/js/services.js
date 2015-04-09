@@ -137,7 +137,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 			
 			console.log('RegisterUserService | registering bart@gmail.com (' + username + ' / ' + password + ' / ' + nickname + ')');
 			
-			dpd.users.post({ username: username, password: password, nickname: nickname, score: score, picture:false }).success(function(session) {
+			dpd.users.post({ username: username, password: password, nickname: nickname, score: score, picture:false, acivated:false }).success(function(session) {
 				  console.log('success ! user created');
 				  console.log('Sucess created user : ' + username + ' (' + session.uid + ')!'); 
 				  deferred.resolve('Created ' + name + ' (' + session.uid + ')!'); 

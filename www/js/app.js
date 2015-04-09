@@ -176,10 +176,16 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
       views: {
         'tab-profile': {
           templateUrl: 'templates/user-forgot-password.html',
+		  controller: 'LostPasswordCtrl'
         }
       }
     })
 
+	.state('reset-password', {
+    url: '/user-reset-password/:uid',
+    templateUrl: 'templates/user-reset-password.html',
+    controller: 'ResetPasswordCtrl'
+  })
 	
 	.state('scan-modal', {
     url: '/scan/modal',
@@ -199,8 +205,8 @@ app.value('dpdConfig',['categories']);
 
 app.value('dpdConfig', { 
     collections: ['users', 'welcomecontents', 'trophies', 'trophiesmatched', 'newsecom', 'newscross'], 
-    //serverRoot: 'http://localhost:2403/', // optional, defaults to same server
-    serverRoot: 'https://digitalwatchproject.cross-systems.ch/', // optional, defaults to same server
+    serverRoot: 'http://localhost:2403/', // optional, defaults to same server
+    //serverRoot: 'https://digitalwatchproject.cross-systems.ch/', // optional, defaults to same server
     socketOptions: { reconnectionDelayMax: 3000 }, // optional socket io additional configuration
     useSocketIo: false, // optional, defaults to false
     noCache: true // optional, defaults to false (false means that caching is enabled, true means it disabled)
