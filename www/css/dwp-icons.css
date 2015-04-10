@@ -1,15 +1,15 @@
 @font-face {
 	font-family: 'dwp-icons';
-	src:url('fonts/dwp-icons.eot?-a8vce4');
-	src:url('fonts/dwp-icons.eot?#iefix-a8vce4') format('embedded-opentype'),
-		url('fonts/dwp-icons.woff?-a8vce4') format('woff'),
-		url('fonts/dwp-icons.ttf?-a8vce4') format('truetype'),
-		url('fonts/dwp-icons.svg?-a8vce4#dwp-icons') format('svg');
+	src:url('../fonts/dwp-icons/dwp-icons.eot?gdddqc');
+	src:url('../fonts/dwp-icons/dwp-icons.eot?#iefixgdddqc') format('embedded-opentype'),
+		url('../fonts/dwp-icons/dwp-icons.woff?gdddqc') format('woff'),
+		url('../fonts/dwp-icons/dwp-icons.ttf?gdddqc') format('truetype'),
+		url('../fonts/dwp-icons/dwp-icons.svg?gdddqc#dwp-icons') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
-[class^="icon-dwp"], [class*=" icon-dwp"] {
+[class^="icon-dwp-"], [class*=" icon-dwp-"] {
 	font-family: 'dwp-icons';
 	speak: none;
 	font-style: normal;
@@ -17,72 +17,75 @@
 	font-variant: normal;
 	text-transform: none;
 	line-height: 1;
-	font-size: 12px;
 
 	/* Better Font Rendering =========== */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.icon-dwpwrist-watch-square:before {
+
+
+.icon-dwp-wrist-watch-square:before {
 	content: "\e63b";
 }
 
-.icon-dwpsand-timer:before {
+.icon-dwp-sand-timer:before {
 	content: "\e61a";
 }
 
-.icon-dwpdigital-time:before {
+.icon-dwp-digital-time:before {
 	content: "\e615";
 }
 
-.icon-dwpiphone:before {
+.icon-dwp-iphone:before {
 	content: "\e604";
 }
 
-.icon-dwplight:before {
+.icon-dwp-light:before {
 	content: "\e623";
 }
 
-.icon-dwplight-bulb:before {
+.icon-dwp-light-bulb:before {
 	content: "\e624";
 }
 
-.icon-dwplight-bulb-on:before {
+.icon-dwp-light-bulb-on:before {
 	content: "\e625";
 }
 
-.icon-dwpchat:before {
+.icon-dwp-chat:before {
 	content: "\e606";
 }
 
-.icon-dwpelectronic-megaphone:before {
+.icon-dwp-electronic-megaphone:before {
 	content: "\e612";
 }
 
-.icon-dwptrophy:before {
+.icon-dwp-trophy:before {
 	content: "\e62b";
 }
 
-.icon-dwptrophy-star:before {
+.icon-dwp-trophy-star:before {
 	content: "\e62c";
 }
 
-.icon-dwpwinners-podium:before {
+.icon-dwp-winners-podium:before {
 	content: "\e631";
 }
 
-.icon-dwpwinners-podium-on:before {
-	content: "\e631";
-	stroke-width:4; 
-}
-
-.icon-dwpuser:before {
+.icon-dwp-user:before {
 	content: "\e600";
 }
 
-.icon-dwpuser-on:before {
-	content: "\e600";
-	stroke-width:4; 
+.icon-dwp-jogging:before {
+	content: "\e614";
+}
+
+.icon-dwp-jogging:before {
+	content: "\e614";
+}
+
+.icon-dwp-arrow-right:before {
+	content: "\e608";
 }
 

@@ -53,7 +53,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 
                 console.log('checking current user start');
                 console.log('persisting auth state');
-                localStorage.setItem("user_auth_id") = session.id;
+                localStorage.setItem("user_auth_id", session.uid);
                 console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
 
               dpd.users.get('me').success(function(session) {
@@ -86,7 +86,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
                   console.log('success !');
 
                 console.log('persisting auth state');
-                localStorage.setItem("user_auth_id", session.uid);
+                localStorage.setItem("user_auth_id", session.id);
                 console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
 
                 deferred.resolve('Welcome ' + name + ' !');         
@@ -202,9 +202,9 @@ angular.module('starter.services', ['dpd', 'appconfig'])
             } else if ( env == 'dev-local-backend' ) {
             
             
-            console.log('ProfileService | registering bart@gmail.com (' + username + ' / ' + password + ' / ' + nickname + ')');
+            console.log('ProfileService | getting info on ' + uid );
             
-              dpd.users.get('me').success(function(session) {
+              dpd.users.get(uid).success(function(session) {
                   console.log('me :: success ! A user is logged in');
                   console.log('session', session);
                   console.log('me :: Sucess Sucess user is already logged in : ' + session.nickname + ' (' + session.id + ')!'); 

@@ -57,7 +57,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		if ( localStorage.getItem('user_auth_id') != null && localStorage.getItem('user_auth_id') != '' ) {
 			console.log('SignInCtrl | already logged in('+localStorage.getItem('user_auth_id')+'), redirecting to profile view. ') ;
 			$state.go('tab.profile');
-
 		}
 	  });	
 
@@ -192,7 +191,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 							console.log('LostPasswordCtrl::sendPasswordReset() | found user : ' + response[0].username +'(' + response[0].id + ')');
 							var user = response[0];
 
-							var link = 'http://digitalprojectwatch.cross-systems.ch/user-reset-password/' + response[0].id;
+							var link = 'http://digitalwatchproject.cross-systems.ch/user-reset-password/' + response[0].id;
 							// 2. send email & set flag passwordreset: true
 							
 							var mailJSON ={
@@ -351,14 +350,15 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
 	/*}*/	
 
-	$scope.updateUserPassword = function(form, $scope) {
+	$scope.updateUserPassword = function(form, $scope, $ionicPopup) {
 		pwd1 = form.pwd1;
 		pwd2 = form.pwd2;
 
 		
-		console.log('updating password for user : ' + user.username);
-		
+		console.log('ResetPasswordCtrl | Updating password for user : ' + user.username + '(' + pwd1 +' / ' + pwd2 );
+					
 		if (pwd1 == pwd2 ){
+		
 			console.log('setting password : \'' + pwd1 + '\' for user : ' +  user.username  );
 			dpd.users.put( $stateParams.uid, { password: pwd1, nickname: user.nickname}).success(function(session) {
 				  console.log('success ! user updated');
@@ -387,8 +387,28 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 				  console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
 			  });
 
-
+				form.pwd1 = '';
+				form.pwd2 = '';
+				state.go('tab.profile');
+				/*
+				} else {
+				
+				}
+				*/
 		
+		} else {
+					console.log('error : Password string does not match ("' + pwd1 +'" vs "'+ pwd2 + '")');
+					if (pwd1 == '' || pwd2 =='') {
+						var alertPopup = $ionicPopup.alert({
+							title: 'Erreur',
+							template: 'Le mot de passe ne doit pas être vide.'
+						});
+					} else {
+						var alertPopup = $ionicPopup.alert({
+							title: 'Erreur',
+							template: 'Impossible de changer le mot de passe. Les deux valeurs doivent être identiques.'
+						});
+					}
 		}
 	}
 	console.log('ResetPasswordCtrl | done. ') ;
@@ -439,25 +459,31 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 					});
 					  
 				});
-		}
+		} 
 		
 
 	/*}*/	
 
 	$scope.updateUserPassword = function(form ) {
-		pwd1 = form.pwd1;
-		pwd2 = form.pwd2;
+		
+		if ( form != null ) { pwd1 = form.pwd1;} else { pwd1 = ''}
+		if ( form != null ) { pwd2 = form.pwd2;} else { pwd2 = ''}
 
-		
-		console.log('updating password for user : ' + user.username);
-		
-		if (pwd1 == pwd2 ){
+		if ( form == null ) {
+			var alertPopup = $ionicPopup.alert({
+				title: 'Erreur',
+				template: 'Le mot de passe ne peut être vide.'
+			});
+		} else if (pwd1 == pwd2 ){
 			console.log('setting password : \'' + pwd1 + '\' for user : ' +  user.username  );
 			dpd.users.put( uid, { password: pwd1, nickname: user.nickname}).success(function(session) {
 				  console.log('success ! user updated');
 				  console.log('Sucess updated user : ' + $stateParams.uid + '!');
 				  
 			console.log('authenticating user '+  user.username +' with password ' + pwd1);
+
+			form.pwd1 = '';
+			form.pwd2 = '';
 			
 			$state.go('tab.profile');
 
@@ -485,6 +511,12 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
 
 		
+		} else {
+					console.log('error : Password string does not match ("' + pwd1 +'" vs "'+ pwd2 + '")');
+					var alertPopup = $ionicPopup.alert({
+						title: 'Erreur',
+						template: 'Les deux valeurs de mot de passe doivent être identiques.'
+					});
 		}
 	}
 	console.log('ChangePasswordCtrl | done. ') ;
@@ -696,7 +728,9 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 .controller('LeaderboardCtrl', function(dpd, ScoreService, $scope, $http) {
 	console.log('LeaderboardCtrl | starting ... ');
   //dpd.users.exec('me');
-  $scope.$apply();
+
+	//$scope.$apply();
+  
 	$scope.players = [];
 	
 	console.log('LeaderboardCtrl | calling ScoreService.getScores() ... ') ;
@@ -741,18 +775,38 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 .controller('ProfileCtrl', function($scope, $state, ProfileService, dpd) {
 
 	console.log('ProfileCtrl | starting ... ') ;
-	console.log('ProfileCtrl | user_auth_id ... ' + localStorage.getItem('user_auth_id') ) ;
 
-	if ( localStorage.getItem('user_auth_id') ) {
+	var uid = localStorage.getItem('user_auth_id');
+	var usr = {};
+	if ( uid != null || uid != '' ) {
+		console.log('ProfileCtrl | user ('+localStorage.getItem('user_auth_id')+') logged in (from localStorage)');
+	
+
+	$scope.$on('$ionicView.beforeEnter', function(){
+		console.log("$ionicView.beforeEnter | start ");
+
+              dpd.users.get(uid).success(function(session) {
+                  console.log('me :: success ! A user is logged in');
+                  console.log('session', session);
+                  console.log('me :: Sucess Sucess user is already logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+                  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!'); 
+                  usr.nickname = session.nickname;
+                  usr.username = session.username;
+				  $scope.user = usr;
+
+              }).error(function(error) {
+                  console.log('me::ERROR : ' + error.message, error);
+                  console.log('me::ERROR : please check user : ' + username + ' exists in DB.');
+                  deferred.reject('Wrong credentials.');
+              });		
+		console.log("$ionicView.beforeEnter | done ");
 		
+		});	
+	
+	
 	}
 	
-	ProfileService.getUserProfile(localStorage.getItem('user_auth_id'), dpd).success(function(response) {
-		$scope.user = response;
-		console.log('response', response);
-	});
-	console.log(' username ' + '');
-	
+	// SignOut
 	$scope.signOutUser = function(user, $rootScope) {
 	
 	console.log('ProfileCtrl.signOutUser() | start. ') ;

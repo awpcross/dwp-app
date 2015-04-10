@@ -8,17 +8,21 @@ Vous devez vous connecter pour accéder à votre profil.
 <br/>
 <br/>
 </div>-->
-<div class="row">
-  <div class="col">Vous êtes connecté.</div>
+<div class="info-banner">
+	<div class="info-banner-icon"><img class="info-visual" src="img/info/logged.png"></div>
+	<div class="info-banner-text">
+	<div class="info-banner-text-label">Vous êtes connecté.</div>	
+	<div class="info-banner-text-label">&nbsp;</div>	
+	</div>
 </div>
 <div class="list" id="profile">
   <label class="item item-input item-stacked-label">
-	<span class="input-label">Email</span>
-    <input type="text" ng-model="user.username" placeholder="Email">
+	<span class="input-label">Nom d'utilisateur</span>
+    <input type="text" ng-model="user.nickname" style="text-align: right;" placeholder="Nom d'utilisateur">
   </label>
   <label class="item item-input item-stacked-label">
-	<span class="input-label">Nom d'utilisateur</span>
-    <input type="text" ng-model="user.nickname" placeholder="Nom d'utilisateur">
+	<span class="input-label">Email</span>
+    <input type="text" ng-model="user.username" style="text-align: right;" placeholder="Email">
   </label>
 </div>
 <div class="row">

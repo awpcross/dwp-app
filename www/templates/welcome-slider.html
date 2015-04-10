@@ -11,27 +11,31 @@
 </ion-nav-buttons>
 <ion-nav-buttons side="right"> 
   <button class="button button-positive button-clear no-animation"
-		  ng-click="next()" ng-show="slideIndex != 2">
+		  ng-click="next()" ng-show="slideIndex != 3">
 	Suivant
   </button>
   <button class="button button-positive button-clear no-animation"
-		  ng-click="signIn()" ng-show="slideIndex == 2">
+		  ng-click="signIn()" ng-show="slideIndex == 3">
 	Commencer
   </button>
 </ion-nav-buttons>
 <ion-slide-box on-slide-changed="slideChanged(index)">
 <ion-slide>
-<div class="row welcome-banner">
-<div class="welcome-banner-icon"><img id="welcome-visual-step2" src="img/welcome/wizard-step-2@2x.png"></div>
-<div class="welcome-banner-title">{{labels[0].content}}</div>
+<div class="welcome-banner">
+	<div class="welcome-banner-icon"><img class="welcome-visual" src="img/welcome/welcome-banner-icon.png"></div>
+	<div class="welcome-banner-text">
+	<div class="welcome-banner-text-label">Bienvenue dans</div>	
+	<div class="welcome-banner-text-label">"Project Digital Watch"</div>	
+	</div>
 </div>
 
 <div class="row">
-  <div class="col"><h4 class="welcome-title">{{labels[0].content}}</h4></div>
+  <div class="col">&nbsp;</div>
 </div>
 <div class="row welcome-content">
   <div class="col">
 	<p class="welcome-directives">{{labels[1].content}}</p>
+	<p class="welcome-directives">Cross vous propose un jeu de piste qui s'appuie sur la technologie iBeacon. Nous avons placé ces petites balises dans divers lieux. Losrque que vous passez à proximité de l'une d'elle, vous activez un trophée qui vous crédite des points. Le joueur au score le plus élevé remportera le premier prix.</p>  
 	<p class="welcome-directives">{{labels[2].content}}</p>  
   </div>
 </div>
@@ -41,22 +45,30 @@
 </div>
 </ion-slide>
 <ion-slide>
-<div class="row">
-	<div class="col"><img id="welcome-visual-step2" src="img/welcome/wizard-step-2@2x.png"></div>
-</div>
-<div class="row welcome-content">
-	<div class="col"><h4 class="welcome-title">{{labels[4].content}}</h4></div>
+<div class="welcome-banner">
+	<div class="welcome-banner-icon"><img class="welcome-visual" src="img/welcome/welcome-banner-icon.png"></div>
+	<div class="welcome-banner-text">
+	<div class="welcome-banner-text-label"><b>Bravo!</b> 1000 points ...</div>	
+	<div class="welcome-banner-text-label">&nbsp;</div>	
+	</div>
 </div>
 <div class="row welcome-content">
 	<div class="col">
 	<p class="welcome-directives">{{labels[5].content}}</p>
-	<ul class="welcome-list">
+	<div class="welcome-list-item">1</div>
+	<div class="welcome-list-text">Enregistrez-vous dans l'application (500 points)</div>
+	<div class="welcome-list-item">2</div>
+	<div class="welcome-list-text">Participez à nos conférences (4000 points / conférence)</div>
+	<div class="welcome-list-item">3</div>
+	<div class="welcome-list-text">Le jour du salon SITB eCOM, rendez-nous visite sur notre stand B12 (1000 points)</div>
+	
+	<!--ul class="welcome-list">
 	<li>1. Enregistrez-vous (500 points)</li>
 	<li>2. Gagnez des points en participant à nos conférences (4000 points / conférence)</li>
 	<li>3. Rendez-nous visite sur le stand B12 au SITB, eCOM et gagnez encore plus de points (1000 points)</li>
 	<li>4. Participez à notre jeu et pulvérisez votre score</li>
 	<li>5. Passez à la caisse pour comptabiliser vos points totaux et participer au tirage au sort.</li>
-	</ul>
+	</ul-->
 	</div>
 </div>
 <div class="bar bar-footer bar-stable">
@@ -65,15 +77,53 @@
 </div>
 </ion-slide>
 <ion-slide>
-<div class="row">
-	<div class="col"><img id="welcome-visual-step3" src="img/welcome/wizard-step-3@2x.png"></div>
-</div>
-<div class="row welcome-content">
-	<div class="col"><h4 class="welcome-title">{{labels[8].content}}</h4></div>
+<div class="welcome-banner">
+	<div class="welcome-banner-icon"><img class="welcome-visual" src="img/welcome/welcome-banner-icon.png"></div>
+	<div class="welcome-banner-text">
+	<div class="welcome-banner-text-label">... et ce n'est que le début!</div>	
+	<div class="welcome-banner-text-label">&nbsp;</div>	
+	</div>
 </div>
 
-<p class="welcome-directives">{{labels[9].content}}</p>
-<p class="welcome-directives">{{labels[10].content}}</p>
+<div class="row welcome-content">
+	<div class="col">
+	<p class="welcome-directives">{{labels[5].content}}</p>
+	<div class="welcome-list-item">4</div>
+	<div class="welcome-list-text">Faites un "check-out" sur notre stand et pulvérisez votre score. (nombre de points aléatoire)</div>
+	<div class="welcome-list-item">5</div>
+	<div class="welcome-list-text">Le mercredi 22 avril à 18:00, un tirage au sort vous attribuera des points supplémentaires</div>
+	<div class="welcome-list-item">6</div>
+	<div class="welcome-list-text">Si la chance est avec vous, vous aurez le plus haut score et remporterez le premier prix.</div>
+	
+	<!--ul class="welcome-list">
+	<li>1. Enregistrez-vous (500 points)</li>
+	<li>2. Gagnez des points en participant à nos conférences (4000 points / conférence)</li>
+	<li>3. Rendez-nous visite sur le stand B12 au SITB, eCOM et gagnez encore plus de points (1000 points)</li>
+	<li>4. Participez à notre jeu et pulvérisez votre score</li>
+	<li>5. Passez à la caisse pour comptabiliser vos points totaux et participer au tirage au sort.</li>
+	</ul-->
+	</div>
+</div>
+<div class="bar bar-footer bar-stable">
+  <button class="button button-icon icon ion-information-circled"></button>
+  <div class="title indice">{{labels[7].content}}</div>
+</div>
+</ion-slide><ion-slide>
+<div class="welcome-banner">
+	<div class="welcome-banner-icon"><img class="welcome-visual" src="img/welcome/welcome-banner-icon.png"></div>
+	<div class="welcome-banner-text">
+	<div class="welcome-banner-text-label">Prêt? Alors foncez!</div>	
+	<div class="welcome-banner-text-label">&nbsp;</div>	
+	</div>
+</div>
+<div class="row welcome-content">
+	<div class="col">
+		<p class="welcome-directives">N'attendez plus, lancez-vous dans la recherche des ces trophées en vivant une expérience aussi ludique qu'instructive. Sans oublier le superbe prix qui n'attendant plus que vous.</p>
+		<p class="welcome-directives">Commencez déjà dès à présent à vous enregistrer dans l'application et ensuite laissez-vous guider jusqu'au but.</p>
+		<div><span class="icon-dwp-jogging welcome-icon-big"></span></div>
+	</div>
+</div>
+
 <div class="bar bar-footer bar-stable">
   <button class="button button-icon icon ion-information-circled"></button>
   <div class="title indice">{{labels[11].content}}</div>
