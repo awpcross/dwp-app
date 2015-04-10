@@ -147,9 +147,10 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
     console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
     //state.go('tab.profil');
 	var currentTS = new Date().getTime();	
-	dpd.trophiesmatched.post({ "timestamp" : currentTS, "trophyid":"eac708b7e5f508e1","userid":session.id,"points":1000});
-	dpd.trophiesmatched.post({ "timestamp" : currentTS, "trophyid":"22334cdaa20578a3","userid":session.id,"points":500});
-	$state.go('tab.cross-ecom');
+	dpd.trophiesmatched.post({ "timestamp" : currentTS, "trophyid":"eac708b7e5f508e1","userid":session.uid,"points":1000});
+	dpd.trophiesmatched.post({ "timestamp" : currentTS, "trophyid":"22334cdaa20578a3","userid":session.uid,"points":500});
+	
+	$state.go('tab.profile');
     
     }).error(function(error) {
       console.log('ERROR : ' + error.message, error);
