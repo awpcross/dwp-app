@@ -698,7 +698,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   console.log('LeaderboardCtrl | starting ... ');
   //dpd.users.exec('me');
 
-  $scope.$apply();
+  //$scope.$apply();
   $scope.players = [];
   
   console.log('LeaderboardCtrl | calling ScoreService.getScores() ... ') ;
@@ -745,6 +745,29 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   console.log('ProfileCtrl | starting ... ') ;
   console.log('ProfileCtrl | user_auth_id ... ' + localStorage.getItem('user_auth_id') ) ;
+
+  	$scope.$on('$ionicView.beforeEnter', function(){
+		console.log("$ionicView.beforeEnter  ");
+		if ( localStorage.getItem('user_auth_id') != null && localStorage.getItem('user_auth_id') != '' ) {
+			uid = localStorage.getItem('user_auth_id');
+			console.log('SignInCtrl | already logged in('+ uid +'), redirecting to profile view. ') ;
+
+              dpd.users.get(uid).success(function(session) {
+                  console.log('me :: success ! A user is logged in');
+                  console.log('session', session);
+                  console.log('me :: Sucess Sucess user is already logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+                  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!'); 
+                  return(session);
+
+              }).error(function(error) {
+                  console.log('me::ERROR : ' + error.message, error);
+                  console.log('me::ERROR : please check user : ' + username + ' exists in DB.');
+                  deferred.reject('Wrong credentials.');
+              });
+
+			
+		}
+	  });	
 
   if ( localStorage.getItem('user_auth_id') ) {
     
