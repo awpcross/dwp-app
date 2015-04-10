@@ -221,8 +221,8 @@ angular.module('starter.services', ['dpd', 'appconfig'])
             console.log('ProfileService | calling deployd service (dpd.users.get(me))... ');
             
               dpd.users.get(uid).success(function(session) {
-			  
-			  
+        
+        
                   console.log('me :: success ! A user is logged in');
                   console.log('session', session);
                   console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
@@ -639,35 +639,35 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 
 
 .service('BeaconService', ['$q', 'ENV', function($q, env) {
-	
-	console.log('BeaconService | starting... ');
+  
+  console.log('BeaconService | starting... ');
     return {
         listBeacons: function() {
             var deferred = $q.defer();
             var promise = deferred.promise;
 
-			console.log('BeaconService | using appconfig.ENV : "' + env +'"');
-			if ( env == 'dev-nobackend') {
-				deferred.resolve('Welcome ' + name + '!');
-			} else {	
+      console.log('BeaconService | using appconfig.ENV : "' + env +'"');
+      if ( env == 'dev-nobackend') {
+        deferred.resolve('Welcome ' + name + '!');
+      } else {  
 
-			console.log('BeaconService | calling deployd service ... ');
-		
-			dpd.users.login({username: name, password: pw}, function(session, error) {
-				if (error) {
-				  console.log('error : ' + error.message);
-				  deferred.reject('Wrong credentials.');
-				  
-				} else {
-				  console.log('success !');
+      console.log('BeaconService | calling deployd service ... ');
+    
+      dpd.users.login({username: name, password: pw}, function(session, error) {
+        if (error) {
+          console.log('error : ' + error.message);
+          deferred.reject('Wrong credentials.');
+          
+        } else {
+          console.log('success !');
 
-				  deferred.resolve('Welcome ' + name + '!');
-				//location.href = "/welcome.html";
+          deferred.resolve('Welcome ' + name + '!');
+        //location.href = "/welcome.html";
 
-				}
-			});
-			console.log('LoginService | done deployd ... ');
-			}
+        }
+      });
+      console.log('LoginService | done deployd ... ');
+      }
 
             promise.success = function(fn) {
                 promise.then(fn);
@@ -681,6 +681,6 @@ angular.module('starter.services', ['dpd', 'appconfig'])
             return promise;
         }
     }
-	console.log('BeaconService | done. ') ;
-	
+  console.log('BeaconService | done. ') ;
+  
 }]);
