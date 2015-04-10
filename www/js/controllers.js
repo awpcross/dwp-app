@@ -2,20 +2,20 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
 .controller('WelcomeCtrl', function(dpd,$scope, $state, $ionicSlideBoxDelegate) {
 
-	console.log('WelcomeCtrl | starting ... ');
+  console.log('WelcomeCtrl | starting ... ');
 
-	dpd.welcomecontents.get( { $sort: {orderno: 1}} ).success(function(response) {
-			  console.log('success !');
-			  console.log('data : ', response);
-			  $scope.labels = response;
-		}).error(function(error) {
-			  console.log('error : ' + error.message, error);
-		});
-				
+  dpd.welcomecontents.get( { $sort: {orderno: 1}} ).success(function(response) {
+        console.log('success !');
+        console.log('data : ', response);
+        $scope.labels = response;
+    }).error(function(error) {
+        console.log('error : ' + error.message, error);
+    });
+        
 
   // Called to navigate to the main app
   $scope.signIn = function() {
-	//$state.go('signin');
+  //$state.go('signin');
     $state.go('tab.profilelogin');
 
   };
@@ -31,7 +31,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
     $scope.slideIndex = index;
   };
 
-	console.log('WelcomeCtrl | done. ') ;
+  console.log('WelcomeCtrl | done. ') ;
   
 })
 
@@ -48,6 +48,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 })
 
 .controller('SignInCtrl', function($ionicPopup, $scope, $state, LoginService, dpd, ProfileService) {
+
 
 	console.log('SignInCtrl | starting ... ') ;
 
@@ -80,92 +81,94 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	$scope.authUser = function(user) {
 	
 	console.log('SignInCtrl.signIn() | start. ') ;
+
     if (user != null) {
-	console.log('SignInCtrl.signIn() | Signing in user : ', user);
+  console.log('SignInCtrl.signIn() | Signing in user : ', user);
 
-		LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
-			//$state.go('tab.trophies');
-			$scope.user = {};
-			$state.go('tab.profile');
-		}).error(function(user) {
-			var alertPopup = $ionicPopup.alert({
-				title: 'Erreur!',
-				template: 'Veuillez vérifier votre email et mot de passe!'
-			});
-		});
-	
-	} else {
-	console.log('SignInCtrl.signIn() | Signing in user : !!warning user is empty!!');	
-	}
+    LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
+      //$state.go('tab.trophies');
+      $scope.user = {};
+      $state.go('tab.profile');
+    }).error(function(user) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Erreur!',
+        template: 'Veuillez vérifier votre email et mot de passe!'
+      });
+    });
+  
+  } else {
+  console.log('SignInCtrl.signIn() | Signing in user : !!warning user is empty!!'); 
+  }
 
-	
+  
     //$state.go('tab.trophies');
 
-	console.log('SignInCtrl.signIn() | end. ') ;
-	
+  console.log('SignInCtrl.signIn() | end. ') ;
+  
   };
 
-	console.log('SignInCtrl | done. ') ;
+  console.log('SignInCtrl | done. ') ;
   
 })
 
 .controller('RegisterCtrl', function($scope, $state, RegisterUserService, dpd) {
-	console.log('RegisterCtrl | starting ... ') ;
+  console.log('RegisterCtrl | starting ... ') ;
 
-	var newuser = $scope.newuser;
-	
-	$scope.registerUser = function(newuser) {
-	console.log('RegisterCtrl.registerUser() | start. ') ;
+  var newuser = $scope.newuser;
+  
+  $scope.registerUser = function(newuser) {
+  console.log('RegisterCtrl.registerUser() | start. ') ;
 
     if (newuser == null) {
-	console.log('RegisterCtrl.registerUser() | registering user : !!warning user is empty!!');	
-	} else {
-	console.log('RegisterCtrl.registerUser() | registering user : ', newuser);
+  console.log('RegisterCtrl.registerUser() | registering user : !!warning user is empty!!');  
+  } else {
+  console.log('RegisterCtrl.registerUser() | registering user : ', newuser);
 
-	RegisterUserService.registerUser(newuser.username, newuser.password, newuser.nickname, dpd).success(function(user) {
-	
-	// TODO PES / LAL auto signin the user
-	dpd.users.exec('login', { username: newuser.username, password: newuser.password }).success(function(session) {
-		  console.log('success ! user logged in');
-		  console.log('Sucess logged in : ' + session.username + ' (' + session.id + ')!'); 	
+  RegisterUserService.registerUser(newuser.username, newuser.password, newuser.nickname, dpd).success(function(user) {
+  
+  // TODO PES / LAL auto signin the user
+  dpd.users.exec('login', { username: newuser.username, password: newuser.password }).success(function(session) {
+      console.log('success ! user logged in');
+      console.log('Sucess logged in : ' + session.username + ' (' + session.id + ')!');   
 
-		console.log('checking current user start');
-		console.log('persisting auth state');
-		localStorage.setItem("user_auth_id", session.id);
-		console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
-		//state.go('tab.profil');
-		
-	  }).error(function(error) {
-		  console.log('ERROR : ' + error.message, error);
-		  console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
-	  });	
-			  
-	$state.go('tab.cross-ecom');
-	}).error(function(user) {
-		var alertPopup = $ionicPopup.alert({
-			title: 'This user already exists!',
-			template: 'Please select another username or contact support!'
-		});
-	});
-	
+    console.log('checking current user start');
+    console.log('persisting auth state');
+    localStorage.setItem("user_auth_id", session.id);
+    console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
+    //state.go('tab.profil');
+    
+    }).error(function(error) {
+      console.log('ERROR : ' + error.message, error);
+      console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
+    }); 
+        
+  $state.go('tab.cross-ecom');
+  }).error(function(user) {
+    var alertPopup = $ionicPopup.alert({
+      title: 'This user already exists!',
+      template: 'Please select another username or contact support!'
+    });
+  });
+  
     //$state.go('tab.trophies');
-	}
+  }
 
-	console.log('SignInCtrl.registerUser() | end. ') ;
-	
+  console.log('SignInCtrl.registerUser() | end. ') ;
+  
   };
 
-	
-	console.log('RegisterCtrl | done. ') ;
+  
+  console.log('RegisterCtrl | done. ') ;
 })
 
 .controller('ProfileRegisterCtrl', function($scope, $state) {
-	console.log('ProfileRegisterCtrl | starting ... ') ;
-		
-	console.log('ProfileRegisterCtrl | done. ') ;
+  console.log('ProfileRegisterCtrl | starting ... ') ;
+    
+  console.log('ProfileRegisterCtrl | done. ') ;
 })
 
 .controller('LostPasswordCtrl', function($scope, $state, $http, $ionicPopup, dpd) {
+<<<<<<< HEAD
 	console.log('LostPasswordCtrl | starting ... ') ;
 
 	$scope.sendPasswordReset = function( useremail ) {
@@ -520,33 +523,355 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		}
 	}
 	console.log('ChangePasswordCtrl | done. ') ;
+=======
+  console.log('LostPasswordCtrl | starting ... ') ;
+
+  $scope.sendPasswordReset = function( useremail ) {
+    
+    if ( useremail == null) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Erreur',
+        template: 'Veuillez saisir un email valide!'
+      });   
+    } else {
+      console.log('LostPasswordCtrl::sendPasswordReset() | looking for user : ' + useremail) ;
+
+      // 1. check if user exists (ok : 2., ko :alert)
+      dpd.users.get( {"username":useremail} ).success(function(response) {
+            
+            if ( response == null || response == ''){ 
+              console.log('LostPasswordCtrl::sendPasswordReset() | no such user : ' + useremail) ;
+              var alertPopup = $ionicPopup.alert({
+                title: 'Erreur',
+                template: 'Une erreur est survenue, veuillez vérifier l\'adresse email saisie.'
+              });   
+            } else {
+              console.log('LostPasswordCtrl::sendPasswordReset() | found user : ' + response[0].username +'(' + response[0].id + ')');
+              var user = response[0];
+
+              var link = 'http://digitalprojectwatch.cross-systems.ch/user-reset-password/' + response[0].id;
+              // 2. send email & set flag passwordreset: true
+              
+              var mailJSON ={
+                  "key": "b5jBPWAtZOqLnILTUURplQ",
+                  "template_name": "dwp-app-password-reset",
+                    "template_content": [
+                      {
+                        "nickname": user.nickname,
+                        "link": 'http://digitalwatchproject.cross-systems.ch/user-reset-password/' + user.id,
+                        "password" : '1234'
+                        }
+                    ],
+                    "message": {
+                    "html": "<p>Example HTML content</p>",
+                    "text": "Example text content",
+                    "from_email": "projectdigitalwatch@cross-systems.ch",
+                    "from_name": "Project Digital Watch by Cross",
+                    "to": [
+                      {
+                        "email": user.username,
+                        "name": user.nickname,
+                        "type": "to"
+                      }
+                    ],
+                    "important": false,
+                    "track_opens": null,
+                    "track_clicks": null,
+                    "auto_text": null,
+                    "auto_html": null,
+                    "inline_css": null,
+                    "url_strip_qs": null,
+                    "preserve_recipients": null,
+                    "view_content_link": null,
+                    "tracking_domain": null,
+                    "signing_domain": null,
+                    "return_path_domain": null,
+                    "merge": true,
+                    "merge_language": "handlebars",
+                    "merge_vars": [
+                          {
+                            "rcpt": user.username,
+                            "vars": [
+                              {
+                                "name": "nickname",
+                                "content": user.nickname
+                              },
+                              {
+                                "name": "link",
+                                "content": link
+                              }
+                              
+                            ]
+                          }
+                        ]                   
+                  },
+                  "async": false,
+                  "ip_pool": "Main Pool"
+                };
+                //reference to the Mandrill REST api
+                var apiURL = "https://mandrillapp.com/api/1.0/messages/send-template.json";
+                //used to send the email via POST of JSON to Manrdill REST API end-point
+
+              console.log('LostPasswordCtrl::sendPasswordReset() | sending email ...') ;
+                $http.post(apiURL, mailJSON).
+                  success(function(data, status, headers, config) {
+                    console.log('successful email send.');
+                    var alertPopup = $ionicPopup.alert({
+                      title: 'Confirmation',
+                      template: 'Un email de réinitialisation à été envoyé. Veuillez consulter votre boîte mail et suivre les instructions.'
+                    });   
+                    console.log('status: ' + status);
+                  }).error(function(data, status, headers, config) {
+                    console.log('error sending email.');
+                    var alertPopup = $ionicPopup.alert({
+                      title: 'Erreur',
+                      template: 'Une erreur est survenue dans l\'envoi de l\'email, veuillez rééssayer. Veuillez consulter votre boîte mail et suivre les instructions.'
+                    });   
+                    console.log('status: ' + status);
+                  });
+              console.log('LostPasswordCtrl::sendPasswordReset() | sending done.') ;
+                            
+              
+              
+            }
+        }).error(function(error) {
+          console.log('error : ' + error.message, error);
+          var alertPopup = $ionicPopup.alert({
+            title: 'Erreur!',
+            template: 'Veuillez vérifier votre email et mot de passe!'
+          });
+            
+        });
+    }
+    
+
+  } 
+  
+  
+  
+  // 3. go to set password view
+  
+  console.log('LostPasswordCtrl | done. ') ;
+})
+
+.controller('ResetPasswordCtrl', function($scope, $state, $stateParams, $ionicPopup, dpd) {
+  console.log('ResetPasswordCtrl | starting ... ') ;
+
+  console.log('ResetPasswordCtrl');
+  
+  /*$scope.resetPassword = function( $stateParams ) {*/
+
+    var uid = $stateParams.uid;
+    $scope.user = null;
+    console.log()
+    if ( uid == null) {
+      console.log('ResetPasswordCtrl::resetPassword() | wrong id : ' + uid );
+      var alertPopup = $ionicPopup.alert({
+        title: 'Erreur',
+        template: 'Erreur lors de la réinitialisation du mot de passe.'
+      });   
+    } else {
+      console.log('LostPasswordCtrl::sendPasswordReset() | looking for user : ' + uid) ;
+
+      // 1. check if user exists (ok : 2., ko :alert)
+      dpd.users.get( {"id":uid} ).success(function(response) {
+            
+            if ( response == null || response == ''){ 
+              console.log('LostPasswordCtrl::sendPasswordReset() | no such user : ' + uid) ;
+              var alertPopup = $ionicPopup.alert({
+                title: 'Erreur',
+                template: 'Erreur lors de la réinitialisation du mot de passe.'
+              });
+              // state.go( out' );
+            } else {
+              console.log(response);
+              console.log('LostPasswordCtrl::sendPasswordReset() | found user : ' + response.username +'(' + response.id + ')');
+              user = response;
+              $scope.user = response;
+              
+              console.log('LostPasswordCtrl::sendPasswordReset() | redirecting to set new password.') ;
+              // state.go('set-new-password');
+                            
+              
+              
+            }
+        }).error(function(error) {
+          console.log('error : ' + error.message, error);
+          var alertPopup = $ionicPopup.alert({
+            title: 'Erreur',
+            template: 'Erreur lors de la réinitialisation du mot de passe.'
+          });
+            
+        });
+    }
+    
+
+  /*}*/ 
+
+  $scope.updateUserPassword = function(form, $scope) {
+    pwd1 = form.pwd1;
+    pwd2 = form.pwd2;
+
+    
+    console.log('updating password for user : ' + user.username);
+    
+    if (pwd1 == pwd2 ){
+      console.log('setting password : \'' + pwd1 + '\' for user : ' +  user.username  );
+      dpd.users.put( $stateParams.uid, { password: pwd1, nickname: user.nickname}).success(function(session) {
+          console.log('success ! user updated');
+          console.log('Sucess updated user : ' + $stateParams.uid + '!');
+          
+      console.log('authenticating user '+  user.username +' with password ' + pwd1);
+
+      dpd.users.exec('login', { username: user.username, password: pwd1 }).success(function(session) {
+          console.log('success ! user logged in');
+          console.log('Sucess logged in : ' + user.username + ' (' + session.uid + ')!');   
+
+        console.log('checking current user start');
+        console.log('persisting auth state');
+        localStorage.setItem("user_auth_id", session.id);
+        console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
+        //state.go('tab.profil');
+        
+        }).error(function(error) {
+          console.log('ERROR : ' + error.message, error);
+          console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
+        });       
+
+          
+        }).error(function(error) {
+          console.log('ERROR : ' + error.message, error);
+          console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
+        });
+
+
+    
+    }
+  }
+  console.log('ResetPasswordCtrl | done. ') ;
+})
+
+.controller('ChangePasswordCtrl', function($scope, $state, $stateParams, $ionicPopup, dpd) {
+  console.log('ChangePasswordCtrl | starting ... ') ;
+
+  
+  /*$scope.resetPassword = function( $stateParams ) {*/
+
+    var uid = localStorage.getItem('user_auth_id');
+    $scope.user = null;
+    if ( uid == null) {
+      console.log('ChangePasswordCtrl::resetPassword() | wrong id : ' + uid );
+      var alertPopup = $ionicPopup.alert({
+        title: 'Erreur',
+        template: 'Erreur lors de la réinitialisation du mot de passe.'
+      });   
+    } else {
+      console.log('ChangePasswordCtrl::sendPasswordReset() | looking for user : ' + uid) ;
+
+      // 1. check if user exists (ok : 2., ko :alert)
+      
+      dpd.users.get( {"id":uid} ).success(function(response) {
+            
+            if ( response == null || response == ''){ 
+              console.log('ChangePasswordCtrl::sendPasswordReset() | no such user : ' + uid) ;
+              var alertPopup = $ionicPopup.alert({
+                title: 'Erreur',
+                template: 'Erreur lors de la réinitialisation du mot de passe.'
+              });
+              // state.go( out' );
+            } else {
+              console.log(response);
+              console.log('ChangePasswordCtrl::sendPasswordReset() | user : ' + response.username +'(' + response.id + ')');
+              user = response;
+              $scope.user = response;
+                                          
+              
+              
+            }
+        }).error(function(error) {
+          console.log('error : ' + error.message, error);
+          var alertPopup = $ionicPopup.alert({
+            title: 'Erreur',
+            template: 'Erreur lors de la réinitialisation du mot de passe.'
+          });
+            
+        });
+    }
+    
+
+  /*}*/ 
+
+  $scope.updateUserPassword = function(form ) {
+    pwd1 = form.pwd1;
+    pwd2 = form.pwd2;
+
+    
+    console.log('updating password for user : ' + user.username);
+    
+    if (pwd1 == pwd2 ){
+      console.log('setting password : \'' + pwd1 + '\' for user : ' +  user.username  );
+      dpd.users.put( uid, { password: pwd1, nickname: user.nickname}).success(function(session) {
+          console.log('success ! user updated');
+          console.log('Sucess updated user : ' + $stateParams.uid + '!');
+          
+      console.log('authenticating user '+  user.username +' with password ' + pwd1);
+      
+      $state.go('tab.profile');
+
+    /*
+      dpd.users.exec('login', { username: user.username, password: pwd1 }).success(function(session) {
+          console.log('success ! user logged in');
+          console.log('Sucess logged in : ' + user.username + ' (' + session.uid + ')!');   
+        console.log('checking current user start');
+        console.log('persisting auth state');
+        localStorage.setItem("user_auth_id", session.id);
+        console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
+        //state.go('tab.profil');
+        
+        }).error(function(error) {
+          console.log('ERROR : ' + error.message, error);
+          console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
+        });       
+    */
+          
+        }).error(function(error) {
+          console.log('ERROR : ' + error.message, error);
+          console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
+        });
+
+
+    
+    }
+  }
+  console.log('ChangePasswordCtrl | done. ') ;
+>>>>>>> 49df10daefb16e01a2d7160e3b07fee52658f688
 })
 
 .controller('CrossEcomCtrl', function($scope, $state, dpd) {
-	console.log('CrossEcomCtrl | starting ... ') ;
+  console.log('CrossEcomCtrl | starting ... ') ;
 
-	dpd.newsecom.get( { $sort: {timestamp: 1}} ).success(function(response) {
-			  console.log('success !');
-			  console.log('data : ', response);
-			  $scope.ecomnews = response;
-		}).error(function(error) {
-			  console.log('error : ' + error.message, error);
-		});
-	
-	console.log('CrossEcomCtrl | done. ') ;
+  dpd.newsecom.get( { $sort: {timestamp: 1}} ).success(function(response) {
+        console.log('success !');
+        console.log('data : ', response);
+        $scope.ecomnews = response;
+    }).error(function(error) {
+        console.log('error : ' + error.message, error);
+    });
+  
+  console.log('CrossEcomCtrl | done. ') ;
 })
 
 .controller('CrossNewsCtrl', function($scope, $state,dpd) {
-	console.log('CrossNewsCtrl | starting ... ') ;
-	dpd.newscross.get( { $sort: {timestamp: 1}} ).success(function(response) {
-			  console.log('success !');
-			  console.log('data : ', response);
-			  $scope.crossnews = response;
-		}).error(function(error) {
-			  console.log('error : ' + error.message, error);
-		});
-	
-	console.log('CrossNewsCtrl | done. ') ;
+  console.log('CrossNewsCtrl | starting ... ') ;
+  dpd.newscross.get( { $sort: {timestamp: 1}} ).success(function(response) {
+        console.log('success !');
+        console.log('data : ', response);
+        $scope.crossnews = response;
+    }).error(function(error) {
+        console.log('error : ' + error.message, error);
+    });
+  
+  console.log('CrossNewsCtrl | done. ') ;
 })
 
 
@@ -726,8 +1051,9 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
 
 .controller('LeaderboardCtrl', function(dpd, ScoreService, $scope, $http) {
-	console.log('LeaderboardCtrl | starting ... ');
+  console.log('LeaderboardCtrl | starting ... ');
   //dpd.users.exec('me');
+<<<<<<< HEAD
 
 	//$scope.$apply();
   
@@ -770,10 +1096,53 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		$scope.$apply()
 	};	
 	console.log('LeaderboardCtrl | done. ') ;
+=======
+  $scope.$apply();
+  $scope.players = [];
+  
+  console.log('LeaderboardCtrl | calling ScoreService.getScores() ... ') ;
+
+  ScoreService.getScores().then(function(promise) {
+    $scope.players = promise;
+  });
+
+  console.log('LeaderboardCtrl | ScoreService.getScores() --> players : ', $scope.players);
+  /*
+  $http.get('http://localhost:2403/users').then(function(resp) {
+    console.log('Success', resp);
+    // For JSON responses, resp.data contains the result
+    $scope.loaded = true;
+    $scope.players = resp.data;
+    console.log( $scope.players[0].name);
+  }, function(err) {
+    console.error('ERR', err);
+    // err.status will contain the status code
+  })
+  */
+  console.log('LeaderboardCtrl | ScoreService.getScores() done. ') ;
+  
+  
+  /*
+  $scope.players =  [
+    {nickname: "Jamie Sommers", avatar:"img/avatar-player2.png", score:4500},
+    {nickname: "Willy Wonka", avatar:"img/avatar-player3.png", score:2500},
+    {nickname: "Bart Simpson", avatar:"img/avatar-player4.png", score:1500}
+  ];
+  */
+  
+  
+  $scope.doRefresh = function() {
+    $scope.players.unshift({name: 'Player ' + Date.now(), avatar:"img/avatar-player1.png", score:500})
+    $scope.$broadcast('scroll.refreshComplete');
+    $scope.$apply()
+  };  
+  console.log('LeaderboardCtrl | done. ') ;
+>>>>>>> 49df10daefb16e01a2d7160e3b07fee52658f688
 })
 
 .controller('ProfileCtrl', function($scope, $state, ProfileService, dpd) {
 
+<<<<<<< HEAD
 	console.log('ProfileCtrl | starting ... ') ;
 
 	var uid = localStorage.getItem('user_auth_id');
@@ -810,26 +1179,44 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	$scope.signOutUser = function(user, $rootScope) {
 	
 	console.log('ProfileCtrl.signOutUser() | start. ') ;
+=======
+  console.log('ProfileCtrl | starting ... ') ;
+  console.log('ProfileCtrl | user_auth_id ... ' + localStorage.getItem('user_auth_id') ) ;
+
+  if ( localStorage.getItem('user_auth_id') ) {
+    
+  }
+  
+  ProfileService.getUserProfile(localStorage.getItem('user_auth_id'), dpd).success(function(response) {
+    $scope.user = response;
+    console.log('response', response);
+  });
+  console.log(' username ' + '');
+  
+  $scope.signOutUser = function(user, $rootScope) {
+  
+  console.log('ProfileCtrl.signOutUser() | start. ') ;
+>>>>>>> 49df10daefb16e01a2d7160e3b07fee52658f688
     if (user != null) {
-	console.log('ProfileCtrl.signOutUser() | Signing in user : ', user);
-	} else {
-	console.log('ProfileCtrl.signOutUser() | Signing in user : !!warning user is empty!!');	
-	}
+  console.log('ProfileCtrl.signOutUser() | Signing in user : ', user);
+  } else {
+  console.log('ProfileCtrl.signOutUser() | Signing in user : !!warning user is empty!!'); 
+  }
 
-	console.log('ProfileCtrl | logging out ');
+  console.log('ProfileCtrl | logging out ');
 
-	dpd.users.get('me').success(function(session, $rootScope) {
-	console.log('me :: success ! A user is logged in');
-	console.log('session', session);
-	console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
+  dpd.users.get('me').success(function(session, $rootScope) {
+  console.log('me :: success ! A user is logged in');
+  console.log('session', session);
+  console.log('me :: Sucess logged in : ' + session.nickname + ' (' + session.id + ')!'); 
 
-		dpd.users.get('logout').success(function(session) {
-			  console.log('Sucessfuly logged out !');
-				//deferred.resolve('Logged out ' + name + ' !');
-				console.log('persisting auth state');
+    dpd.users.get('logout').success(function(session) {
+        console.log('Sucessfuly logged out !');
+        //deferred.resolve('Logged out ' + name + ' !');
+        console.log('persisting auth state');
         // NULL
-				localStorage.setItem("user_auth_id", '');
-				console.log('set user_auth_id : "', localStorage.getItem("user_auth_id") +'"' );
+        localStorage.setItem("user_auth_id", '');
+        console.log('set user_auth_id : "', localStorage.getItem("user_auth_id") +'"' );
         // Stop monitoring
         
         if ($rootScope.monitoringLaunched  ==true ) {
@@ -838,30 +1225,29 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
           $rootScope.monitoringLaunched  = false;
         }
         console.log("STOP MONITORING in Profil");
-				$state.go('tab.profilelogin');
+        $state.go('tab.profilelogin');
 
-			  
-		}).error(function(error) {
-			  //console.log('error : ' + error.message, error);
-			  console.log('error', error);
-		});
+        
+    }).error(function(error) {
+        //console.log('error : ' + error.message, error);
+        console.log('error', error);
+    });
 
-		//deferred.resolve('Logged out ' + session.nickname + ' (' + session.id + ')!'); 
+    //deferred.resolve('Logged out ' + session.nickname + ' (' + session.id + ')!'); 
 
-	}).error(function(error) {
-		console.log('me::ERROR : ' + error.message, error);
-		console.log('me::ERROR : please check user is logged in.');
-		//deferred.reject('No user logged in.');
-	});
+  }).error(function(error) {
+    console.log('me::ERROR : ' + error.message, error);
+    console.log('me::ERROR : please check user is logged in.');
+    //deferred.reject('No user logged in.');
+  });
 
-	
-	
-	
+  
+  
+  
     //$state.go('tab.trophies');
 
-	console.log('ProfileCtrl.signOutUser() | end. ') ;
-	
-  };	
-	console.log('ProfileCtrl | done. ') ;
+  console.log('ProfileCtrl.signOutUser() | end. ') ;
+  
+  };  
+  console.log('ProfileCtrl | done. ') ;
 });
-
