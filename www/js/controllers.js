@@ -35,14 +35,24 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   
 })
 
-.controller('PrerequisitesCtrl', function($scope, $state) {
+.controller('PrerequisitesCtrl', function($scope, $state, dpd) {
 
   console.log('PrerequisitesCtrl | starting ... ') ;
   // Called to navigate to the main app
+  
+  dpd.trophycontents.get( { $sort: {orderno: 1}} ).success(function(response) {
+        console.log('success !');
+        console.log('data : ', response);
+        $scope.prereqs = response;
+    }).error(function(error) {
+        console.log('error : ' + error.message, error);
+    });
+  
   $scope.goTrophies = function() {
     //$state.go('tab.trophies');
     $state.go('tab.cross-news');
   };
+  
   console.log('PrerequisitesCtrl | done. ') ;
   
 })
