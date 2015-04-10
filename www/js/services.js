@@ -86,7 +86,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
                   console.log('success !');
 
                 console.log('persisting auth state');
-                localStorage.setItem("user_auth_id", session.id);
+                localStorage.setItem("user_auth_id", session.uid);
                 console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
 
                 deferred.resolve('Welcome ' + name + ' !');         
