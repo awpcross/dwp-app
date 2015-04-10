@@ -139,20 +139,25 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   // TODO PES / LAL auto signin the user
   dpd.users.exec('login', { username: newuser.username, password: newuser.password }).success(function(session) {
       console.log('success ! user logged in');
-      console.log('Sucess logged in : ' + session.username + ' (' + session.id + ')!');   
+      console.log('Sucess logged in : ' + session.username + ' (' + session.uid + ')!');   
 
     console.log('checking current user start');
     console.log('persisting auth state');
-    localStorage.setItem("user_auth_id", session.id);
+    localStorage.setItem("user_auth_id", session.uid);
     console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
     //state.go('tab.profil');
+	var currentTS = new Date().getTime();	
+	dpd.trophiesmatched.post({ "timestamp" : currentTS, "trophyid":"eac708b7e5f508e1","userid":session.id,"points":1000});
+	dpd.trophiesmatched.post({ "timestamp" : currentTS, "trophyid":"22334cdaa20578a3","userid":session.id,"points":500});
+	$state.go('tab.cross-ecom');
     
     }).error(function(error) {
       console.log('ERROR : ' + error.message, error);
-      console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
+      console.log('ERROR : please check could not update : ' + session.id + ' in DB.');
     }); 
-        
-  $state.go('tab.cross-ecom');
+
+
+  
   }).error(function(user) {
     var alertPopup = $ionicPopup.alert({
       title: 'This user already exists!',
