@@ -70,7 +70,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
 		templateUrl: 'templates/welcome-slider.html',
 		controller: 'WelcomeCtrl'
 	  })
-    // Prerequis
+    // Prerequis all
   .state('prerequisites', {
     url: '/prerequisites',
     templateUrl: 'templates/prerequisites.html',

@@ -655,7 +655,16 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
       }
   }
     // Gestion modal des prerequis  - faire une version allegée pour le bluetooth [BEGIN]
-    $ionicModal.fromTemplateUrl('templates/modal-prerequisites.html', {
+
+  dpd.prereqcontents.get( { $sort: {orderno: 1}} ).success(function(response) {
+        console.log('success !');
+        console.log('data : ', response);
+        $scope.prereqs = response;
+    }).error(function(error) {
+        console.log('error : ' + error.message, error);
+    });
+    
+	$ionicModal.fromTemplateUrl('templates/modal-prerequisites.html', {
           scope: $scope,
           animation: 'slide-in-up'
       }).then(function(modal) {
