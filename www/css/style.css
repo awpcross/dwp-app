@@ -3,6 +3,12 @@
 blue : #37b0dc
 */
 
+.tab-nav.tabs {
+  background-color: #37b0dc;
+  border: none;
+  color: #fff;
+}
+
 .grid-reset.col {
 	padding: 0px;
 }
