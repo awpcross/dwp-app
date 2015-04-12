@@ -1,29 +1,254 @@
 angular.module('starter.services', ['dpd', 'appconfig'])
 
- .factory('AuthService', function ($rootScope) {
-        return {
-            checkLogin: function() {
-                // Check if logged in and fire events
-                if(this.isLoggedIn()) {
-                    $rootScope.$broadcast('app.loggedIn');
-                } else {
-                    $rootScope.$broadcast('app.loggedOut');
-                }
-            },
-            isLoggedIn: function() {
-                // Check auth token here from localStorage
-                if (localStorage.getItem("coride_auth_token") === null || localStorage.getItem("coride_auth_token") === "undefined") {
-                    return false
-                } else {
-                    return true
-                };
-            },
-            logout: function(email, pass) {
-                // Same thing, log out user
-                $rootScope.$broadcast('app.loggedOut');
-            }
-        }
-    })
+.service('DataService', ['dpd', '$q', function(dpd, $q) {
+
+	var cacheKeyPrefix = 'data-cache-';
+
+	this.getDevBackendData = function(collection) {
+		var str = '';
+		
+		switch (collection) {
+		
+			case 'test' : 
+				str = '[{"name":"testname","value":"testvalue"}]';
+				break;
+			case 'users' : 
+				str = '[{"nickname":"Bart Simpson","picture":false,"username":"bart@gmail.com","score":5000,"activated":false,"id":"77876edeb634e8af"}]';
+				break;
+			case 'applabels' : 
+				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
+				break;
+
+			case 'appcontents' : 
+				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
+				break;
+		}
+
+		return JSON.parse(str);
+		};
+	
+	this.getLocalBackendData = function(collection) {
+
+		var str = '';
+		
+		switch (collection) {
+			case 'test' : 
+				str = '[{"name":"testname","value":"testvalue"}]';
+				break;
+			case 'users' : 
+				str = '';
+				break;
+			case 'applabels' : 
+				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
+				break;
+			case 'appcontents' : 
+				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
+				break;
+		}
+
+		return JSON.parse(str);
+		};
+
+	this.getCachedBackendData = function(collection) {
+		var dta = {};
+		var cacheExpiry;
+
+		if ( collection != null || collection == '') {
+			var cacheKey = cacheKeyPrefix + collection;
+		} else {
+			cacheKey = 'CACHEERR_' + currentTS;
+		}
+		console.log('DataService::getCachedBackendData() | INFO Will use cacheKey : '+cacheKey);
+		cachedExpiry = parseInt( window.localStorage.getItem( cacheKey + '_cachets') ); 
+		if ( !isNaN( cachedExpiry ) ) {
+			cacheExpiry = cachedExpiry + cacheLiveTime;		
+		} else {
+			cacheExpiry = 0;
+		}
+		
+		var currentTS = new Date().getTime();
+
+		console.log('DataService::getCachedBackendData() | INFO cache expiry : ' + cacheExpiry + ' (current : ' + currentTS + ')' );
+		if (cacheExpiry != null || cacheExpiry != '') {
+			var tmpDta = window.localStorage.getItem( cacheKey + '_data' );
+			if ( tmpDta != null || tmpDta == '') {
+				dta = JSON.parse(tmpDta);
+			} else {
+				console.log('DataService::getCachedBackendData() | ERROR, no cached data');
+				return null;
+			}		
+		} else {
+			console.log('DataService::getCachedBackendData() | ERROR, no cached data');
+			return null;
+		}
+		
+		//console.log('DataService::getCachedBackendData() | returning data : ' + dta);
+		console.log('DataService::getCachedBackendData() | returning data : ' + dta);
+		return dta;
+	}	
+
+	this.getLiveBackendData = function(collection, collObj, cacheLiveTime, collQuery) { 
+
+		var deferred = $q.defer();
+        var promise = deferred.promise;
+		var currentTS = new Date().getTime();
+		var cacheExpiry;
+
+
+		if ( collObj == null ) {
+			console.log('DataService::getLiveBackendData() | ERROR data collection does not exist');
+			// TODO manage error msg &  return
+		} else {
+			console.log('DataService::getLiveBackendData() | INFO Working with collection : '+collection);
+
+			
+			if ( collection != null || collection == '') {
+				var cacheKey = cacheKeyPrefix + collection;
+			} else {
+				cacheKey = 'CACHEERR_' + currentTS;
+			}
+			console.log('DataService::getLiveBackendData() | INFO Will use cacheKey : '+cacheKey);
+			cachedExpiry = parseInt( window.localStorage.getItem( cacheKey + '_cachets') ); 
+			if ( !isNaN( cachedExpiry ) ) {
+				cacheExpiry = cachedExpiry + cacheLiveTime;		
+			} else {
+				cacheExpiry = 0;
+			}
+			console.log('DataService::getLiveBackendData() | INFO Checking cache expiry : currentTS : '+currentTS+' vs cacheExpiry : ' + cacheExpiry + ', needs refresh : ' + (currentTS > cacheExpiry) );
+			
+			if ( currentTS > cacheExpiry  ) {
+				console.log('DataService::getLiveBackendData() | INFO cache expired, requesting live data');
+				
+				
+				collObj.get(collQuery, function(result, error){
+				
+				if (error != 200) { // error contains HTTP response code
+					console.log('DataService::getLiveBackendData() | async | ERROR an error occured processing the DB request, probably a malformed query (error code : ' + error + ')');
+					deferred.reject('ERROR processing the DB request, probably a malformed query (error code : ' + error + ')')
+					// TODO return value null ? empty
+					//return null; return unnecessary promise is rejected
+				} else {
+
+				if ( result != null ) {
+					console.log('DataService::getLiveBackendData() | async |  INFO query sucessfully returned ' + result.length + ' row(s)');
+					//console.log(result);
+					var currentTS = new Date().getTime();
+					console.log('DataService::getLiveBackendData() | async |  INFO caching response with ts : '+ currentTS);
+					window.localStorage.setItem( cacheKey + '_data', JSON.stringify( result ) );
+					window.localStorage.setItem( cacheKey + '_cachets', currentTS );
+					deferred.resolve(result);
+				} else {
+					// TODO ---test
+					console.log('DataService::getLiveBackendData() | async |  ERROR, cannot return live data (response is null), leaving cache unchanged ', response);
+					deferred.reject('ERROR result is null');
+					//return null; return unnecessary promise is rejected
+				}
+				
+				}
+			});
+		} else {
+			// TODO ---test
+			console.log('DataService::getLiveBackendData() | cache is valid, returning cached data');
+			response = this.getCachedBackendData(collection);
+			deferred.resolve(response);
+		}
+
+			
+		}
+		
+		promise.success = function(fn) {
+			promise.then(fn);
+			return promise;
+		}
+
+		promise.error = function(fn) {
+			promise.then(null, fn);
+			return promise;
+		}
+		return promise;
+
+	};
+
+	this.getBackendData = function(dpd, collection, mode) {
+		console.log('DataService::getBackendData(' + mode + ') | processing ...');
+
+		var dta = {};
+		var collObj;
+		var collQuery = '';
+
+		
+		collObj = dpd.test;
+			// getting a pointer on the dpd collection
+			//'test','users', 'applabels', 'welcomecontents', 'trophies', 'trophiesmatched', 'newsecom', 'newscross', 'trophycontents', 'prereqcontents'
+			switch (collection) {
+				case 'test' : 
+					collObj = dpd.test;
+					cacheLiveTime = 0;
+					break;
+				case 'users' : 
+					collObj = dpd.users;
+					collQuery = '{ $sort: {orderno: 1}}';
+					cacheLiveTime = 1;					
+					break;
+				case 'applabels' : 
+					collObj = dpd.applabels;
+					collQuery = '{ $sort: {orderno: 1}}';
+					cacheLiveTime = 10800000;					
+					break;
+				case 'appcontents' : 
+					collObj = dpd.appcontents;
+					collQuery = '{ $sort: {orderno: 1}}';
+					cacheLiveTime = 10800000;					
+					break;
+				case 'newsecom' : 
+					collObj = dpd.newsecom;
+					collQuery = '{ $sort: {timestamp: 1}}';
+					cacheLiveTime = 10800000;					
+					break;
+				case 'crosssecom' : 
+					collObj = dpd.crossecom;
+					collQuery = '{ $sort: {timestamp: 1}}';
+					cacheLiveTime = 0;					
+					break;
+				case 'welcomecontents' : 
+					collObj = dpd.welcomecontents;
+					collQuery = '{ $sort: {orderno: 1}}';
+					cacheLiveTime = 10800000;
+					break;
+			}
+			
+		if ( collObj != null ) {		
+
+			// getting data in requested mode
+			switch (mode) {
+				case 'live':
+					return this.getLiveBackendData( collection, collObj, cacheLiveTime );
+				break;
+				
+				case 'cache' : 
+					return this.getCachedBackendData( collection );
+				break;
+
+				case 'local' : 
+					return this.getLocalBackendData();
+				break;
+
+				case 'dev' :
+				default :
+					return this.getDevBackendData();
+					break;
+			}
+		} else {
+			console.log('DataService::getBackendData(' + mode + ') | ERROR collection "'+ colection+'" does not exits in backend ');
+			dta = null;
+		}
+
+
+		console.log('DataService::getBackendData(' + mode + ') | done.');
+		return dta;
+	}	
+	
+}])
 
 .service('LoginService', ['dpd', '$q', 'ENV', function(dpd, $q, env) {
     
@@ -157,7 +382,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
                   deferred.resolve('Created ' + session.username + ' (' + session.id + ')!'); 
               }).error(function(error) {
                   console.log('ERROR : ' + error.message, error);
-                  console.log('ERROR : please check could not create : ' + new  username + ' in DB.');
+                  console.log('ERROR : please check could not create : ' + username + ' in DB.');
                   deferred.reject('Wrong credentials.');
               });
 

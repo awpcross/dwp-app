@@ -1,9 +1,10 @@
 var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
-.controller('WelcomeCtrl', function(dpd,$scope, $state, $ionicSlideBoxDelegate) {
+.controller('WelcomeCtrl', function(DataService, dpd, $scope, $state, $ionicSlideBoxDelegate) {
 
   console.log('WelcomeCtrl | starting ... ');
 
+ 
   dpd.welcomecontents.get( { $sort: {orderno: 1}} ).success(function(response) {
         console.log('success !');
         console.log('data : ', response);
@@ -56,6 +57,46 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   console.log('PrerequisitesCtrl | done. ') ;
   
 })
+
+.controller('EComNewsCtrl', function(dpd, DataService, $scope, $state) {
+	
+	console.log('EComNewsCtrl | INFO starting ... ') ;
+	DataService.getBackendData(dpd, 'newsecom', 'live').success(function(response) {
+		console.log('EComNewsCtrl | INFO data returned ' + response.length + ' news items');
+		$scope.ecomnews = response;
+	}).error(function(error) {
+		console.log('EComNewsCtrl | ERROR An error occured while retrieving live data : ' + error);
+		console.log('EComNewsCtrl | INFO getting local data instead' + error);
+		DataService.getBackendData(dpd, 'newsecom', 'local').success(function(response) {
+			//console.log('EComNewsCtrl | INFO data returned : ' + response);
+			$scope.ecomnews = response;
+		}).error(function(error) {
+			console.log('EComNewsCtrl | ERROR An error occured while retrieving local data : ' + error);
+		})
+		
+	})
+	console.log('EComNewsCtrl | done. ') ;
+})
+
+.controller('CrossNewsCtrl', function($scope, $state,dpd) {
+	console.log('CrossNewsCtrl | INFO starting ... ') ;
+	DataService.getBackendData(dpd, 'newsecom', 'live').success(function(response) {
+		console.log('CrossNewsCtrl | INFO data returned ' + response.length + ' news items');
+		$scope.ecomnews = response;
+	}).error(function(error) {
+		console.log('CrossNewsCtrl | ERROR An error occured while retrieving live data : ' + error);
+		console.log('CrossNewsCtrl | INFO getting local data instead' + error);
+		DataService.getBackendData(dpd, 'newsecom', 'local').success(function(response) {
+			//console.log('CrossNewsCtrl | INFO data returned : ' + response);
+			$scope.ecomnews = response;
+		}).error(function(error) {
+			console.log('CrossNewsCtrl | ERROR An error occured while retrieving local data : ' + error);
+		})
+		
+	})
+	console.log('CrossNewsCtrl | done. ') ;
+})
+
 
 .controller('SignInCtrl', function($ionicPopup, $scope, $state, LoginService, dpd, ProfileService) {
 
@@ -507,33 +548,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   console.log('ChangePasswordCtrl | done. ') ;
 })
 
-.controller('CrossEcomCtrl', function($scope, $state, dpd) {
-  console.log('CrossEcomCtrl | starting ... ') ;
-
-  dpd.newsecom.get( { $sort: {timestamp: 1}} ).success(function(response) {
-        console.log('success !');
-        console.log('data : ', response);
-        $scope.ecomnews = response;
-    }).error(function(error) {
-        console.log('error : ' + error.message, error);
-    });
-  
-  console.log('CrossEcomCtrl | done. ') ;
-})
-
-.controller('CrossNewsCtrl', function($scope, $state,dpd) {
-  console.log('CrossNewsCtrl | starting ... ') ;
-  dpd.newscross.get( { $sort: {timestamp: 1}} ).success(function(response) {
-        console.log('success !');
-        console.log('data : ', response);
-        $scope.crossnews = response;
-    }).error(function(error) {
-        console.log('error : ' + error.message, error);
-    });
-  
-  console.log('CrossNewsCtrl | done. ') ;
-})
-
 
 .controller('TrophiesCtrl', function($scope, $rootScope, $state, $ionicModal, $timeout, $http, Trophies, dpd) {
   // BG Listner
@@ -861,4 +875,48 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   
   };  
   console.log('ProfileCtrl | done. ') ;
-});
+})
+
+
+.controller('DevCtrl', function(dpd, dpdConfig, DataService, $scope, $state) {
+
+	console.log('DevCtrl | processing... ') ;
+
+	// cache
+	/*
+	console.log('WelcomeCtrl | DataService.getLocalAppLabelsData() ');	
+	obj1 = DataService.getLocalAppLabelsData(dpd, 'tmp');	
+	console.log(obj1);
+	console.log('WelcomeCtrl | DataService.getAppLabelsData(\'local\') ');	
+	obj1 = DataService.getAppLabelsData(dpd, 'local');	
+	console.log(obj1);
+	*/
+	console.log('DevCtrl | DataService.getLiveAppLabelsData() ');	
+	DataService.getBackendData(dpd, 'applabels', 'live').success(function(response) {
+		console.log('DevCtrl | data returned : ' + response);
+		$scope.backendTestData = response;
+	}).error(function(error) {
+		console.log('DevCtrl | An error occured : ' + error);
+	})
+	/*
+	console.log('WelcomeCtrl | DataService.getAppLabelsData(\'live\') ');	
+	obj1 = DataService.getAppLabelsData(dpd, 'live');	
+	console.log(obj1);
+	
+	console.log('WelcomeCtrl | DataService.getCachedAppLabelsData() ');	
+	obj1 = DataService.getCachedAppLabelsData(dpd, 'tmp');	
+	console.log(obj1);
+	console.log('WelcomeCtrl | DataService.getAppLabelsData(\'cache\') ');	
+	obj1 = DataService.getAppLabelsData(dpd, 'cache');	
+	console.log(obj1);
+	*/
+	
+	
+	//localAppLabels = DataService.getLocalAppLabelsData();
+	//$scope.localAppLabels = DataService.getAppLabelsData('local');
+
+	console.log('DevCtrl | done. ') ;
+	
+})
+
+;

@@ -1,0 +1,31 @@
+<ion-view view-title="News eCOM SITB 2015">
+<ion-nav-buttons side="left">
+<button class="button" ng-click="doSomething()">
+HLP.
+</button>
+</ion-nav-buttons>	
+<ion-nav-buttons side="right">
+<button class="button" ng-click="doSomething()">
+HW.
+</button>
+</ion-nav-buttons>	
+<ion-content>
+<div class="info-banner info-banner-medium info-banner-warning">
+	<div class="info-banner-icon"><img class="info-visual" src="img/info/error.png"></div>
+	<div class="info-banner-text info-banner-text-medium">
+	<div class="info-banner-text-label">Vous n'avez pas d'accès réseau, veuillez vous connecter au réseau pour obtenir les dernières informations.</div>	
+	</div>
+</div>
+
+
+<div class="list card" ng-repeat="news in ecomnews">
+<div class="item item-divider news-header" ng-bind-html="news.headerText"></div>
+<div class="item item-body">
+<div>
+<h1 class="news-title" ng-bind-html="news.titleText"></h1>
+<p class="news-article" ng-bind-html="news.articleText"></p> 
+</div>
+</div>
+</div>
+</ion-content>
+</ion-view>

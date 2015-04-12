@@ -4,16 +4,27 @@
 </ion-nav-bar>
 <ion-view view-title="Connectez-vous">
 <ion-content>
+<form name="signinForm" novalidate="" ng-submit="authUser(user)" ng-class="{ 'has-error' : signinForm.username.$invalid}">
 	<div class="list">
 		<label class="item item-input">
-			<span class="input-label">Nom d'utilisateur</span>
-			<input type="text" ng-model="user.username">
+			<span class="input-label">Email (login)</span>
+			<input name="login" type="email" ng-model="user.username" 
+				ng-minlength="5" 
+				ng-maxlength="10" 
+				required>				
 		</label>
-		<label class="item item-input">
+		<label class="item item-input" ng-class="{ 'has-error-lr' : signinForm.password.$invalid  && signinForm.$submitted, 'valid-lr' : signinForm.password.$valid  && signinForm.$submitted}">
 			<span class="input-label">Mot de passe</span>
-			<input type="password" ng-model="user.password">
+			<input name="password" type="password" ng-model="user.password" 
+			   ng-minlength="5" 
+			   ng-maxlength="25"
+			   required>
 		</label>
 	</div>
+</form>
+<div class="form-errors" ng-messages="signinForm.username.$error" ng-messages-include="form-errors.html">  
+<div class="form-error" ng-message="maxlength">This field is must be less than 10 characters</div>  
+
 	<div class="padding">
 	<button class="button button-block button-positive" ng-click="authUser(user)">Connexion</button>
 	<p class="text-center">

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','angular.filter'])
+var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','angular.filter', 'ngMessages'])
 
 // TODO dpd initialisation
 //.value('dpdConfig',['categories']);
@@ -69,7 +69,8 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
 		url: '/welcome',
 		templateUrl: 'templates/welcome-slider.html',
 		controller: 'WelcomeCtrl'
-	  })
+	})
+	
     // Prerequis all
   .state('prerequisites', {
     url: '/prerequisites',
@@ -101,25 +102,25 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
 	
 	// tab states
 
-	.state('tab.cross-ecom', {
-    url: '/cross-ecom',
-    views: {
-      'tab-cross-ecom': {
-        templateUrl: 'templates/tab-cross-ecom.html',
-        controller: 'CrossEcomCtrl'
-      }
-    }
-  })
-	
+	.state('tab.news-ecom', {
+		url: '/news-ecom',
+		views: {
+			'tab-news-ecom': {
+				templateUrl: 'templates/tab-news-ecom.html',
+				controller: 'EComNewsCtrl'
+			}
+		}
+	})
+
 	.state('tab.cross-news', {
-    url: '/cross-news',
-    views: {
-      'tab-cross-news': {
-        templateUrl: 'templates/tab-cross-news.html',
-        controller: 'CrossNewsCtrl'
-      }
-    }
-  })
+		url: '/cross-news',
+		views: {
+			'tab-cross-news': {
+				templateUrl: 'templates/tab-news-cross.html',
+				controller: 'CrossNewsCtrl'
+			}
+		}
+	})
 
 	.state('tab.trophies', {
 	  url: '/trophies',
@@ -190,7 +191,13 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
         }
       }
   })
-	
+
+  .state('test', {
+    url: '/test',
+    templateUrl: 'templates/dev.html',
+    controller: 'DevCtrl'
+  })
+  
   .state('resetpassword', {
     url: '/user-reset-password/:uid',
     templateUrl: 'templates/user-reset-password.html',
@@ -214,7 +221,7 @@ app.value('dpdConfig',['categories']);
 */
 
 app.value('dpdConfig', { 
-    collections: ['users', 'welcomecontents', 'trophies', 'trophiesmatched', 'newsecom', 'newscross', 'trophycontents', 'prereqcontents'], 
+    collections: ['test','users', 'applabels', 'welcomecontents', 'trophies', 'trophiesmatched', 'newsecom', 'newscross', 'trophycontents', 'prereqcontents'], 
     //serverRoot: 'http://localhost:2403/', // optional, defaults to same server
     serverRoot: 'https://digitalwatchproject.cross-systems.ch/', // optional, defaults to same server
     socketOptions: { reconnectionDelayMax: 3000 }, // optional socket io additional configuration

@@ -3,13 +3,55 @@
 blue : #37b0dc
 */
 
+.dev {
+	font-family: "Courier New";
+	font-size: 10px;
+	
+}
+.small-info {
+	color: #999;
+	margin-left: 20px;
+	padding-top: 5px;
+	font-size: 13px;
+}
 
+/* form validation */
+/** Styling for the username field **/
+label.item.has-error {  
+  border-bottom: 2px solid red;
+}
+
+/** Styling for the password field when an error exists**/
+label.item.has-error-lr {  
+  border-left: 2px solid red;
+  border-right: 2px solid red;
+}
+
+/** Styling for the password field when an error has been resolved**/
+label.item.valid-lr {  
+  border-left: 2px solid green;
+  border-right: 2px solid green;
+}
+
+/** Styling for the error text and container **/
+.form-errors {
+  margin: 5px 0
+}
+.form-error {
+  padding: 2px 0 2px 16px;
+  color: red;
+}
+/* // form validation */
 
 h1, .h1 {
   font-size: 14px;
   padding-bottom: 0px;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+.info-banner-warning {
+	background-color:#ff5a37 !important;
 }
 
 .input-label {
@@ -28,7 +70,7 @@ h1, .h1 {
 	height:123px;
 }
 .info-banner-medium {
-	height:93px;
+	height:80px;
 }
 
 .info-banner-icon {
@@ -41,15 +83,17 @@ h1, .h1 {
   margin:0px;
   width: 33px;
   height: 33px;
-  background-color:#37b0dc;
  }
 
 .info-banner-text {
 	width: 100%;
 	position:absolute;
-	padding-top: 25px;
-	
+	padding-top: 25px;	
 }
+.info-banner-text-high, .info-banner-text-medium {
+	padding-top: 15px;	
+}
+
 .info-banner-text-label {
 	color: #fff;
 	font-size:14px;
@@ -97,7 +141,7 @@ h1, .h1 {
 }
 
 .bar.bar-light .title {
-  color:#37b0dc;
+  /* color:#37b0dc; */
 }
 
 
@@ -105,7 +149,7 @@ h1, .h1 {
 	padding: none;
 	margin: none;
 	color: #fff;
-	background-color:#37b0dc;
+	background-color:#999;
 	font-weight:300;
 }
 
@@ -137,10 +181,6 @@ div.list.list-inset{
 .tab-item .icon {
 	font-size: 28px;
 }
-
-
-
-
 
 .welcome-banner {
 	width: 100%;
