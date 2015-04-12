@@ -1,13 +1,21 @@
-<ion-view view-title="Cross News">
-  <ion-content class="padding">    
-	<div class="list card" ng-repeat="news in crossnews">
-      <div class="item item-divider news-header" ng-bind-html="news.headerText"></div>
-      <div class="item item-body">
-        <div>
-          <h3 class="news-title" ng-bind-html="news.titleText"></h3>
-		  <p class="news-article" ng-bind-html="news.articleText"></p>
-        </div>
-      </div>
-    </div>
-  </ion-content>
+<ion-view view-title="News Cross">
+<ion-content>
+<div ng-if="isError" class="info-banner info-banner-medium info-banner-warning">
+	<div class="info-banner-icon"><img class="info-visual" src="img/info/error.png"></div>
+	<div class="info-banner-text info-banner-text-medium">
+	<div class="info-banner-text-label">Vous n'avez pas d'accès réseau, veuillez vous connecter au réseau pour obtenir les informations à jour.</div>	
+	</div>
+</div>
+<div ng-repeat="news in ecomnews"> 
+<div class="news-banner news-yellow">
+	<div class="news-banner-icon"><img class="news-visual" src="{{getCategoryIcon(news.type)}}"></div>
+	<div class="news-banner-text  news-yellow">
+	<div class="news-banner-text-label" ng-bind-html="news.titleText"></div>
+	</div>
+</div>
+<div class="news-banner-date" ng-bind-html="formatDate(news.timestamp)"></div>
+<div class="news-banner-header" ng-bind-html="news.headerText"></div>
+<div class="news-banner-body" ng-bind-html="news.articleText"></div>
+</div>
+</ion-content>
 </ion-view>

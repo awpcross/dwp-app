@@ -6,6 +6,9 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 
 	this.getDevBackendData = function(collection) {
 		var str = '';
+		var obj = {};
+		var deferred = $q.defer();
+        var promise = deferred.promise;
 		
 		switch (collection) {
 		
@@ -15,6 +18,9 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 			case 'users' : 
 				str = '[{"nickname":"Bart Simpson","picture":false,"username":"bart@gmail.com","score":5000,"activated":false,"id":"77876edeb634e8af"}]';
 				break;
+			case 'players' : 
+				str = '[{"name":"testname","value":"testvalue"}]';
+				break;
 			case 'applabels' : 
 				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
 				break;
@@ -23,13 +29,17 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
 				break;
 		}
+		obj = JSON.parse(str);
+		deferred.resolve(obj);
 
-		return JSON.parse(str);
+		return obj;
 		};
 	
 	this.getLocalBackendData = function(collection) {
 
-		var str = '';
+		var str = {};
+		var deferred = $q.defer();
+        var promise = deferred.promise;
 		
 		switch (collection) {
 			case 'test' : 
@@ -38,15 +48,35 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 			case 'users' : 
 				str = '';
 				break;
-			case 'applabels' : 
+			case 'scores' : 
+				str = '[{"nickname":"Impossible d\'afficher les scores"}]';
+				break;
+			case 'newsecom' : 
+				str = '[{"headerText":"Conférence e-commerce","titleText":"Total Retail: du digital à la boutique.... et du digital en boutique! ","headlineText":"","articleText":"Comment faire évoluer votre plateforme digitale, vos points de vente, mieux connaître vos clients et créer votre stratégie de marketing relationnel. <br/>Intervenant : Pascal Escarment","timestamp":1429599600000,"type":"presenter_podium","id":"19651b1aada4984d"},{"titleText":"Conférence Big Data","headlineText":"","headerText":"Conférence Big Data","type":"presenter_podium","timestamp":1429597980000,"articleText":"Le Big Data à l\'assaut des zones de confort technique. Dois-je y aller? Mais surtout quel chemin emprunter? <br/>Intervenant : Charles Parat","id":"314f6d475fd3e8a8"},{"headerText":"Retrouvez-nous sur notre stand (B12)","titleText":"VENEZ DÉCOUVRIR CROSS AU SALON SITB ET ECOM","headlineText":"","articleText":" Expérimentez les solutions Cross comme vous ne l\'avez jamais fait auparavant.<br/> Venez vivre l\'expérience Web2Store et Big Data avec Cross, qui sera présent avec deux conférences et un stand au salon SITB et eCOM du mardi 21 au mercredi 22 avril 2015.","timestamp":1428305400000,"type":"information","id":"7a7bc777222058d5"}]';
+				break;
+			case 'newscross' : 
+				str = '[{"headerText":"Retrouvez-nous sur notre stand (B12)","titleText":"VENEZ DÉCOUVRIR CROSS AU SALON SITB ET ECOM","headlineText":"","articleText":" Expérimentez les solutions Cross comme vous ne l\'avez jamais fait auparavant.<br/> Venez vivre l\'expérience Web2Store et Big Data avec Cross, qui sera présent avec deux conférences et un stand au salon SITB et eCOM du mardi 21 au mercredi 22 avril 2015.","timestamp":1428305400000,"type":"information","id":"7a7bc777222058d5"}]';
+				break;			case 'applabels' : 
 				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
 				break;
 			case 'appcontents' : 
 				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
 				break;
 		}
+		obj = JSON.parse(str);
+		deferred.resolve(obj);
 
-		return JSON.parse(str);
+		promise.success = function(fn) {
+			promise.then(fn);
+			return promise;
+		}
+
+		promise.error = function(fn) {
+			promise.then(null, fn);
+			return promise;
+		}
+		
+		return promise;
 		};
 
 	this.getCachedBackendData = function(collection) {
@@ -87,7 +117,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 		return dta;
 	}	
 
-	this.getLiveBackendData = function(collection, collObj, cacheLiveTime, collQuery) { 
+	this.getLiveBackendData = function(collection, collObj, collQuery, cacheLiveTime) { 
 
 		var deferred = $q.defer();
         var promise = deferred.promise;
@@ -119,7 +149,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 			if ( currentTS > cacheExpiry  ) {
 				console.log('DataService::getLiveBackendData() | INFO cache expired, requesting live data');
 				
-				
+				console.log(collQuery);
 				collObj.get(collQuery, function(result, error){
 				
 				if (error != 200) { // error contains HTTP response code
@@ -187,33 +217,41 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 					break;
 				case 'users' : 
 					collObj = dpd.users;
-					collQuery = '{ $sort: {orderno: 1}}';
-					cacheLiveTime = 1;					
+					collQuery = { $sort: {id: 1}};
+					cacheLiveTime = 0;					
+					break;
+				case 'scores' : 
+					collObj = dpd.users;
+					collQuery = { $sort: {score: -1},  $limit: 30};
+					cacheLiveTime = 900000;					
 					break;
 				case 'applabels' : 
 					collObj = dpd.applabels;
-					collQuery = '{ $sort: {orderno: 1}}';
+					collQuery = { $sort: {orderno: 1}};
 					cacheLiveTime = 10800000;					
 					break;
 				case 'appcontents' : 
 					collObj = dpd.appcontents;
-					collQuery = '{ $sort: {orderno: 1}}';
+					collQuery = { $sort: {orderno: 1}};
 					cacheLiveTime = 10800000;					
 					break;
 				case 'newsecom' : 
 					collObj = dpd.newsecom;
-					collQuery = '{ $sort: {timestamp: 1}}';
-					cacheLiveTime = 10800000;					
+					collQuery = { $sort: {timestamp: -1}};
+					cacheLiveTime = 900000;					
 					break;
-				case 'crosssecom' : 
-					collObj = dpd.crossecom;
-					collQuery = '{ $sort: {timestamp: 1}}';
-					cacheLiveTime = 0;					
+				case 'newscross' : 
+					collObj = dpd.newscross;
+					collQuery = { $sort: {timestamp: -1}};
+					cacheLiveTime = 900000;					
 					break;
 				case 'welcomecontents' : 
 					collObj = dpd.welcomecontents;
-					collQuery = '{ $sort: {orderno: 1}}';
+					collQuery = { $sort: {orderno: 1}};
 					cacheLiveTime = 10800000;
+					break;
+				default : 
+					collObj = null;
 					break;
 			}
 			
@@ -222,20 +260,23 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 			// getting data in requested mode
 			switch (mode) {
 				case 'live':
-					return this.getLiveBackendData( collection, collObj, cacheLiveTime );
+					return this.getLiveBackendData(collection, collObj, collQuery, cacheLiveTime);
 				break;
 				
 				case 'cache' : 
-					return this.getCachedBackendData( collection );
+					return this.getCachedBackendData(collection);
 				break;
 
 				case 'local' : 
-					return this.getLocalBackendData();
+					console.log('call');
+					console.log(this.getLocalBackendData(collection));
+					return this.getLocalBackendData(collection);
+					console.log('done call');
 				break;
 
 				case 'dev' :
 				default :
-					return this.getDevBackendData();
+					dta =  this.getDevBackendData(collection);
 					break;
 			}
 		} else {

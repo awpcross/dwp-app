@@ -1,5 +1,42 @@
 var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
+.controller('AppHeaderCtrl', function($scope, $state, $ionicModal) {
+
+  console.log('AppHeaderCtrl | starting ... ');
+
+  $ionicModal.fromTemplateUrl('templates/dev.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal1 = modal
+  })
+  $ionicModal.fromTemplateUrl('templates/welcome-slider.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal2 = modal
+  })
+
+  $scope.openModal1 = function() {
+   $scope.modal1.show()
+  }
+  $scope.openModal2 = function() {
+   $scope.modal1.show()
+  }
+
+  $scope.closeModal1 = function() {
+    $scope.modal1.hide()
+  }
+  $scope.closeModal2 = function() {
+    $scope.modal1.hide()
+  }
+
+  $scope.$on('$destroy', function() {
+    $scope1.modal1.remove()
+    $scope.modal2.remove()
+  });  
+  
+  console.log('AppHeaderCtrl | done. ') ;
+  
+})
 .controller('WelcomeCtrl', function(DataService, dpd, $scope, $state, $ionicSlideBoxDelegate) {
 
   console.log('WelcomeCtrl | starting ... ');
@@ -61,40 +98,95 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 .controller('EComNewsCtrl', function(dpd, DataService, $scope, $state) {
 	
 	console.log('EComNewsCtrl | INFO starting ... ') ;
-	DataService.getBackendData(dpd, 'newsecom', 'live').success(function(response) {
-		console.log('EComNewsCtrl | INFO data returned ' + response.length + ' news items');
-		$scope.ecomnews = response;
-	}).error(function(error) {
-		console.log('EComNewsCtrl | ERROR An error occured while retrieving live data : ' + error);
-		console.log('EComNewsCtrl | INFO getting local data instead' + error);
-		DataService.getBackendData(dpd, 'newsecom', 'local').success(function(response) {
-			//console.log('EComNewsCtrl | INFO data returned : ' + response);
-			$scope.ecomnews = response;
+	$scope.$on('$ionicView.beforeEnter', function(){
+
+		DataService.getBackendData(dpd, 'newsecom', 'live').success(function(response) {
+			console.log('EComNewsCtrl | INFO data returned ' + response.length + ' news items');
+			$scope.ecomnews = response;			
+			$scope.isError = false;
 		}).error(function(error) {
-			console.log('EComNewsCtrl | ERROR An error occured while retrieving local data : ' + error);
+			console.log('EComNewsCtrl | ERROR An error occured while retrieving live data : ' + error);
+			console.log('EComNewsCtrl | INFO getting local data instead' + error);
+			DataService.getBackendData(dpd, 'newsecom', 'local').success(function(response) {
+				//console.log('EComNewsCtrl | INFO data returned : ' + response);
+				$scope.ecomnews = response;
+				$scope.isError = true;
+			}).error(function(error) {
+				console.log('EComNewsCtrl | ERROR An error occured while retrieving local data : ' + error);
+			})
+			
 		})
-		
-	})
+
+	});	
 	console.log('EComNewsCtrl | done. ') ;
+	
+	$scope.getCategoryIcon = function(ico) {
+		var str = 'img/types/information.png';
+		
+		if (ico != null || ico != '') {
+			str = 'img/types/'+ico+'.png';
+		} 
+		
+		return str;
+	};
+
+	$scope.formatDate = function(ts) {
+		var str = '';
+		var d = new Date(ts);
+		
+		if (!isNaN(ts)) {
+			str = d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear() + ' - ' + d.getHours() + ':' + d.getMinutes();
+		} 
+		
+		return str;
+	};
 })
 
-.controller('CrossNewsCtrl', function($scope, $state,dpd) {
+.controller('CrossNewsCtrl', function(dpd, DataService, $scope, $state) {
+	
 	console.log('CrossNewsCtrl | INFO starting ... ') ;
-	DataService.getBackendData(dpd, 'newsecom', 'live').success(function(response) {
-		console.log('CrossNewsCtrl | INFO data returned ' + response.length + ' news items');
-		$scope.ecomnews = response;
-	}).error(function(error) {
-		console.log('CrossNewsCtrl | ERROR An error occured while retrieving live data : ' + error);
-		console.log('CrossNewsCtrl | INFO getting local data instead' + error);
-		DataService.getBackendData(dpd, 'newsecom', 'local').success(function(response) {
-			//console.log('CrossNewsCtrl | INFO data returned : ' + response);
+	$scope.$on('$ionicView.beforeEnter', function(){
+
+		DataService.getBackendData(dpd, 'newscross', 'live').success(function(response) {
+			console.log('CrossNewsCtrl | INFO data returned ' + response.length + ' news items');
 			$scope.ecomnews = response;
+			$scope.isError = false;
 		}).error(function(error) {
-			console.log('CrossNewsCtrl | ERROR An error occured while retrieving local data : ' + error);
+			console.log('CrossNewsCtrl | ERROR An error occured while retrieving live data : ' + error);
+			console.log('CrossNewsCtrl | INFO getting local data instead' + error);
+			DataService.getBackendData(dpd, 'newscross', 'local').success(function(response) {
+				//console.log('EComNewsCtrl | INFO data returned : ' + response);
+				$scope.ecomnews = response;
+				$scope.isError = true;
+			}).error(function(error) {
+				console.log('CrossNewsCtrl | ERROR An error occured while retrieving local data : ' + error);
+			})
+			
 		})
+
+	});	
+	console.log('EComNewsCtrl | done. ') ;
+	
+	$scope.getCategoryIcon = function(ico) {
+		var str = 'img/types/information.png';
 		
-	})
-	console.log('CrossNewsCtrl | done. ') ;
+		if (ico != null || ico != '') {
+			str = 'img/types/'+ico+'.png';
+		} 
+		
+		return str;
+	};
+
+	$scope.formatDate = function(ts) {
+		var str = '';
+		var d = new Date(ts);
+		
+		if (!isNaN(ts)) {
+			str = d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear() + ' - ' + d.getHours() + ':' + d.getMinutes();
+		} 
+		
+		return str;
+	};
 })
 
 
@@ -733,32 +825,32 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 })
 
 
-.controller('LeaderboardCtrl', function(dpd, ScoreService, $scope, $http) {
+.controller('LeaderboardCtrl', function(dpd, DataService, ScoreService, $scope, $http) {
   console.log('LeaderboardCtrl | starting ... ');
-  //dpd.users.exec('me');
 
-  //$scope.$apply();
-  $scope.players = [];
+	$scope.$on('$ionicView.beforeEnter', function(){
+		DataService.getBackendData(dpd, 'scores', 'live').success(function(response) {
+			console.log('LeaderboardCtrl | INFO data returned ' + response.length + ' row(s)');
+			$scope.players = response;
+			console.log(response);
+			$scope.isError = false;
+		}).error(function(error) {
+			console.log('LeaderboardCtrl | ERROR An error occured while retrieving live data : ' + error);
+			console.log('LeaderboardCtrl | INFO getting local data instead' + error);
+			DataService.getBackendData(dpd, 'scores', 'local').success(function(response) {
+				//console.log('EComNewsCtrl | INFO data returned : ' + response);
+				$scope.players = response;
+				$scope.isError = true;
+			}).error(function(error) {
+				console.log('LeaderboardCtrl | ERROR An error occured while retrieving local data : ' + error);
+			})
+			
+		})
+
+	});	
   
-  console.log('LeaderboardCtrl | calling ScoreService.getScores() ... ') ;
-
-  ScoreService.getScores().then(function(promise) {
-    $scope.players = promise;
-  });
-
   console.log('LeaderboardCtrl | ScoreService.getScores() --> players : ', $scope.players);
-  /*
-  $http.get('http://localhost:2403/users').then(function(resp) {
-    console.log('Success', resp);
-    // For JSON responses, resp.data contains the result
-    $scope.loaded = true;
-    $scope.players = resp.data;
-    console.log( $scope.players[0].name);
-  }, function(err) {
-    console.error('ERR', err);
-    // err.status will contain the status code
-  })
-  */
+
   console.log('LeaderboardCtrl | ScoreService.getScores() done. ') ;
   
   

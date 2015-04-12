@@ -2,18 +2,50 @@
 	<ion-header-bar class="bar-energized">
 		<h1 class="title">Pull to Refresh!</h1>
 	</ion-header-bar>
-	<ion-content ng-controller="LeaderboardCtrl">
+	<!--ion-header-bar class="bar-subheader">
+		<div class="info-banner">
+			<div class="info-banner-icon"><img class="info-visual" src="img/info/trophy_star.png"></div>
+			<div class="info-banner-text">
+			<div class="info-banner-text-label">Vous n'êtes pas connecté.</div>	
+			<div class="info-banner-text-label">&nbsp;</div>	
+			</div>
+		</div>
+	</ion-header-bar-->
+	<div ng-if="isError" class="info-banner info-banner-medium info-banner-warning">
+		<div class="info-banner-icon"><img class="info-visual" src="img/info/error.png"></div>
+		<div class="info-banner-text info-banner-text-medium">
+		<div class="info-banner-text-label">Vous n'avez pas d'accès réseau, veuillez vous connecter au réseau pour obtenir les informations à jour.</div>	
+		</div>
+	</div>
+	<ion-content ng-controller="LeaderboardCtrl">	
+	
 		<!---
 		<ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()">
 		</ion-refresher>
 		!-->
-		<ion-list>
-			<ion-item ng-repeat="player in players | orderBy:'-score'">
-				<div class="score-list">
-				<div class="score-list-nickname">{{player.nickname}}</div>
-				<div class="score-list-score">{{player.score}}</div>
+			<div class="grid-reset col">
+			<div ng-if="isError" class="info-banner info-banner-medium info-banner-warning">
+				<div class="info-banner-icon"><img class="info-visual" src="img/info/error.png"></div>
+				<div class="info-banner-text info-banner-text-medium">
+				<div class="info-banner-text-label">Vous n'avez pas d'accès réseau, veuillez vous connecter au réseau pour obtenir les informations à jour.</div>	
 				</div>
-			</ion-item>
-		</ion-list>     
+			</div>
+			<div ng-if="!isError" class="info-banner">
+				<div class="info-banner-icon"><img class="info-visual" src="img/info/trophy_star.png"></div>
+				<div class="info-banner-text info-banner-text-medium">
+				<div class="info-banner-text-label">Saurez-vous rester dans la course et prendre la tête de notre TOP30 !?!</div>	
+				</div>
+			</div>
+			</div>
+			<div class="col">
+			<ion-list>
+				<ion-item ng-repeat="player in players">
+					<div class="score-list">
+					<div class="score-list-nickname">{{player.nickname}}</div>
+					<div class="score-list-score">{{player.score}}</div>
+					</div>
+				</ion-item>
+			</ion-list> 
+			</div>
 	</ion-content>
 </ion-view>
