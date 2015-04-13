@@ -1,6 +1,6 @@
 <ion-view view-title="">
 <ion-nav-buttons side="left">
-  <button class="button button-light button-clear no-animation"
+  <button class="button button-light button-clear button-white no-animation"
 		  ng-click="signIn()" ng-show="!slideIndex">
 	Passer
   </button>
@@ -118,7 +118,7 @@
 	<div class="col">
 		<p class="welcome-directives">{{labels[13].content}}</p>
 		<p class="welcome-directives">{{labels[14].content}}</p>
-		<div><span class="icon-dwp-jogging welcome-icon-big"></span></div>
+		<div><div ng-click="signIn()" class="icon-dwp-jogging welcome-icon-big"></div></div>
 	</div>
 </div>
 

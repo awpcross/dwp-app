@@ -64,26 +64,51 @@ h1, .h1 {
 	background-color: #37b0dc;
 }
 
-.news-normal {
-	color: #111 !important;
-	background-color:#ffca37 !important;	
+.button.button-light.button-clear {
+color: #fff !important;
 }
 
 /*
 yellow				ffb60f	ffcb55
 lagoon green  		36d7b7	6bdac4
 gray				e5e3df	ededed
+blue				6abfde	a4d4e5
 */
 
 .slider-slide {
-	padding-top:45px !important;
+	padding-top:46px !important;
 }
 
+.trophy-banner {
+	width: 100%;
+	min-height:63px;
+	text-align: left;
+	background-color:#6abfde;
+	padding-top: 15px;
+	padding-right:10px;
+	padding-bottom: 15px;
+	margin-bottom: 40px;
+}
+.trophy-banner-score {
+	width: 100%;
+	min-height:26px;
+	text-align: left;
+	color: #fff;
+	background-color:#a4d4e5;
+	padding-top: 5px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-bottom: 10px;
+	font-size:16px;
+	letter-spacing:1px;
+	font-weight: 500;
+	
+}
 .news-banner {
 	width: 100%;
 	min-height:63px;
 	text-align: left;
-	background-color:#e5e3df;
+	background-color:#6abfde;
 	padding-top: 15px;
 	padding-right:10px;
 	padding-bottom: 15px;
@@ -92,15 +117,14 @@ gray				e5e3df	ededed
 	width: 100%;
 	min-height:26px;
 	text-align: right;
-	color: #222;
-	background-color:#ededed;
+	color: #fff;
+	background-color:#a4d4e5;
 	padding-top: 5px;
 	padding-right:10px;
 	padding-bottom: 0px;
 	font-size:12px;
 	letter-spacing:1px;
 	font-weight: 200;
-	
 }
 .news-banner-header {
 	width: 100%;
@@ -146,7 +170,7 @@ gray				e5e3df	ededed
 	padding-right: 5px;
 }
 .news-banner-text-label {
-	color: #222;
+	color: #fff;
 	font-size:14px;
 	letter-spacing:1px;
 	padding-left:45px;

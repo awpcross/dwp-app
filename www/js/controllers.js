@@ -700,6 +700,16 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   }
 
+	$scope.getCategoryIcon = function(ico) {
+		var str = 'img/types/information.png';
+		
+		if (ico != null || ico != '') {
+			str = 'img/types/'+ico+'.png';
+		} 
+		
+		return str;
+	};
+  
   $scope.gotoPrerequisites =  function() {
     console.log('gotoPrerequisites');
     // $rootScope.monitoringLaunched = true;
