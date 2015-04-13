@@ -1,15 +1,3 @@
-<ion-nav-bar class="bar-positive" ng-controller="AppHeaderCtrl">
-<!--ion-nav-buttons side="left">
-<button class="button-navheader" ng-click="openModal1()">
-	<img class="news-visual" src="img/header/info.png" >
-</button>
-</ion-nav-buttons>	
-<ion-nav-buttons side="right">
-<button class="button-navheader" ng-click="doSomething()">
-	<img class="news-visual" src="img/header/error.png" ng-click="openModal2()">
-</button>
-</ion-nav-buttons-->	
-</ion-nav-bar>
 <ion-view view-title="News eCOM SITB 2015">
 <ion-content>
 <div ng-if="isError" class="info-banner info-banner-medium info-banner-warning">
@@ -26,7 +14,7 @@
 	</div>
 </div>
 <div class="news-banner-date" ng-bind-html="formatDate(news.timestamp)"></div>
-<div class="news-banner-header" ng-bind-html="news.headerText"></div>
+<!--div class="news-banner-header" ng-bind-html="news.headerText"></div-->
 <div class="news-banner-body" ng-bind-html="news.articleText"></div>
 </div>
 </ion-content>

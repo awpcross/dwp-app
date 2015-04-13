@@ -41,7 +41,29 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   console.log('WelcomeCtrl | starting ... ');
 
- 
+	$scope.$on('$ionicView.beforeEnter', function(){
+
+		DataService.getBackendData(dpd, 'welcomecontents', 'live').success(function(response) {
+			console.log('CrossNewsCtrl | INFO data returned ' + response.length + ' news items');
+			$scope.labels = response;
+			$scope.isError = false;
+			
+		}).error(function(error) {
+			console.log('CrossNewsCtrl | ERROR An error occured while retrieving live data : ' + error);
+			console.log('CrossNewsCtrl | INFO getting local data instead' + error);
+			DataService.getBackendData(dpd, 'welcomecontents', 'local').success(function(response) {
+				//console.log('EComNewsCtrl | INFO data returned : ' + response);
+				$scope.labels = response;
+				$scope.isError = true;
+			}).error(function(error) {
+				console.log('CrossNewsCtrl | ERROR An error occured while retrieving local data : ' + error);
+			})
+			
+		})
+
+	});	
+
+/*	
   dpd.welcomecontents.get( { $sort: {orderno: 1}} ).success(function(response) {
         console.log('success !');
         console.log('data : ', response);
@@ -49,7 +71,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
     }).error(function(error) {
         console.log('error : ' + error.message, error);
     });
-        
+*/        
 
   // Called to navigate to the main app
   $scope.signIn = function() {
@@ -77,6 +99,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   console.log('PrerequisitesCtrl | starting ... ') ;
   // Called to navigate to the main app
+
+
   
   dpd.trophycontents.get( { $sort: {orderno: 1}} ).success(function(response) {
         console.log('success !');
@@ -194,21 +218,22 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
 
 	console.log('SignInCtrl | starting ... ') ;
-
-	
-	
-	$scope.$on('$ionicView.beforeEnter', function(){
-		console.log("$ionicView.beforeEnter  ");
-		if ( localStorage.getItem('user_auth_id') != null && localStorage.getItem('user_auth_id') != '' ) {
-			console.log('SignInCtrl | already logged in('+localStorage.getItem('user_auth_id')+'), redirecting to profile view. ') ;
-			$state.go('tab.profile');
-		}
-	  });	
-	
 	  $scope.user = {
 		username: '',
 		password : ''
 	  };
+
+	$scope.$on('$ionicView.beforeEnter', function(){
+		console.log('$ionicView.beforeEnter  start');
+		if ( localStorage.getItem('user_auth_id') != null && localStorage.getItem('user_auth_id') != '' ) {
+			console.log('SignInCtrl | already logged in('+localStorage.getItem('user_auth_id')+'), redirecting to profile view. ') ;
+			$state.go('tab.profile');
+		} else {
+			console.log('SignInCtrl | not logged in, authenticating user. ') ;
+		}
+		console.log('$ionicView.beforeEnter end ') ;
+	  });	
+
 	
 	$scope.signIn = function(form){
 		console.log(form);
@@ -219,14 +244,14 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
     if (form != null && form.$valid) {
 		console.log('SignInCtrl.signIn() | Signing in user : ', form);
 
-    LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
-      $scope.user = {};
-      $state.go('tab.profile');
-    }).error(function(user) {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Erreur!',
-        template: 'Veuillez vérifier votre email et mot de passe!'
-      });
+		LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
+		  $scope.user = {};
+		  $state.go('tab.profile');
+		}).error(function(user) {
+		  var alertPopup = $ionicPopup.alert({
+			title: 'Erreur!',
+			template: 'Veuillez vérifier votre email et mot de passe!'
+		  });
     });
   
   } else {
@@ -244,39 +269,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		}
 	
 	}
-	/*
-	$scope.authUser = function(form) {
-	
-	console.log('SignInCtrl.signIn() | start. ') ;
 
-	console.log(form);
-
-    if (form != null && form.$valid) {
-		console.log('SignInCtrl.signIn() | Signing in user : ', form);
-
-    LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
-      $scope.user = {};
-      $state.go('tab.profile');
-    }).error(function(user) {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Erreur!',
-        template: 'Veuillez vérifier votre email et mot de passe!'
-      });
-    });
-  
-  } else {
-	console.log('SignInCtrl.signIn() | Signing in user : !!warning user is empty!!'); 
-      var alertPopup = $ionicPopup.alert({
-        title: 'Erreur!',
-        template: 'Veuillez vérifier votre email et mot de passe!'
-      });
-  
-  }
-
-  console.log('SignInCtrl.signIn() | end. ') ;
-  
-  };
-	*/
   console.log('SignInCtrl | done. ') ;
   
 })
@@ -347,21 +340,28 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   console.log('LostPasswordCtrl | starting ... ') ;
 
-  $scope.sendPasswordReset = function( useremail ) {
+  $scope.user = {
+		email: '',
+		password : ''
+	  };
+
+ 
+  $scope.sendPasswordReset = function( form ) {
     
-    if ( useremail == null) {
+	
+    if ( $scope.user.email == null && !form.$valid ) {
       var alertPopup = $ionicPopup.alert({
         title: 'Erreur',
-        template: 'Veuillez saisir un email valide!'
+        template: 'Veuillez saisir un email valide! [1]'
       });   
     } else {
-      console.log('LostPasswordCtrl::sendPasswordReset() | looking for user : ' + useremail) ;
+      console.log('LostPasswordCtrl::sendPasswordReset() | looking for user : ' + $scope.user.email) ;
 
       // 1. check if user exists (ok : 2., ko :alert)
-      dpd.users.get( {"username":useremail} ).success(function(response) {
+      dpd.users.get( {"username":$scope.user.email} ).success(function(response) {
             
             if ( response == null || response == ''){ 
-              console.log('LostPasswordCtrl::sendPasswordReset() | no such user : ' + useremail) ;
+              console.log('LostPasswordCtrl::sendPasswordReset() | no such user : ' + $scope.user.email) ;
               var alertPopup = $ionicPopup.alert({
                 title: 'Erreur',
                 template: 'Une erreur est survenue, veuillez vérifier l\'adresse email saisie.'
@@ -459,7 +459,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
           console.log('error : ' + error.message, error);
           var alertPopup = $ionicPopup.alert({
             title: 'Erreur!',
-            template: 'Veuillez vérifier votre email et mot de passe!'
+            template: 'Veuillez vérifier votre email et mot de passe! [2]'
           });
             
         });

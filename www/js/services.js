@@ -37,10 +37,11 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 	
 	this.getLocalBackendData = function(collection) {
 
-		var str = {};
+		var str;
 		var deferred = $q.defer();
         var promise = deferred.promise;
 		
+		// check strings with http://json.parser.online.fr/
 		switch (collection) {
 			case 'test' : 
 				str = '[{"name":"testname","value":"testvalue"}]';
@@ -62,7 +63,12 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 			case 'appcontents' : 
 				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
 				break;
+			case 'welcomecontents' : 
+				str = '[{"content":"Bienvenue dans le \'Digital Watch Project\'","info":"welcome / slide 1 / item 1","viewid":"10","orderno":1,"subviewid":"1","tag":"h3","id":"228c1f5a8bb97951"},{"content":"Jouez avec Cross... et gagnez un prix mystère!","info":"welcome / slide 1 / item 2","viewid":"10","orderno":2,"subviewid":"1","tag":"p","id":"7756431f06fd5ac8"},{"content":"Cross vous propose un jeu de piste qui s\'appuie sur la technologie iBeacon. Nous avons placé ces petites balises dans divers lieux.","info":"welcome / slide 1 / item 3","viewid":"10","orderno":3,"subviewid":"1","tag":"p","id":"a0d397215f70d897"},{"viewid":10,"subviewid":"1","orderno":4,"tag":"p","content":"Lorsque que vous passez à proximité de l\'une d\'elle, vous activez un trophée qui vous crédite des points. De nombreux lots sont à gagner et le joueur au score le plus élevé remportera le premier prix.","info":"","id":"15815c055dbfcb2c"},{"viewid":10,"subviewid":"2","orderno":5,"tag":"h3","content":"1er indice : elle n\'a pas d\'aiguilles","info":"welcome / slide 2 / item 1","id":"05afc186f9c89acd"},{"viewid":10,"subviewid":"2","orderno":6,"tag":"p","content":"Enregistrez-vous dans l\'application (500 points)","info":"welcome / slide 2 / item 2","id":"48d9c5fc928208b5"},{"viewid":10,"subviewid":"2","orderno":7,"tag":"p","content":"Participez à nos conférences (4000 points / conférence)","info":"welcome / slide 2 / item 3","id":"98dc963906e6c913"},{"orderno":8,"content":"Le jour du salon SITB eCOM, rendez-nous visite sur notre stand B12 (1000 points)","viewid":0,"id":"3acc66df79beb9a9"},{"viewid":10,"subviewid":"2","orderno":9,"tag":"p","content":"2ème indice : elle ne fait pas que donner l\'heure","info":"","id":"1463d4fa1f578a3e"},{"viewid":10,"subviewid":"3","orderno":10,"tag":"p","content":"Faites un \'check-out\' sur notre stand et pulvérisez votre score. (nombre de points aléatoire)","id":"ead664be205ff8f0"},{"viewid":10,"subviewid":"3","orderno":11,"tag":"p","content":"Le mercredi 22 avril à 18:00, un tirage au sort vous attribuera des points supplémentaires","info":"","id":"147eb4b378e4e981"},{"orderno":12,"code":"","content":"Soyez le premier et raflez la mise!","id":"6e727decaf95791c"},{"orderno":13,"content":"3ème indice : elle parle avec votre smartphone","id":"f19cb9233bb2c8d2"},{"orderno":14,"content":"Vous avez trouvé? Alors BONNE CHANCE !","id":"e18c6884420a18c9"},{"orderno":14,"content":"N\'attendez plus, lancez-vous dans la recherche des ces trophées en vivant une expérience aussi ludique qu\'instructive. Sans oublier le superbe prix qui n\'attend plus que vous.","viewid":0,"id":"d2466fe591d9db5d"},{"orderno":15,"content":"Commencez dès à présent à vous enregistrer dans l\'application et laissez-vous guider jusqu\'au but.","viewid":0,"id":"df868f0f693489e4"}]';					
+				break;
 		}
+		console.log(str);
+		
 		obj = JSON.parse(str);
 		deferred.resolve(obj);
 
@@ -162,6 +168,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 				if ( result != null ) {
 					console.log('DataService::getLiveBackendData() | async |  INFO query sucessfully returned ' + result.length + ' row(s)');
 					//console.log(result);
+					console.log(JSON.stringify( result ));
 					var currentTS = new Date().getTime();
 					console.log('DataService::getLiveBackendData() | async |  INFO caching response with ts : '+ currentTS);
 					window.localStorage.setItem( cacheKey + '_data', JSON.stringify( result ) );

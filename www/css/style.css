@@ -5,7 +5,7 @@ blue : #37b0dc
 
 .tab-nav.tabs {
   background-color: #37b0dc;
-  border: none;
+  border-color: #fff;
   color: #fff;
 }
 
@@ -73,6 +73,8 @@ yellow				ffb60f	ffcb55
 lagoon green  		36d7b7	6bdac4
 gray				e5e3df	ededed
 blue				6abfde	a4d4e5
+green 				9ed790	bbe4b1
+violet				d88fd3
 */
 
 .slider-slide {
@@ -80,14 +82,14 @@ blue				6abfde	a4d4e5
 }
 
 .trophy-score {
-	background-color : #d88fd3 !important;
+	background-color : #d64a73 !important;
 }
 
 .trophy-banner {
 	width: 100%;
 	min-height:63px;
 	text-align: left;
-	background-color:#9ed790;
+	background-color:#ede9e5;
 	padding-top: 15px;
 	padding-right:10px;
 	padding-bottom: 15px;
@@ -98,7 +100,7 @@ blue				6abfde	a4d4e5
 	min-height:26px;
 	text-align: left;
 	color: #fff;
-	background-color:#bbe4b1;
+	background-color:#d64a73;
 	padding-top: 5px;
 	padding-left:10px;
 	padding-right:10px;
@@ -112,7 +114,7 @@ blue				6abfde	a4d4e5
 	width: 100%;
 	min-height:63px;
 	text-align: left;
-	background-color:#9ed790;
+	background-color:#76c2de;
 	padding-top: 15px;
 	padding-right:10px;
 	padding-bottom: 15px;
@@ -121,8 +123,8 @@ blue				6abfde	a4d4e5
 	width: 100%;
 	min-height:26px;
 	text-align: right;
-	color: #fff;
-	background-color:#bbe4b1;
+	color: #333;
+	background-color:#ede9e5;
 	padding-top: 5px;
 	padding-right:10px;
 	padding-bottom: 0px;
@@ -280,7 +282,7 @@ blue				6abfde	a4d4e5
 
 .bar.bar-header.bar-positive {
 	color: #fff;
-	border-color: #37b0dc;
+	border-color: #fff;
 	background-color: #37b0dc;	
 }
 .bar.bar-light .title {

@@ -88,7 +88,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
 	})
 	.state('forgotpassword', {
 		url: '/forgot-password',
-		templateUrl: 'templates/user-forgot-password.html'
+		templateUrl: 'templates/user-forgot-password.html',
 	})
 
 // App signed-in states
