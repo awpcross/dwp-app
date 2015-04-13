@@ -245,6 +245,11 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 					collQuery = { $sort: {timestamp: -1}};
 					cacheLiveTime = 900000;					
 					break;
+				case 'trophycontents' : 
+					collObj = dpd.trophycontents;
+					collQuery = { $sort: {orderno: 1}};
+					cacheLiveTime = 10800000;
+					break;
 				case 'welcomecontents' : 
 					collObj = dpd.welcomecontents;
 					collQuery = { $sort: {orderno: 1}};
