@@ -159,7 +159,13 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		var d = new Date(ts);
 		
 		if (!isNaN(ts)) {
-			str = d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear() + ' - ' + d.getHours() + ':' + d.getMinutes();
+			
+			if (d.getDate()  < 10) 		{str = "0"+d.getDate()+ '.'} else {str = d.getDate()+ '.'}
+			if ((d.getMonth()+1) < 10) 	{str = str + "0"+ (d.getMonth()+1)+ '.'} else {str = str + (d.getMonth()+1)+ '.'}
+			str = str + d.getFullYear()+ ' - ';
+			if (d.getHours()  < 10) 		{str = str + "0"+d.getHours()+ '.'} else {str = str + d.getHours()+ '.'}
+			if ((d.getMinutes()+1) < 10) 	{str = str + "0"+d.getMinutes()} else {str = str + d.getMinutes()}
+			
 		} 
 		
 		return str;
@@ -206,7 +212,11 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		var d = new Date(ts);
 		
 		if (!isNaN(ts)) {
-			str = d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear() + ' - ' + d.getHours() + ':' + d.getMinutes();
+			if (d.getDate()  < 10) 		{str = "0"+d.getDate()+ '.'} else {str = d.getDate()+ '.'}
+			if ((d.getMonth()+1) < 10) 	{str = str + "0"+ (d.getMonth()+1)+ '.'} else {str = str + (d.getMonth()+1)+ '.'}
+			str = str + d.getFullYear()+ ' - ';
+			if (d.getHours()  < 10) 		{str = str + "0"+d.getHours()+ '.'} else {str = str + d.getHours()+ '.'}
+			if ((d.getMinutes()+1) < 10) 	{str = str + "0"+d.getMinutes()} else {str = str + d.getMinutes()}
 		} 
 		
 		return str;
