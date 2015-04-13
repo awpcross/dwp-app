@@ -196,6 +196,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	console.log('SignInCtrl | starting ... ') ;
 
 	
+	
 	$scope.$on('$ionicView.beforeEnter', function(){
 		console.log("$ionicView.beforeEnter  ");
 		if ( localStorage.getItem('user_auth_id') != null && localStorage.getItem('user_auth_id') != '' ) {
@@ -203,33 +204,22 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 			$state.go('tab.profile');
 		}
 	  });	
+	
+	  $scope.user = {
+		username: '',
+		password : ''
+	  };
+	
+	$scope.signIn = function(form){
+		console.log(form);
+		console.log($scope.user.username);
 
-	/*
-	ProfileService.getUserProfile(dpd).success(function(response) {
-	
-		if (response != null && response != '' ) {
-			console.log('user signed in');
-			$scope.user = response;		
-			console.log('response : "' + response + '"', response);
-		} else {
-			console.log('no user signed in');
-		}
-	}).error(function(error) {
-		console.log('error ProfileService.getUserProfile() in SignInCtrl', error);
-	});
-	*/
-	
-	$scope.user = {};
-	
-	$scope.authUser = function(user) {
-	
-	console.log('SignInCtrl.signIn() | start. ') ;
+		if(form.$valid) {
 
-    if (user != null) {
-  console.log('SignInCtrl.signIn() | Signing in user : ', user);
+    if (form != null && form.$valid) {
+		console.log('SignInCtrl.signIn() | Signing in user : ', form);
 
     LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
-      //$state.go('tab.trophies');
       $scope.user = {};
       $state.go('tab.profile');
     }).error(function(user) {
@@ -240,16 +230,53 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
     });
   
   } else {
-  console.log('SignInCtrl.signIn() | Signing in user : !!warning user is empty!!'); 
+	console.log('SignInCtrl.signIn() | Signing in user : !!warning user is empty!!'); 
+      var alertPopup = $ionicPopup.alert({
+        title: 'Erreur!',
+        template: 'Veuillez vérifier votre email et mot de passe!'
+      });
+  
   }
 
+
+		} else {
+			console.log(form);
+		}
+	
+	}
+	/*
+	$scope.authUser = function(form) {
+	
+	console.log('SignInCtrl.signIn() | start. ') ;
+
+	console.log(form);
+
+    if (form != null && form.$valid) {
+		console.log('SignInCtrl.signIn() | Signing in user : ', form);
+
+    LoginService.loginUser($scope.user.username, $scope.user.password, dpd).success(function(user) {
+      $scope.user = {};
+      $state.go('tab.profile');
+    }).error(function(user) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Erreur!',
+        template: 'Veuillez vérifier votre email et mot de passe!'
+      });
+    });
   
-    //$state.go('tab.trophies');
+  } else {
+	console.log('SignInCtrl.signIn() | Signing in user : !!warning user is empty!!'); 
+      var alertPopup = $ionicPopup.alert({
+        title: 'Erreur!',
+        template: 'Veuillez vérifier votre email et mot de passe!'
+      });
+  
+  }
 
   console.log('SignInCtrl.signIn() | end. ') ;
   
   };
-
+	*/
   console.log('SignInCtrl | done. ') ;
   
 })

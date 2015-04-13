@@ -156,7 +156,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
       url: '/profilelogin',
       views: {
         'tab-profile': {
-          templateUrl: 'templates/user-profile-login.html',
+          templateUrl: 'templates/user-sign-in.html',
           controller: 'SignInCtrl'
         }
       }
