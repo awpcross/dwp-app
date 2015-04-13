@@ -252,11 +252,6 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 					collQuery = { $sort: {timestamp: -1}};
 					cacheLiveTime = 900000;					
 					break;
-				case 'trophycontents' : 
-					collObj = dpd.trophycontents;
-					collQuery = { $sort: {orderno: 1}};
-					cacheLiveTime = 10800000;
-					break;
 				case 'welcomecontents' : 
 					collObj = dpd.welcomecontents;
 					collQuery = { $sort: {orderno: 1}};
@@ -879,9 +874,14 @@ angular.module('starter.services', ['dpd', 'appconfig'])
         }
       }
       else {
-        console.log("You have to have the localisation activated - start " +  status);
-        $scope.gotoPrerequisites();
-        console.log("You have to have the localisation activated - end" +  status);
+        $rootScope.monitoringLaunched = false;
+        estimote.beacons.stopMonitoringForRegion({});
+        console.log("You have to have the localisation activated - Prereq " + $scope.prereq_shown);
+        if($scope.prereq_shown == false) {
+          $scope.gotoPrerequisites();
+          $scope.prereq_shown = true;
+        }
+        console.log("You have to have the localisation activated - Prereq " + $scope.prereq_shown);
       }
     }
 

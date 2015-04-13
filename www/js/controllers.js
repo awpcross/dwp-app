@@ -111,8 +111,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
     });
   
   $scope.goTrophies = function() {
-    //$state.go('tab.trophies');
-    $state.go('tab.cross-news');
+    $state.go('tab.trophies');
+    //$state.go('tab.cross-news');
   };
   
   console.log('PrerequisitesCtrl | done. ') ;
@@ -679,6 +679,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   // $scope.totalpoints = 1520;
   $scope.totalpoints = "";
   $scope.nextStep = "Identifiez vous pour continuer.";
+  $scope.prereq_shown = false;
 
   // Call launchMonitoring from Services
   $scope.main =  function() {
@@ -690,9 +691,9 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
       $scope.trophies = promise_trophies;
       // Get Granted trophies 
       Trophies.getGrantedTrophies($scope, dpd).then(function(promise_grantedTrophies) {
-          //TODO : Not always check ListGrantedTrophies
-           console.log('rootScope.monitoringLaunched > ' + $rootScope.monitoringLaunched);
-          if($rootScope.monitoringLaunched==false) {
+          console.log('rootScope.monitoringLaunched > ' + $rootScope.monitoringLaunched);
+           //TODO : if $rootScope.monitoringLaunched==true, verifiy that monitoring is allowed...
+          if($rootScope.monitoringLaunched==false || $rootScope.monitoringLaunched==true) {
             $scope.listGrantedTrophies = promise_grantedTrophies;
             //console.log("GRANTED_LIST: " +JSON.stringify($scope.listGrantedTrophies));
             $scope.listInfoGrantedTrophies = [];
@@ -700,7 +701,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
             //total point
             $scope.totalpoints = Trophies.getCurrentPoints($scope);
             
-             console.log('IN MAIN before if');
+            console.log('IN MAIN before if');
             // Launch Monitoring
             if (localStorage.getItem("user_auth_id")) {
               console.log("********* someone is identified" + localStorage.getItem("user_auth_id") );
@@ -710,6 +711,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
             else {
               console.log("********* Nobody is identified"+ localStorage.getItem("user_auth_id") );
               $scope.nextStep = "Identifiez vous pour continuer.";
+              $scope.listInfoGrantedTrophies = [];
             }
           }
           // Fix for underterminedBug
@@ -842,6 +844,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   // Execute after view Render
   $scope.$on('$ionicView.afterEnter', function() {
+    // Set prerequi display to true
+    // $scope.prereq_shown = false;
     console.log('$ionicView.loaded event captured | start');
     // STOP MONITORING and launch PREREQUIS
     if($rootScope.bluetoothAct==false) {
@@ -859,6 +863,17 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
     }
     console.log('$ionicView.loaded event captured | end');
   });
+
+  $scope.$on('$ionicView.beforeLeave', function() {
+    // Set prerequi display to true
+    console.log('------------------------ In Scope Before beforeLeave - BEGIN' +  $scope.prereq_shown);
+    if ($scope.prereq_shown == true) {
+        $scope.prereq_shown = false;
+    }
+    console.log('------------------------ In Scope Before Leave - END' +  $scope.prereq_shown);
+  });
+
+
 })
 
 
