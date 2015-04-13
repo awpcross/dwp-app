@@ -4,7 +4,8 @@ blue : #37b0dc
 */
 
 .tab-nav.tabs {
-  background-color: #37b0dc;
+	background-image: none !important;
+ background-color: #37b0dc;
   border-color: #fff;
   color: #fff;
 }
