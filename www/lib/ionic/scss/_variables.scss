@@ -4,7 +4,7 @@
 
 $light:                           #fff !default;
 $stable:                          #f8f8f8 !default;
-$positive:                        #387ef5 !default;
+$positive:                        #37b0dc !default;
 $calm:                            #11c1f3 !default;
 $balanced:                        #33cd5f !default;
 $energized:                       #ffc900 !default;
@@ -106,9 +106,9 @@ $button-stable-active-border:     #a2a2a2 !default;
 
 $button-positive-bg:              $positive !default;
 $button-positive-text:            #fff !default;
-$button-positive-border:          darken($positive, 10%) !default;
-$button-positive-active-bg:       darken($positive, 10%) !default;
-$button-positive-active-border:   darken($positive, 10%) !default;
+$button-positive-border:          $positive !default;
+$button-positive-active-bg:       ligthen($positive, 10%) !default;
+$button-positive-active-border:   lighten($positive, 10%) !default;
 
 $button-calm-bg:                  $calm !default;
 $button-calm-text:                #fff !default;

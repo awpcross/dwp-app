@@ -293,7 +293,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   
 })
 
-.controller('RegisterCtrl', function($scope, $state, RegisterUserService, dpd) {
+.controller('RegisterCtrl', function($scope, $state, $ionicPopup, RegisterUserService, dpd) {
   console.log('RegisterCtrl | starting ... ') ;
 
   var newuser = $scope.newuser;
@@ -333,8 +333,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   
   }).error(function(user) {
     var alertPopup = $ionicPopup.alert({
-      title: 'This user already exists!',
-      template: 'Please select another username or contact support!'
+      title: 'Ce nom d\'utilisateur existe!',
+      template: 'Veuillez choisir un autre nom d\'utilisateur.'
     });
   });
   
@@ -468,7 +468,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
                     console.log('successful email send.');
                     var alertPopup = $ionicPopup.alert({
                       title: 'Confirmation',
-                      template: 'Un email de réinitialisation à été envoyé. Veuillez consulter votre boîte mail et suivre les instructions.'
+                      template: 'Un email de réinitialisation vous a été envoyé. Veuillez consulter votre boîte mail et suivre les instructions.'
                     });   
                     console.log('status: ' + status);
                   }).error(function(data, status, headers, config) {
@@ -655,12 +655,14 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   /*}*/ 
 
-  $scope.updateUserPassword = function(form ) {
-    pwd1 = form.pwd1;
-    pwd2 = form.pwd2;
+  $scope.updateUserPassword = function(form, $scope ) {
+    pwd1 = user.pwd1;
+    pwd2 = user.pwd2;
 
     
     console.log('updating password for user : ' + user.username);
+	console.log(pwd1);
+	console.log(pwd2);
     
     if (pwd1 == pwd2 ){
       console.log('setting password : \'' + pwd1 + '\' for user : ' +  user.username  );
@@ -672,21 +674,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
       
       $state.go('tab.profile');
 
-    /*
-      dpd.users.exec('login', { username: user.username, password: pwd1 }).success(function(session) {
-          console.log('success ! user logged in');
-          console.log('Sucess logged in : ' + user.username + ' (' + session.uid + ')!');   
-        console.log('checking current user start');
-        console.log('persisting auth state');
-        localStorage.setItem("user_auth_id", session.id);
-        console.log('set user_auth_id : ', localStorage.getItem("user_auth_id") );
-        //state.go('tab.profil');
-        
-        }).error(function(error) {
-          console.log('ERROR : ' + error.message, error);
-          console.log('ERROR : please check could not update : ' + $stateParams.uid + ' in DB.');
-        });       
-    */
           
         }).error(function(error) {
           console.log('ERROR : ' + error.message, error);
@@ -695,7 +682,13 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
 
     
-    }
+    } else {
+		  var alertPopup = $ionicPopup.alert({
+			title: 'Erreur!',
+			template: 'Les deux mots de passe ne sont pas identiques!'
+		  });
+	
+	}
   }
   console.log('ChangePasswordCtrl | done. ') ;
 })
@@ -992,6 +985,10 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
                   deferred.reject('Wrong credentials.');
               });
 
+			
+		} else {
+			console.log('ProfileCtrl | user is not authenticated anymore');
+			$state.go('tab.profilelogin');
 			
 		}
 	  });	
