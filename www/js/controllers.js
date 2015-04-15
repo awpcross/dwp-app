@@ -156,7 +156,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	
 	$scope.getCategoryIcon = function(ico) {
 		var str = 'img/types/information.png';
-		
 		if (ico != null || ico != '') {
 			str = 'img/types/'+ico+'.png';
 		} 
@@ -713,6 +712,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   // $scope.totalpoints = 1520;
   $scope.totalpoints = "";
   $scope.nextStep = "Identifiez vous pour continuer.";
+  $scope.nextStepLog = "Loggedout";
   $scope.prereq_shown = false;
 
   // Call launchMonitoring from Services
@@ -740,17 +740,20 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
             if (localStorage.getItem("user_auth_id")) {
               console.log("********* someone is identified" + localStorage.getItem("user_auth_id") );
               $scope.nextStep = "";
+              $scope.nextStepLog = "Loggedin";
               Trophies.launchMonitoring($scope,$rootScope);
             }
             else {
               console.log("********* Nobody is identified"+ localStorage.getItem("user_auth_id") );
               $scope.nextStep = "Identifiez vous pour continuer.";
+              $scope.nextStepLog = "Loggedout";
               $scope.listInfoGrantedTrophies = [];
             }
           }
           // Fix for underterminedBug
           else if (localStorage.getItem("user_auth_id")=='') {
             console.log('IN PARTICULAR BUG [BEGIN]');
+            $scope.nextStepLog = "Loggedin";
             $scope.nextStep = "Vous n'êtes plus connecté. Identifiez-vous pour continuer.";
             $scope.listInfoGrantedTrophies = [];
             estimote.beacons.stopMonitoringForRegion({});
@@ -811,6 +814,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
           console.log('Add newItem');
           // Update NextStep in the view 
           $scope.nextStep = trophy.nextStep;
+          $scope.nextStepLog = "Loggedin";
           // Update Score in the view
           $scope.totalpoints += trophy.points;
           $scope.listInfoGrantedTrophies.push(trophy);
