@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="ch.cross-agency.digital-watch-project" version="1.0.3">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="ch.cross-agency.digital-watch-project" version="1.0.4">
   <name>D Watch</name>
   <description>Cross au salon SITB et eCOM 2015. Jouez et gagnez un magnifique prix.</description>
-  <author href="http://phonegap.com" email="support@phonegap.com">CrossAgencyTeam</author>
+  <author href="http://phonegap.com" email="support@phonegap.com">Cross Agency Team</author>
   <content src="index.html"/>
   <preference name="permissions" value="none"/>
   <preference name="orientation" value="portrait"/>
