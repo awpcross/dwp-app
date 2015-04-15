@@ -705,7 +705,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   // $scope.totalpoints = 1520;
   $scope.totalpoints = "";
   $scope.nextStep = "Identifiez vous pour continuer.";
-  $scope.nextStepLog = "Loggedout";
+  $scope.nextStepLog = "loggedout";
   $scope.prereq_shown = false;
 
   // Call launchMonitoring from Services
@@ -733,20 +733,20 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
             if (localStorage.getItem("user_auth_id")) {
               console.log("********* someone is identified" + localStorage.getItem("user_auth_id") );
               $scope.nextStep = "";
-              $scope.nextStepLog = "Loggedin";
+              $scope.nextStepLog = "loggedin";
               Trophies.launchMonitoring($scope,$rootScope);
             }
             else {
               console.log("********* Nobody is identified"+ localStorage.getItem("user_auth_id") );
               $scope.nextStep = "Identifiez vous pour continuer.";
-              $scope.nextStepLog = "Loggedout";
+              $scope.nextStepLog = "loggedout";
               $scope.listInfoGrantedTrophies = [];
             }
           }
           // Fix for underterminedBug
           else if (localStorage.getItem("user_auth_id")=='') {
             console.log('IN PARTICULAR BUG [BEGIN]');
-            $scope.nextStepLog = "Loggedin";
+            $scope.nextStepLog = "loggedin";
             $scope.nextStep = "Vous n'êtes plus connecté. Identifiez-vous pour continuer.";
             $scope.listInfoGrantedTrophies = [];
             estimote.beacons.stopMonitoringForRegion({});
