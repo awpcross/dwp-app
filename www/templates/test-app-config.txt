@@ -2,9 +2,9 @@
   <ion-nav-back-button>
   </ion-nav-back-button>
 </ion-nav-bar>
-<ion-view view-title="TEST">
+<ion-view view-title="TEST App Config">
 <ion-content>
-<div>backendTestData</div>
-<div class="dev">{{backendTestData}}</div>
+<div>TODO nice output</div>
+<div>meanwhile check console logs...</div>
 </ion-content>
 </ion-view>

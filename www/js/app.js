@@ -64,6 +64,14 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
   // Each state's controller can be found in controllers.js
   $stateProvider
 
+    // Prerequis all
+  .state('support', {
+    url: '/support',
+    templateUrl: 'templates/support-password.html',
+    controller: 'SupportPasswordCtrl'
+    })
+    
+  
 	// Welcome slider
 	.state('welcome', {
 		url: '/welcome',
@@ -192,24 +200,37 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
       }
   })
 
-  .state('test', {
-    url: '/test',
-    templateUrl: 'templates/dev.html',
-    controller: 'DevCtrl'
-  })
-  
-  .state('resetpassword', {
-    url: '/user-reset-password/:uid',
-    templateUrl: 'templates/user-reset-password.html',
-    controller: 'ResetPasswordCtrl'
-  })
-	
-	.state('scan-modal', {
-    url: '/scan/modal',
-    templateUrl: 'templates/modal-scan.html',
-    controller: 'RegisterCtrl'
-  })
+ 
+	.state('resetpassword', {
+	url: '/user-reset-password/:uid',
+	templateUrl: 'templates/user-reset-password.html',
+	controller: 'ResetPasswordCtrl'
+	})
 
+	.state('scan-modal', {
+	url: '/scan/modal',
+	templateUrl: 'templates/modal-scan.html',
+	controller: 'RegisterCtrl'
+	})
+
+.state('test-dev', {
+url: '/test-dev',
+templateUrl: 'templates/test-dev.html',
+controller: 'DevCtrl'
+})
+	
+.state('test-cache', {
+url: '/test-cache',
+templateUrl: 'templates/test-backend-cache.html',
+controller: 'TestBackendCacheCtrl'
+})
+
+.state('test-appconfig', {
+url: '/test-appconfig',
+templateUrl: 'templates/test-appconfig.html',
+controller: 'TestAppConfigCtrl'
+})
+	
   ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/welcome');
@@ -221,7 +242,7 @@ app.value('dpdConfig',['categories']);
 */
 
 app.value('dpdConfig', { 
-    collections: ['test','users', 'applabels', 'welcomecontents', 'trophies', 'trophiesmatched', 'newsecom', 'newscross', 'trophycontents', 'prereqcontents'], 
+    collections: ['test', 'applabels', 'appcontents', 'users', 'welcomecontents', 'trophies', 'trophiesmatched', 'newsecom', 'newscross', 'trophycontents', 'prereqcontents'], 
     //serverRoot: 'http://localhost:2403/', // optional, defaults to same server
     serverRoot: 'https://digitalwatchproject.cross-systems.ch/', // optional, defaults to same server
     socketOptions: { reconnectionDelayMax: 3000 }, // optional socket io additional configuration

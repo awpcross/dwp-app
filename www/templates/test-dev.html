@@ -1,0 +1,20 @@
+<ion-nav-bar class="bar-positive">
+  <ion-nav-back-button>
+  </ion-nav-back-button>
+</ion-nav-bar>
+<ion-view view-title="TEST App Config">
+<ion-content>
+<div>TODO nice output</div>
+<div>meanwhile check console logs...</div>
+<br/>
+<div>APPLABELS</div>
+<div>This is a test to get a label out of the backend</div>
+<div><b>label for WEL01</b> should be displayed below</div>
+<div ng-bind="labels['TST01'].text"></div>
+<br/>
+<div>APPCONTENTS</div>
+<div>This is a test to get a label out of the backend</div>
+<div><b>content for WEL01</b> should be displayed below</div>
+<div ng-repeat="content in contents">{{content}}</div>
+</ion-content>
+</ion-view>

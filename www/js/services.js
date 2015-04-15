@@ -1,9 +1,134 @@
 angular.module('starter.services', ['dpd', 'appconfig'])
 
+.service('AppConfigService', ['dpd', 'DataService', '$q', function(dpd, DataService, $q) {
+
+	this.appLabelsForSection = function(section, lang) {
+		// returns the applabels for a section (uses Dataservice, same cache rules apply)
+		var applabels;
+		var filteredApplabels = [];
+		var filteredValues = 0;
+
+		console.log('AppConfigService.appLabelsForSection('+section+','+lang+') | processing ');
+		
+		DataService.getBackendData(dpd, 'applabels', 'live').success(function(response) {
+			console.log('AppConfigService.appLabelsForSection | backend data query returned ' + response.length + ' rows');
+			applabels = response;
+			for (var key in applabels){
+				if ( applabels[key].section == section && applabels[key].lang == lang) {
+					filteredApplabels[applabels[key].key] = applabels[key];
+					filteredValues++;
+				}
+			}
+			console.log('AppConfigService.appLabelsForSection | '+filteredValues+' item(s) for section');
+		}).error(function(error) {
+			console.log('AppConfigService.appLabelsForSection | An error occured : ' + error);
+			applabels = {};
+		})
+
+	return filteredApplabels;
+	}
+
+	this.appContentsForSection = function(section, lang) {
+	// returns the appcontents for a section (uses Dataservice, same cache rules apply)
+		var appcontents;
+		var filteredAppcontents = [];
+		var filteredValues = 0;
+
+		console.log('AppConfigService.appLabelsForSection('+section+','+lang+') | processing ');
+		
+		DataService.getBackendData(dpd, 'appcontents', 'live').success(function(response) {
+			console.log('AppConfigService.appLabelsForSection | backend data query returned ' + response.length + ' rows');
+			appcontents = response;
+			for (var key in appcontents){
+				if ( appcontents[key].section == section && appcontents[key].lang == lang) {
+					filteredAppcontents[appcontents[key].key] = appcontents[key];
+					filteredValues++;
+				}
+			}
+			console.log('AppConfigService.appLabelsForSection | '+filteredValues+' item(s) for section');
+		}).error(function(error) {
+			console.log('AppConfigService.appLabelsForSection | An error occured : ' + error);
+			appcontents = {};
+		})
+
+	return filteredAppcontents;
+	}
+}])
+
 .service('DataService', ['dpd', '$q', function(dpd, $q) {
 
-	var cacheKeyPrefix = 'data-cache-';
+	// dynamic notation for dpd object, it rocks!
+	//console.log(dpd["applabels"]);
 
+	var cacheKeyPrefix 				= 'data-cache-';
+	var cachedCollectionsIndexKey 	= 'data-cache-index';
+	var collDataCacheKey = '';
+	var collTsCacheKey  = '';
+
+	addDataToCache = function( collection, ts, data ) {
+	
+		var collDataCacheKey = cacheKeyPrefix + collection + '_data';
+		var collTsCacheKey  = cacheKeyPrefix + 	collection + '_datats';
+
+		console.log('DataService::addDataToCache() | caching data for collection (' + collection + ') with key \''+collDataCacheKey+'\', ts : ' + ts);		
+		window.localStorage.setItem( collDataCacheKey, JSON.stringify( data ) );
+		window.localStorage.setItem( collTsCacheKey, ts );
+		
+		cachedCollectionsFromCache = window.localStorage.getItem( cachedCollectionsIndexKey );
+		cachedCollections = JSON.parse(cachedCollectionsFromCache);
+
+		if (cachedCollections==null) {
+			cachedCollections = [];
+		} 
+		if (cachedCollections.indexOf(collection) < 0) {
+			cachedCollections.push(collection);
+		}
+		window.localStorage.setItem( cachedCollectionsIndexKey, JSON.stringify(cachedCollections) )
+		console.log('DataService::addDataToCache() | adding collection (' + collection + ') to localStorage ' + cachedCollectionsIndexKey + ' item');
+		console.log(JSON.stringify(cachedCollections));
+
+		console.log('DataService::addDataToCache() | done caching data for collection (' + collection + ')');		
+		
+	}
+
+	this.getBackendCacheStatus = function() {
+		var str = '';
+		var i = 0;
+		console.log('DataService::getBackendCacheStatus() | starting');		
+		
+		var cachedCollectionsFromCache = window.localStorage.getItem( cachedCollectionsIndexKey );
+		console.log('cachedCollectionsFromCache');
+		console.log(cachedCollectionsFromCache);
+		
+		cachedCollections = JSON.parse(cachedCollectionsFromCache);
+		
+		for (var key in cachedCollections){
+			if (i!=0) str += ', ';
+			str = str + cachedCollections[key];
+			i++;
+		}
+		console.log('DataService::getBackendCacheStatus() | done');		
+		return str;
+	}
+
+	this.cleanBackendCacheData = function() {
+		console.log('DataService::cleanBackendCacheData() | cleaning cache data for all collections');		
+		//localStorage.clear(); //for dev only
+		
+		cachedCollectionsFromCache = window.localStorage.getItem( cachedCollectionsIndexKey );
+		cachedCollections = JSON.parse(cachedCollectionsFromCache);
+		
+		for (var key in cachedCollections){
+			console.log(cachedCollections[key]);
+			collDataCacheKey = cacheKeyPrefix + cachedCollections[key] + '_data';
+			collTsCacheKey  = cacheKeyPrefix + 	cachedCollections[key] + '_datats';
+			localStorage.removeItem(collDataCacheKey);
+			localStorage.removeItem(collTsCacheKey);
+		}
+		window.localStorage.removeItem(cachedCollectionsIndexKey);
+		console.log('DataService::cleanBackendCacheData() | cache cleaned');		
+	}
+	
 	this.getDevBackendData = function(collection) {
 		var str = '';
 		var obj = {};
@@ -24,9 +149,10 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 			case 'applabels' : 
 				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
 				break;
-
 			case 'appcontents' : 
 				str = '[{"section":"first","key":"onekey","orderno":1,"text":"first text label","id":"dfff00ade950281f"}]';					
+				break;
+			default:
 				break;
 		}
 		obj = JSON.parse(str);
@@ -34,7 +160,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 
 		return obj;
 		};
-	
+
 	this.getLocalBackendData = function(collection) {
 
 		var str;
@@ -144,18 +270,19 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 				cacheKey = 'CACHEERR_' + currentTS;
 			}
 			console.log('DataService::getLiveBackendData() | INFO Will use cacheKey : '+cacheKey);
-			cachedExpiry = parseInt( window.localStorage.getItem( cacheKey + '_cachets') ); 
+			cachedExpiry = parseInt( window.localStorage.getItem( cacheKey + '_datats') ); 
 			if ( !isNaN( cachedExpiry ) ) {
 				cacheExpiry = cachedExpiry + cacheLiveTime;		
 			} else {
 				cacheExpiry = 0;
 			}
-			console.log('DataService::getLiveBackendData() | INFO Checking cache expiry : currentTS : '+currentTS+' vs cacheExpiry : ' + cacheExpiry + ', needs refresh : ' + (currentTS > cacheExpiry) );
+			console.log('DataService::getLiveBackendData() | INFO Checking cache expiry, currentTS   : '+currentTS + '(' + new Date(currentTS) + ')');
+			console.log('DataService::getLiveBackendData() | INFO Checking cache expiry, cacheExpiry : ' + cacheExpiry+ '(' + new Date(cacheExpiry) + ')');
+			console.log('DataService::getLiveBackendData() | INFO Checking cache expiry, needs refresh : ' + (currentTS > cacheExpiry) );
 			
 			if ( currentTS > cacheExpiry  ) {
 				console.log('DataService::getLiveBackendData() | INFO cache expired, requesting live data');
 				
-				console.log(collQuery);
 				collObj.get(collQuery, function(result, error){
 				
 				if (error != 200) { // error contains HTTP response code
@@ -168,11 +295,11 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 				if ( result != null ) {
 					console.log('DataService::getLiveBackendData() | async |  INFO query sucessfully returned ' + result.length + ' row(s)');
 					//console.log(result);
-					console.log(JSON.stringify( result ));
+					//console.log(JSON.stringify( result ));
 					var currentTS = new Date().getTime();
 					console.log('DataService::getLiveBackendData() | async |  INFO caching response with ts : '+ currentTS);
-					window.localStorage.setItem( cacheKey + '_data', JSON.stringify( result ) );
-					window.localStorage.setItem( cacheKey + '_cachets', currentTS );
+					this.addDataToCache(collection, currentTS, result);
+					
 					deferred.resolve(result);
 				} else {
 					// TODO ---test
@@ -213,8 +340,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 		var collObj;
 		var collQuery = '';
 
-		
-		collObj = dpd.test;
+				
 			// getting a pointer on the dpd collection
 			//'test','users', 'applabels', 'welcomecontents', 'trophies', 'trophiesmatched', 'newsecom', 'newscross', 'trophycontents', 'prereqcontents'
 			switch (collection) {
@@ -295,7 +421,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 		console.log('DataService::getBackendData(' + mode + ') | done.');
 		return dta;
 	}	
-	
+
 }])
 
 .service('LoginService', ['dpd', '$q', 'ENV', function(dpd, $q, env) {
@@ -532,7 +658,6 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     
 }])
 
-
 .factory('ScoreService', function($http,dpd) {
 
 
@@ -555,7 +680,6 @@ angular.module('starter.services', ['dpd', 'appconfig'])
   };
   return ScoreService;
 })
-
 
 /* Beacons/Trophies Factory */
 .factory('Trophies', function($http) {
@@ -912,9 +1036,6 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     setPoints : setPoints
   };
 })
-
-
-
 
 .service('BeaconService', ['$q', 'ENV', function($q, env) {
   

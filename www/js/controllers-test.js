@@ -1,11 +1,12 @@
 var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
+
 // Password issue
 .controller('SupportPasswordCtrl', function($scope, $state) {
 
-	console.log('SupportPasswordCtrl | start... ') ;
-		
-	console.log('SupportPasswordCtrl | done. ') ;
+  console.log('SupportPasswordCtrl | start... ') ;
+	
+  console.log('SupportPasswordCtrl | done. ') ;
   
 })
 
@@ -356,7 +357,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   console.log('ProfileRegisterCtrl | done. ') ;
 })
 
-.controller('LostPasswordCtrl', function($scope, $state, $http, $ionicPopup, $ionicLoading, dpd) {
+.controller('LostPasswordCtrl', function($scope, $state, $http, $ionicPopup, dpd) {
 
   console.log('LostPasswordCtrl | starting ... ') ;
 
@@ -368,9 +369,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
  
   $scope.sendPasswordReset = function( form ) {
     
-	$ionicLoading.show({
-	template: 'loading'
-	});
 	
     if ( $scope.user.email == null && !form.$valid ) {
       var alertPopup = $ionicPopup.alert({
@@ -379,12 +377,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
       });   
     } else {
       console.log('LostPasswordCtrl::sendPasswordReset() | looking for user : ' + $scope.user.email) ;
-      console.log('loading screen') ;
 
-	  
-	  
       // 1. check if user exists (ok : 2., ko :alert)
-	  
       dpd.users.get( {"username":$scope.user.email} ).success(function(response) {
             
             if ( response == null || response == ''){ 
@@ -397,11 +391,8 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
               console.log('LostPasswordCtrl::sendPasswordReset() | found user : ' + response[0].username +'(' + response[0].id + ')');
               var user = response[0];
 
-			  var scrambleidprefix = ('000' + Math.floor(Math.random()*100001)).substr(-5);
+              var link = 'http://digitalwatchproject.cross-systems.ch/#/user-reset-password/' + response[0].id;
 
-              var link = 'http://digitalwatchproject.cross-systems.ch/#/user-reset-password/' + scrambleidprefix + response[0].id;
-				
-			  
               // 2. send email & set flag passwordreset: true
               var mailJSON ={
                   "key": "b5jBPWAtZOqLnILTUURplQ",
@@ -409,7 +400,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
                     "template_content": [
                       {
                         "nickname": user.nickname,
-                        "link": 'http://digitalwatchproject.cross-systems.ch/#/user-reset-password/' + scrambleidprefix + user.id,
+                        "link": 'http://digitalwatchproject.cross-systems.ch/#/user-reset-password/' + user.id,
                         "password" : '1234'
                         }
                     ],
@@ -482,7 +473,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
                   });
               console.log('LostPasswordCtrl::sendPasswordReset() | sending done.') ;
                             
-             $ionicLoading.hide(); 
+              
               
             }
         }).error(function(error) {
@@ -493,12 +484,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
           });
             
         });
-
-
-
-		
-	}
-    
+    }
     
 
   } 
@@ -515,12 +501,9 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   console.log('ResetPasswordCtrl');
   
-    var uidurl = $stateParams.uid;
-	
-	var uid = uidurl.substr(5);
-	
+    var uid = $stateParams.uid;
     $scope.user = null;
-    console.log(uid)
+    console.log()
     if ( uid == null) {
 		console.log('ResetPasswordCtrl::resetPassword() | no user id : ' + uid );
 		console.log('ResetPasswordCtrl | redirecting to password support page ... ') ;
@@ -958,20 +941,22 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 })
 
 .controller('ProfileCtrl', function($scope, $state, ProfileService, dpd) {
-	console.log('ProfileCtrl | starting ... ') ;
-	console.log('ProfileCtrl | user_auth_id ... ' + localStorage.getItem('user_auth_id') ) ;
+
+
+  console.log('ProfileCtrl | starting ... ') ;
+  console.log('ProfileCtrl | user_auth_id ... ' + localStorage.getItem('user_auth_id') ) ;
 
   	$scope.$on('$ionicView.beforeEnter', function(){
-		console.log("$ionicView.beforeEnter");
+		console.log("$ionicView.beforeEnter  ");
 		if ( localStorage.getItem('user_auth_id') != null && localStorage.getItem('user_auth_id') != '' ) {
 			uid = localStorage.getItem('user_auth_id');
+			console.log('SignInCtrl | already logged in('+ uid +'), redirecting to profile view. ') ;
 
               dpd.users.get(uid).success(function(session) {
                   console.log('me :: success ! A user is logged in');
                   console.log('session', session);
                   console.log('me :: Sucess Sucess user is already logged in : ' + session.nickname + ' (' + session.id + ')!'); 
-                  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!');
-				  $scope.user = session;
+                  //deferred.resolve('Welcome ' + session.nickname + ' (' + session.id + ')!'); 
                   return(session);
 
               }).error(function(error) {
@@ -984,14 +969,16 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 		}
 	  });	
 
+  if ( localStorage.getItem('user_auth_id') ) {
+    
+  }
   
-/*
   ProfileService.getUserProfile(localStorage.getItem('user_auth_id'), dpd).success(function(response) {
     $scope.user = response;
     console.log('response', response);
-  });  
-*/  
-
+  });
+  console.log(' username ' + '');
+  
   $scope.signOutUser = function(user, $rootScope) {
   
   console.log('ProfileCtrl.signOutUser() | start. ') ;
@@ -1016,9 +1003,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
         // NULL
         localStorage.setItem("user_auth_id", '');
         console.log('set user_auth_id : "', localStorage.getItem("user_auth_id") +'"' );
-		
-		//TODO expire user cache
-		
         // Stop monitoring
         
         if ($rootScope.monitoringLaunched  ==true ) {
@@ -1042,9 +1026,15 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
     console.log('me::ERROR : please check user is logged in.');
     //deferred.reject('No user logged in.');
   });
-  console.log('ProfileCtrl.signOutUser() | end. ') ;
-  };
+
   
+  
+  
+    //$state.go('tab.trophies');
+
+  console.log('ProfileCtrl.signOutUser() | end. ') ;
+  
+  };  
   console.log('ProfileCtrl | done. ') ;
 })
 
@@ -1052,9 +1042,24 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 .controller('TestBackendCacheCtrl', function(dpd, dpdConfig, DataService, $scope, $state) {
 
 	console.log('TestBackendCacheCtrl | processing... ') ;
+
+	// cache
+	/*
+	console.log('WelcomeCtrl | DataService.getLocalAppLabelsData() ');	
+	obj1 = DataService.getLocalAppLabelsData(dpd, 'tmp');	
+	console.log(obj1);
+	console.log('WelcomeCtrl | DataService.getAppLabelsData(\'local\') ');	
+	obj1 = DataService.getAppLabelsData(dpd, 'local');	
+	console.log(obj1);
+	*/
+	
+	// dynamic notation for dpd object, it rocks!
+	//console.log(dpd["applabels"]);
+	
+	
 	
 	console.log('TestBackendCacheCtrl | DataService.getLiveAppLabelsData() test');	
-	DataService.getBackendData(dpd, 'welcomecontents', 'live').success(function(response) {
+	DataService.getBackendData(dpd, 'test', 'live').success(function(response) {
 		console.log('TestBackendCacheCtrl | data returned : ' + response);
 		$scope.backendTestData = response;
 	}).error(function(error) {
@@ -1070,20 +1075,14 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	})
 
 	console.log('TestBackendCacheCtrl | DataService.getLiveAppLabelsData() welcomecontents');	
-	DataService.getBackendData(dpd, 'appcontents', 'live').success(function(response) {
+	DataService.getBackendData(dpd, 'applabels', 'live').success(function(response) {
 		console.log('TestBackendCacheCtrl | data returned : ' + response);
 		$scope.backendTestData = response;
 	}).error(function(error) {
 		console.log('TestBackendCacheCtrl | An error occured : ' + error);
 	})
 	
-	var status = DataService.getBackendCacheStatus();
-	console.log(status);
-	$scope.cacheStatus = status;
-	
-	
-	//DataService.cleanBackendCacheData();
-	
+	DataService.cleanBackendCacheData();
 	/*
 	console.log('WelcomeCtrl | DataService.getAppLabelsData(\'live\') ');	
 	obj1 = DataService.getAppLabelsData(dpd, 'live');	
@@ -1104,46 +1103,5 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 	console.log('TestBackendCacheCtrl | done. ') ;
 	
 })
-.controller('TestAppConfigCtrl', function(dpd, dpdConfig, AppConfigService, $scope, $state) {
 
-	console.log('TestAppConfigCtrl | INFO |  processing... ') ;
-
-  	$scope.$on('$ionicView.beforeEnter', function(){
-		console.log('TestAppConfigCtrl | INFO |  $ionicView.beforeEnter processing... ') ;
-		var t1 = new Date();
-		var labels = AppConfigService.appLabelsForSection('TST', 'fr');
-		var t2 = new Date();
-		console.log('TestAppConfigCtrl | INFO | AppConfigService.appLabelsForSection(\'WEL\', \'fr\') took ' + (t2 - t1) + 'ms');
-		$scope.labels = labels;
-
-		var t3 = new Date();
-		var contents = AppConfigService.appContentsForSection('TST', 'fr');
-		var t4 = new Date();
-		console.log('TestAppConfigCtrl | INFO | AppConfigService.appContentsForSection(\'TST\', \'fr\') took ' + (t4 - t3) + 'ms');
-		console.log('TestAppConfigCtrl | INFO |  done. ') ;
-		$scope.contents = contents;
-		console.log('TestAppConfigCtrl | INFO |  $ionicView.beforeEnter done ') ;
-	  });		
-	
-})
-
-.controller('DevCtrl', function($scope, $state, $ionicLoading) {
-
-	console.log('TestAppConfigCtrl | INFO |  processing... ') ;
-
-  	$scope.$on('$ionicView.beforeEnter', function(){
-		console.log('TestAppConfigCtrl | INFO |  $ionicView.beforeEnter processing... ') ;
-		contents = [];
-		
-		for (i=0; i <100; i++)
-			contents.push( ('000' + Math.floor(Math.random()*100001)).substr(-5) );
-			
-		$scope.contents = contents;
-		console.log('TestAppConfigCtrl | INFO |  $ionicView.beforeEnter done ') ;
-	  });		
-	$ionicLoading.show({
-	template: 'loading'
-	});
-	
-})
 ;
