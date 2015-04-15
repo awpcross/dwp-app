@@ -7,10 +7,16 @@
 	<div class="news-banner-icon"><img class="news-visual" src="img/types/trophy_star.png"></div>
 	<div class="news-banner-text">
 	<div class="news-banner-text-label"><b>Votre score : {{totalpoints}} points</b></div>
-	<div class="news-banner-text-label">
-        Bravo continuez! <br/>
-        {{nextStep}}</b>
+	<div class="news-banner-text-label" ng-if="totalpoints <= 1500">Courage ce n'est que le début! <br/></div>
+	<div class="news-banner-text-label" ng-if="(totalpoints > 1500) && (totalpoints < 4000)">Bravo continuez! <br/></div>
+	<div class="news-banner-text-label" ng-if="(totalpoints >= 4000)">Bravo continuez! <br/></div>
+	<div ng-if="nextStepLog == 'loggedin'" class="news-banner-text-label">{{nextStep}}<br/></div>
 	</div>
+</div>
+<div ng-if="nextStepLog == 'loggedout'" class="trophy-banner trophy-score">
+	<div class="news-banner-icon"><img class="news-visual" src="img/types/trophy_star.png"></div>
+	<div class="news-banner-text">
+	<div class="news-banner-text-label">{{nextStep}}<br/></div>
 	</div>
 </div>
 </div>
