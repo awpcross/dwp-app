@@ -878,10 +878,11 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
   // Execute after view Render
   $scope.$on('$ionicView.afterEnter', function() {
-    // Set prerequi display to true
-    // $scope.prereq_shown = false;
+   /* Check Status */
     console.log('$ionicView.loaded event captured | start');
     // STOP MONITORING and launch PREREQUIS
+    $rootScope.bluetoothAct = Trophies.getBluetoothStatus($rootScope);
+
     if($rootScope.bluetoothAct==false) {
         console.log('Monitoring STOPPED');
         // Launch MODAL ( faire une modal special bluetooth)

@@ -21,19 +21,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
     //console.log('Device Ready | Request authorization ') ;
     estimote.beacons.requestAlwaysAuthorization();
     // Ask to authorize Notification 
-     window.plugin.notification.local.promptForPermission();
-    // Bluetooth : Listenet : To comment for compilation in evothings
-    chrome.bluetooth.onAdapterStateChanged.addListener(
-    function(adapter) {
-      if (adapter.powered != $rootScope.bluetoothActt) {
-        $rootScope.bluetoothAct = adapter.powered;
-        if ($rootScope.bluetoothAct) {
-          console.log('bluetooth is on ') ;
-        } else {
-          console.log('bluetooth is off') ;
-        }
-      }
-    });
+    window.plugin.notification.local.promptForPermission();
     
   });
 
