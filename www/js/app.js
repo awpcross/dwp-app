@@ -16,7 +16,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.se
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);}
     // org.apache.cordova.statusbar required
-    if (window.StatusBar) { StatusBar.styleDefault(); }
+    if (window.StatusBar) { StatusBar.styleLightContent(); }
     // Ask to authorize BG monitoring
     //console.log('Device Ready | Request authorization ') ;
     estimote.beacons.requestAlwaysAuthorization();
