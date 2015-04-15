@@ -881,23 +881,28 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
    /* Check Status */
     console.log('$ionicView.loaded event captured | start');
     // STOP MONITORING and launch PREREQUIS
+    estimote.bluetoothState(function(result){
+        console.log('Bluetooth state: ' + result);
+        $rootScope.bluetoothAct = result;
+        if($rootScope.bluetoothAct==false) {
+          console.log('Monitoring STOPPED');
+          // Launch MODAL ( faire une modal special bluetooth)
+          $scope.openModal();
+          // Stop monitoring
+          estimote.beacons.stopMonitoringForRegion({});
+          $rootScope.monitoringLaunched  = false;
+        }
+        // Execute MAIN VIEW
+        else {
+          console.log('Monitoring WILL BE LAUNCHED');
+          $scope.main();
+        }
+      },function(errorMessage) {
+        console.log('Error getBluetoothStatus: ' + errorMessage);});
 
-    console.log('BEFORE call of Trophies.getBluetoothStatus > $rootScope.bluetoothAct' + $rootScope.bluetoothAct);
-    $rootScope.bluetoothAct = Trophies.getBluetoothStatus($rootScope);
-    console.log('AFTER call of Trophies.getBluetoothStatus> $rootScope.bluetoothAct' + $rootScope.bluetoothAct);
-    if($rootScope.bluetoothAct==false) {
-        console.log('Monitoring STOPPED');
-        // Launch MODAL ( faire une modal special bluetooth)
-        $scope.openModal();
-        // Stop monitoring
-        estimote.beacons.stopMonitoringForRegion({});
-        $rootScope.monitoringLaunched  = false;
-    }
-    // Execute MAIN VIEW
-    else {
-      console.log('Monitoring WILL BE LAUNCHED');
-      $scope.main();
-    }
+   // console.log('BEFORE call of Trophies.getBluetoothStatus > $rootScope.bluetoothAct' + $rootScope.bluetoothAct);
+   // $rootScope.bluetoothAct = Trophies.getBluetoothStatus($rootScope);
+   // console.log('AFTER call of Trophies.getBluetoothStatus> $rootScope.bluetoothAct' + $rootScope.bluetoothAct);
     console.log('$ionicView.loaded event captured | end');
   });
 

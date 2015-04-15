@@ -955,7 +955,8 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 
   }
 
-  // Check BlueTooth Status
+
+    // Check BlueTooth Status
   getBluetoothStatus = function($rootScope) {
   		console.log("[BEGIN]____________________________________ getBluetoothStatus : BlueTooth Status : " + $rootScope.bluetoothAct);
   		estimote.bluetoothState(function(result){
@@ -966,6 +967,20 @@ angular.module('starter.services', ['dpd', 'appconfig'])
   		//$rootScope.bluetoothAct = !!Math.floor(Math.random() * 2)
   		//$rootScope.bluetoothAct = true;
   		//return  $rootScope.bluetoothAct;
+  }
+
+  // Check BlueTooth Status
+  getBluetoothStatus_w = function($rootScope) {
+  		console.log("[BEGIN]____________________________________ getBluetoothStatus : BlueTooth Status : " + $rootScope.bluetoothAct);
+  		estimote.bluetoothState(function(result){
+  			console.log('Bluetooth state: ' + result);
+  			$rootScope.bluetoothAct= result; 
+  		},function(errorMessage) {
+  			console.log('Error getBluetoothStatus: ' + errorMessage) });
+  		//$rootScope.bluetoothAct = !!Math.floor(Math.random() * 2)
+  		console.log("[END]_____________________________________ getBluetoothStatus : BlueTooth Status : " + $rootScope.bluetoothAct);
+  		//$rootScope.bluetoothAct = true;
+  		return  $rootScope.bluetoothAct;
   }
 
 // Launch monitoring of regions
