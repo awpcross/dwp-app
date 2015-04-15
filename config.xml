@@ -22,6 +22,7 @@
   <preference name="disable-cursor" value="false"/>
   <preference name="android-minSdkVersion" value="7"/>
   <preference name="android-installLocation" value="auto"/>
+  <preference name="StatusBarStyle" value="lightcontent" />	
   <gap:plugin name="de.appplant.cordova.plugin.local-notification" version="0.8.1" />
   <gap:plugin name="ch.cross-systems.estimotebeacons" version="0.7.1" />
   <!-- Allow conf Privacy Iphone -->
