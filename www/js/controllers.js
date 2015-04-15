@@ -807,7 +807,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
           console.log('Add newItem');
           // Update NextStep in the view 
           $scope.nextStep = trophy.nextStep;
-          $scope.nextStepLog = "Loggedin";
+          $scope.nextStepLog = "loggedin";
           // Update Score in the view
           $scope.totalpoints += trophy.points;
           $scope.listInfoGrantedTrophies.push(trophy);
