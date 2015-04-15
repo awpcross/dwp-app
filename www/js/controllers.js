@@ -881,8 +881,10 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
    /* Check Status */
     console.log('$ionicView.loaded event captured | start');
     // STOP MONITORING and launch PREREQUIS
-    $rootScope.bluetoothAct = Trophies.getBluetoothStatus($rootScope);
 
+    console.log('BEFORE call of Trophies.getBluetoothStatus > $rootScope.bluetoothAct' + $rootScope.bluetoothAct);
+    $rootScope.bluetoothAct = Trophies.getBluetoothStatus($rootScope);
+    console.log('AFTER call of Trophies.getBluetoothStatus> $rootScope.bluetoothAct' + $rootScope.bluetoothAct);
     if($rootScope.bluetoothAct==false) {
         console.log('Monitoring STOPPED');
         // Launch MODAL ( faire une modal special bluetooth)

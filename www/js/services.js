@@ -959,14 +959,13 @@ angular.module('starter.services', ['dpd', 'appconfig'])
   getBluetoothStatus = function($rootScope) {
   		console.log("[BEGIN]____________________________________ getBluetoothStatus : BlueTooth Status : " + $rootScope.bluetoothAct);
   		estimote.bluetoothState(function(result){
-  			console.log('Bluetooth state: ' + result);
-  			$rootScope.bluetoothAct= result; 
+  			console.log('IN call of Trophies.getBluetoothStatus> $rootScope.bluetoothAct' + $rootScope.bluetoothAct);
+  			return $rootScope.bluetoothAct= result; 
   		},function(errorMessage) {
   			console.log('Error getBluetoothStatus: ' + errorMessage) });
   		//$rootScope.bluetoothAct = !!Math.floor(Math.random() * 2)
-  		console.log("[END]_____________________________________ getBluetoothStatus : BlueTooth Status : " + $rootScope.bluetoothAct);
   		//$rootScope.bluetoothAct = true;
-  		return  $rootScope.bluetoothAct;
+  		//return  $rootScope.bluetoothAct;
   }
 
 // Launch monitoring of regions
