@@ -829,8 +829,6 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     });
     // Return the promise to the controller
     return promise1;
-
-
   }
 
     // Get Matched Trophies Json
@@ -991,7 +989,7 @@ angular.module('starter.services', ['dpd', 'appconfig'])
           {
             var beaconRegion = beaconRegions[i];
             if (beaconRegion.isActive == true){
-            console.log('*** Trophies Factory | Start Monitoring') ;
+            console.log('*** Trophies Factory | Start Monitoring >>>' + beaconRegion.identifier) ;
               estimote.beacons.startMonitoringForRegion(beaconRegion,onMonitoringMatch,onMonitoringError);
             }
           }
@@ -1038,8 +1036,6 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     getListGrantedTrophies : getListGrantedTrophies,
     // Get current points
     getCurrentPoints : getCurrentPoints,
-    // Get bluetooth
-    getBluetoothStatus : getBluetoothStatus,
     // Set addition points
     setPoints : setPoints
   };

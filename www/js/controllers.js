@@ -879,6 +879,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
    /* Check Status */
     console.log('$ionicView.loaded event captured | start');
     // STOP MONITORING and launch PREREQUIS
+    /* COMMENT for debug in EVOTHINGS [BEGIN] */
     estimote.bluetoothState(function(result){
         console.log('Bluetooth state: ' + result);
         $rootScope.bluetoothAct = result;
@@ -897,6 +898,13 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
         }
       },function(errorMessage) {
         console.log('Error getBluetoothStatus: ' + errorMessage);});
+    /* COMMENT for debug in EVOTHINGS [END] */
+
+
+
+    /* Uncomment for debug in EVOTHINGS */
+    // $scope.main();
+
 
    // console.log('BEFORE call of Trophies.getBluetoothStatus > $rootScope.bluetoothAct' + $rootScope.bluetoothAct);
    // $rootScope.bluetoothAct = Trophies.getBluetoothStatus($rootScope);
