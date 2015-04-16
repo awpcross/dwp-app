@@ -703,6 +703,7 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
   };
 
   // $scope.totalpoints = 1520;
+  //  var isAndroid = ionic.Platform.isAndroid();
   $scope.totalpoints = "";
   $scope.nextStep = "Identifiez vous pour continuer.";
   $scope.nextStepLog = "loggedout";
@@ -918,7 +919,6 @@ var app = angular.module('starter.controllers', ['dpd','ngCordova'])
 
 .controller('LeaderboardCtrl', function(dpd, DataService, ScoreService, $scope, $http) {
   console.log('LeaderboardCtrl | starting ... ');
-
 	$scope.$on('$ionicView.beforeEnter', function(){
 		DataService.getBackendData(dpd, 'scores', 'live').success(function(response) {
 			console.log('LeaderboardCtrl | INFO data returned ' + response.length + ' row(s)');

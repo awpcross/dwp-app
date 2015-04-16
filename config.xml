@@ -25,6 +25,7 @@
   <preference name="StatusBarStyle" value="lightcontent" />	
   <gap:plugin name="de.appplant.cordova.plugin.local-notification" version="0.8.1" />
   <gap:plugin name="ch.cross-systems.estimotebeacons" version="0.7.1" />
+  <gap:plugin name="org.apache.cordova.statusbar" version="0.1.4" />
   <!-- Allow conf Privacy Iphone -->
   <gap:config-file platform="ios" parent="NSLocationAlwaysUsageDescription" overwrite="false">
       <string>Project Digital Watch</string>

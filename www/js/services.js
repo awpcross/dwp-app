@@ -580,7 +580,6 @@ angular.module('starter.services', ['dpd', 'appconfig'])
 }])
 
 .service('ProfileService', ['dpd', '$q', 'ENV', function(dpd, $q, env) {
-    
     console.log('ProfileService | starting... ');
     return {
     
@@ -799,6 +798,8 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     var listInfoGrantedTrophies = [];
 
     var  promise = [];
+    var isAndroid = ionic.Platform.isAndroid();
+
 
   // Get a specific trophy from regionState
   getFromRegion  = function($scope,regionState) {
@@ -1011,7 +1012,13 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     var onAuthoError = function() {
       console.log("onAuthoError");
     }
-    estimote.beacons.authorizationStatus(onAuthoResult,onAuthoError);
+    if (isAndroid) {
+    	onAuthoResult(3);
+    }
+    else {
+    	estimote.beacons.authorizationStatus(onAuthoResult,onAuthoError);
+    }
+    
   };
 
   return {
@@ -1031,6 +1038,8 @@ angular.module('starter.services', ['dpd', 'appconfig'])
     getListGrantedTrophies : getListGrantedTrophies,
     // Get current points
     getCurrentPoints : getCurrentPoints,
+    // Get bluetooth
+    getBluetoothStatus : getBluetoothStatus,
     // Set addition points
     setPoints : setPoints
   };
